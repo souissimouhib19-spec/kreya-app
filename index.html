@@ -83,6 +83,7 @@
         button.admin-btn { background-color: #e74c3c; }
         button.landlord-btn { background-color: #d35400; }
         button.tenant-btn { background-color: #2980b9; }
+        button.whatsapp-btn { background-color: #25D366; }
         
         .card {
             background: #fafafa;
@@ -121,53 +122,54 @@
 
     <div class="container">
         
-        <!-- واجهة اختيار الصفة عند الدخول الأول -->
+        <!-- واجهة اختيار الصفة -->
         <div id="roleView" class="role-selection active-view">
-            <h2>اختر صففتك للولوج إلى النظام أو صنع عقد جديد:</h2>
-            <p>يرجى تحديد كيف تريد الدخول إلى المنصة:</p>
+            <h2>اختر صفتك للدخول أو إنشاء عقد جديد:</h2>
             <div class="btn-group">
                 <button class="tenant-btn" onclick="selectRole('tenant')">👤 طالب / مكتري</button>
                 <button class="landlord-btn" onclick="selectRole('landlord')">🏠 مالك العقار</button>
-                <button class="admin-btn" onclick="selectRole('admin')">⚙️ إداري (Admin)</button>
+                <button class="admin-btn" onclick="selectRole('admin')">⚙️ الإدارة (سي مهيب)</button>
             </div>
             
             <div class="card" style="margin-top: 35px;">
-                <h3>📝 إنشاء عقد كراء جديد (تونس)</h3>
-                <p>صنع عقد قانوني فوري وإضافته للنظام:</p>
-                <input type="text" id="contractName" placeholder="اسم المكتري الثلاثي">
-                <input type="text" id="propertyTitle" placeholder="اسم أو عنوان العقار (مثال: شقة أريانة)">
-                <input type="number" id="rentAmount" placeholder="معلوم الكراء بالمليم التونسي (DT)">
-                <button onclick="createContract()">توليد وصنع العقد</button>
-                <p id="contractMsg" style="color: green; font-weight: bold; margin-top: 10px;"></p>
+                <h3>📝 إنشاء عقد كراء جديد وتنبيه الأطراف</h3>
+                <input type="text" id="contractName" placeholder="اسم المكتري (الطالب) الثلاثي">
+                <input type="text" id="contractPhone" placeholder="رقم هاتفه (لإرسال إشعار العقد له)">
+                <input type="text" id="propertyTitle" placeholder="عنوان العقار (مثال: شقة صفاقس)">
+                <input type="number" id="rentAmount" placeholder="معلوم الكراء بالمليم (DT)">
+                <button class="whatsapp-btn" onclick="sendContractAlerts()">💬 إرسال العقد عبر الواتساب للأطراف</button>
             </div>
         </div>
 
-        <!-- لوحة تحكم المكتري / الطالب -->
+        <!-- لوحة الطالب / المكتري -->
         <div id="tenantDashboard" class="dashboard-view">
-            <h2>لوحة تحكم المكتري / الطالب</h2>
+            <h2>لوحة تحكم الطالب / المكتري</h2>
             <div class="card">
-                <p>مرحباً بك في مساحتك الخاصة. يمكنك متابعة مستحقات الكراء، فواتير الاستهلاك (STEG/SONEDE)، ودفع الإيجار عبر D17 أو Flouci.</p>
-                <button onclick="alert('تم إرسال طلب الدفع أو المعاينة بنجاح!')">دفع الكراء / حجز زيارة</button>
+                <p>مرحباً بك. يمكنك إرسال استفسار أو طلب حجز زيارة مباشرة إلى الإدارة أو المالك:</p>
+                <input type="text" id="tenantNameInput" placeholder="اسمك الكامل">
+                <input type="text" id="tenantPhoneInput" placeholder="رقم هاتفك">
+                <input type="text" id="tenantMessage" placeholder="رسالتك أو طلبك (مثال: أريد معاينة الشقة)">
+                <button class="whatsapp-btn" onclick="tenantSendMessage()">💬 إرسال رسالة إلى سي مهيب (المدير)</button>
             </div>
             <span class="back-link" onclick="goHome()">← العودة لاختيار الصفة الرئيسية</span>
         </div>
 
-        <!-- لوحة تحكم المالك -->
+        <!-- لوحة المالك -->
         <div id="landlordDashboard" class="dashboard-view">
             <h2>لوحة تحكم المالك</h2>
             <div class="card">
-                <p>إدارة عقاراتك، متابعة المداخيل، وعقود الكراء الخاصة بممتلكاتك في تونس.</p>
-                <button onclick="alert('تم تحديث قائمة عقاراتك بنجاح!')">إضافة عقار جديد</button>
+                <p>متابعة مداخيل العقارات، تقاسم فواتير الكهرباء والماء (STEG / SONEDE)، والتواصل مع المستأجرين.</p>
+                <button class="whatsapp-btn" onclick="landlordAction()">💬 ربط وتنسيق مع الإدارة</button>
             </div>
             <span class="back-link" onclick="goHome()">← العودة لاختيار الصفة الرئيسية</span>
         </div>
 
-        <!-- لوحة تحكم الإدارة (Admin) -->
+        <!-- لوحة الأدمن (سي مهيب) -->
         <div id="adminDashboard" class="dashboard-view">
-            <h2>لوحة تحكم الإدارة العامة (Admin)</h2>
+            <h2>لوحة تحكم الإدارة (سي مهيب)</h2>
             <div class="card">
-                <p>صلاحيات كاملة على النظام، مراقبة جميع المستخدمين، العقود النشطة، وحركة المعاملات المالية.</p>
-                <button onclick="alert('جاري تحميل تقارير النظام العامة...')">عرض التقارير الشاملة</button>
+                <p>أنت تتحكم الآن في المنصة بالكامل. رقم هاتفك الأساسي للإشعارات هو: <strong>+216 29 461 304</strong></p>
+                <button onclick="alert('تم تحديث جميع تقارير العقارات بنجاح!')">عرض جميع الطلبات والعقود الواردة</button>
             </div>
             <span class="back-link" onclick="goHome()">← العودة لاختيار الصفة الرئيسية</span>
         </div>
@@ -175,19 +177,18 @@
     </div>
 
     <script>
+        // رقم هاتفك الأساسي كأدمن (سي مهيب)
+        const adminPhone = "21629461304"; 
+
         function selectRole(role) {
             document.getElementById('roleView').classList.remove('active-view');
             document.getElementById('tenantDashboard').classList.remove('active-view');
             document.getElementById('landlordDashboard').classList.remove('active-view');
             document.getElementById('adminDashboard').classList.remove('active-view');
 
-            if (role === 'tenant') {
-                document.getElementById('tenantDashboard').classList.add('active-view');
-            } else if (role === 'landlord') {
-                document.getElementById('landlordDashboard').classList.add('active-view');
-            } else if (role === 'admin') {
-                document.getElementById('adminDashboard').classList.add('active-view');
-            }
+            if (role === 'tenant') document.getElementById('tenantDashboard').classList.add('active-view');
+            else if (role === 'landlord') document.getElementById('landlordDashboard').classList.add('active-view');
+            else if (role === 'admin') document.getElementById('adminDashboard').classList.add('active-view');
         }
 
         function goHome() {
@@ -197,17 +198,39 @@
             document.getElementById('roleView').classList.add('active-view');
         }
 
-        function createContract() {
+        function sendContractAlerts() {
             const name = document.getElementById('contractName').value;
+            const phone = document.getElementById('contractPhone').value;
             const property = document.getElementById('propertyTitle').value;
             const amount = document.getElementById('rentAmount').value;
 
-            if(!name || !property || !amount) {
-                alert('الرجاء تعبئة جميع خانات العقد!');
+            if(!name || !phone || !property || !amount) {
+                alert('الرجاء تعبئة جميع خانات العقد بدقة!');
                 return;
             }
 
-            document.getElementById('contractMsg').innerText = `✅ تم بنجاح صنع عقد كراء للمكتري "${name}" في "${property}" بقيمة "${amount} مليم"!`;
+            // إرسال الإشعار لسي مهيب عبر الواتساب الخاص بك
+            const msgToAdmin = `📋 عقد كراء جديد في منصة سي مهيب:%0A- المكتري: ${name}%0A- الهاتف: ${phone}%0A- العقار: ${property}%0A- المعلوم: ${amount} مليم`;
+            window.open(`https://wa.me/${adminPhone}?text=${msgToAdmin}`, '_blank');
+        }
+
+        function tenantSendMessage() {
+            const name = document.getElementById('tenantNameInput').value;
+            const phone = document.getElementById('tenantPhoneInput').value;
+            const msg = document.getElementById('tenantMessage').value;
+
+            if(!name || !phone || !msg) {
+                alert('الرجاء ملء جميع خانات الرسالة!');
+                return;
+            }
+
+            const tenantMsg = `📩 رسالة من طالب/مكتري:%0A- الاسم: ${name}%0A- الهاتف: ${phone}%0A- الطلب: ${msg}`;
+            window.open(`https://wa.me/${adminPhone}?text=${tenantMsg}`, '_blank');
+        }
+
+        function landlordAction() {
+            const landlordMsg = `🏠 طلب تنسيق جديد من مالك عقار مع الإدارة (سي مهيب).`;
+            window.open(`https://wa.me/${adminPhone}?text=${landlordMsg}`, '_blank');
         }
     </script>
 </body>

@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركة محيب والمبنى أصدقاؤه - المنصة العقارية الشاملة 🇹🇳</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        tnRed: '#E70013',
+                        tnRedDark: '#B8000F',
+                        tnGold: '#D4AF37',
+                        tnDark: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <!-- Chart.js for Admin Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Tajawal', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); }
+        .dark .glass-card { background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(12px); }
+        @media print {
+            body * { visibility: hidden; }
+            #printableContract, #printableContract * { visibility: visible; }
+            #printableContract { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300 antialiased selection:bg-tnRed selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <!-- Brand -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-tr from-tnRed to-red-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-tnRed/30">
+                    مـ
+                </div>
+                <div>
+                    <h1 class="font-black text-base sm:text-lg text-slate-900 dark:text-white tracking-tight leading-none">شركة محيب والمبنى أصدقاؤه</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">المنصة الذكية لإدارة العقارات والمبيتات في تونس 🇹🇳</p>
+                </div>
+            </div>
+
+            <!-- Role Selector Tabs in Header -->
+            <div class="flex items-center bg-slate-100 dark:bg-slate-700/80 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-600 text-xs font-bold">
+                <button onclick="setRole('visitor')" id="roleBtnVisitor" class="role-btn px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 bg-tnRed text-white shadow-md">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span class="hidden sm:inline">👤 الزائر / المكتري</span>
+                </button>
+                <button onclick="setRole('landlord')" id="roleBtnLandlord" class="role-btn px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900">
+                    <i class="fa-solid fa-house-user"></i>
+                    <span class="hidden sm:inline">🏠 المالك (Propriétaire)</span>
+                </button>
+                <button onclick="setRole('admin')" id="roleBtnAdmin" class="role-btn px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-slate-900">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span class="hidden sm:inline">⚡ السمسار / الإدارة</span>
+                </button>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-amber-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Active View Banner -->
+        <div id="roleBanner" class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-tnRed text-white p-6 shadow-xl">
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <span id="bannerRoleTag" class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold mb-2 text-amber-300">
+                        واجهة الزائر والمكتري
+                    </span>
+                    <h2 id="bannerTitle" class="text-xl sm:text-3xl font-black">ابحث عن مسكنك أو غرفتك بكل ثقة وسهولة</h2>
+                    <p id="bannerDesc" class="mt-1 text-slate-300 text-xs sm:text-sm">اطّلع على مواعيد معاينة الدار، تاريخ الشغور وخروج المكتري، وشروط المالك المباشرة.</p>
+                </div>
+                <div id="bannerActionArea" class="flex gap-2">
+                    <button onclick="openModal('colocModal')" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs transition flex items-center gap-1.5 shadow-md">
+                        <i class="fa-solid fa-users"></i> نلوّج على Coloc (شريك سكن)
+                    </button>
+                    <button onclick="openModal('billModal')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-4 py-2.5 rounded-xl text-xs backdrop-blur-md transition flex items-center gap-1.5 border border-white/20">
+                        <i class="fa-solid fa-calculator"></i> حاسبة فواتير STEG
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================================================= -->
+        <!-- 1. VISITOR / TENANT VIEW (واجهة الزائر والمكتري) -->
+        <!-- ================================================================================= -->
+        <div id="viewVisitor" class="space-y-6">
+
+            <!-- Filter Bar -->
+            <section class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">الولاية / المنطقة</label>
+                        <select id="filterCity" onchange="applyVisitorFilters()" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-700 text-xs font-semibold border border-slate-200 dark:border-slate-600 outline-none">
+                            <option value="ALL">جميع الولايات</option>
+                            <option value="Ariana">أريانة (حي الغزالة / النصر)</option>
+                            <option value="Tunis">تونس (المنار / وسط المدينة)</option>
+                            <option value="Monastir">المنستير (السكناس / الكلية)</option>
+                            <option value="Sousse">سوسة (سهلول / القنطاوي)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">نوع المسكن</label>
+                        <select id="filterType" onchange="applyVisitorFilters()" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-700 text-xs font-semibold border border-slate-200 dark:border-slate-600 outline-none">
+                            <option value="ALL">جميع الأنواع</option>
+                            <option value="Foyer">غرفة في مبيت (Foyer)</option>
+                            <option value="Studio">استوديو (Studio)</option>
+                            <option value="S+1">S+1 (غرفة وصالة)</option>
+                            <option value="S+2">S+2 (غرفتين وصالة)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">حالة الشغور / الكراء</label>
+                        <select id="filterStatus" onchange="applyVisitorFilters()" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-700 text-xs font-semibold border border-slate-200 dark:border-slate-600 outline-none">
+                            <option value="ALL">جميع الحالات</option>
+                            <option value="متاحة حالياً">متاحة للكراء فوراً</option>
+                            <option value="قيد المعاينة">قيد المعاينة والزيارة</option>
+                            <option value="مكرية">مكرية حالياً</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">شروط المالك</label>
+                        <select id="filterGender" onchange="applyVisitorFilters()" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-700 text-xs font-semibold border border-slate-200 dark:border-slate-600 outline-none">
+                            <option value="ALL">بدون تقييد خاص</option>
+                            <option value="فتيات فقط">فتيات / طالبات فقط</option>
+                            <option value="ذكور فقط">ذكور / طلبة فقط</option>
+                            <option value="عائلات فقط">عائلات فقط</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">بحث بالعنوان / الكلية</label>
+                        <input type="text" id="filterKeyword" oninput="applyVisitorFilters()" placeholder="مثال: قرب INSAT أو FST" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-700 text-xs font-semibold border border-slate-200 dark:border-slate-600 outline-none">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Navigation Sub-tabs for Visitor -->
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
+                <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar">
+                    <button onclick="switchVisitorTab('grid')" id="vTabGrid" class="v-tab px-4 py-2 rounded-xl font-bold text-xs bg-tnRed text-white transition flex items-center gap-1.5 shadow-md">
+                        <i class="fa-solid fa-list"></i> قائمة العقارات
+                    </button>
+                    <button onclick="switchVisitorTab('map')" id="vTabMap" class="v-tab px-4 py-2 rounded-xl font-bold text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-map-location-dot"></i> الخريطة القريبة
+                    </button>
+                    <button onclick="switchVisitorTab('checkin')" id="vTabCheckin" class="v-tab px-4 py-2 rounded-xl font-bold text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-qrcode"></i> توثيق الدخول (Check-in QR)
+                    </button>
+                </div>
+                <span id="visitorCountText" class="text-xs font-bold text-slate-500">العروض المتاحة (0)</span>
+            </div>
+
+            <!-- Grid Container -->
+            <div id="visitorGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Map Container -->
+            <div id="visitorMapContainer" class="hidden bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+                <div id="visitorMap" class="w-full h-[500px] rounded-xl z-10"></div>
+            </div>
+
+            <!-- Digital Check-In / Etat des lieux Container -->
+            <div id="visitorCheckinContainer" class="hidden bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 max-w-2xl mx-auto space-y-4">
+                <div class="text-center">
+                    <i class="fa-solid fa-camera-retro text-3xl text-tnRed mb-2"></i>
+                    <h3 class="font-black text-lg">توثيق حالة الشقة عند الدخول (Etat des lieux)</h3>
+                    <p class="text-xs text-slate-500">قم بتصوير الأثاث وحالة البيت عند الاستلام لحفظ حقك في استرجاع الوديعة كاملة.</p>
+                </div>
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="block font-bold mb-1">اختر الشقة / الغرفة المكرية</label>
+                        <select id="checkinListingSelect" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600"></select>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1">ملاحظات حالة الأثاث والدهان</label>
+                        <textarea id="checkinNotes" rows="3" placeholder="مثال: التلفزة شغالة، يوجد خدش بسيط في طاولة المطبخ..." class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600 outline-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1">رفع صور الإثبات عند التسليم</label>
+                        <input type="file" multiple class="w-full text-slate-500 text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-tnRed file:text-white">
+                    </div>
+                    <button onclick="generateCheckInQR()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition shadow-md">
+                        استخراج رمز التوثيق الرقمي (QR)
+                    </button>
+                    <div id="qrResult" class="hidden text-center pt-4 border-t border-slate-200 dark:border-slate-700 space-y-2">
+                        <p class="font-bold text-xs text-emerald-600">✓ تم حفظ حالة المسكن بنجاح في قاعدة البيانات</p>
+                        <div class="w-32 h-32 bg-slate-200 dark:bg-slate-700 mx-auto rounded-xl flex items-center justify-center font-mono font-bold text-xs">
+                            [ QR CODE ]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================================================================================= -->
+        <!-- 2. LANDLORD / OWNER VIEW (واجهة مالك العقار - خاصة بالمالك) -->
+        <!-- ================================================================================= -->
+        <div id="viewLandlord" class="hidden space-y-6">
+
+            <!-- Owner Selector Header -->
+            <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 font-bold flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-house-chimney-user"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-900 dark:text-white">لوحة تحكم مالك العقار الخاصة</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">تظهر هنا فقط العقارات والمكتريين والمدفوعات الخاصة بك كمالك.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="landlordAccountSelect" onchange="switchLandlordOwner(this.value)" class="px-3 py-2 rounded-xl bg-white dark:bg-slate-800 text-xs font-bold border border-slate-200 dark:border-slate-600 outline-none">
+                        <option value="محسن بن سالم">المالك الحالي: سي محسن بن سالم</option>
+                        <option value="الحاجة فضيلة الورفلي">المالك الحالي: الحاجة فضيلة الورفلي</option>
+                        <option value="السمسار رياض بالشيخ">المالك الحالي: رياض بالشيخ</option>
+                    </select>
+                    <button onclick="openModal('addPropertyModal')" class="bg-tnRed hover:bg-red-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition flex items-center gap-1.5 shadow-md">
+                        <i class="fa-solid fa-plus"></i> أضف دار جديدة
+                    </button>
+                </div>
+            </div>
+
+            <!-- Owner KPI Overview Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400">عدد العقارات المسجلة</span>
+                    <p id="ownerStatTotal" class="text-2xl font-black text-slate-900 dark:text-white mt-1">0</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400">العربونات المستلمة هذا الشهر</span>
+                    <p id="ownerStatIncome" class="text-2xl font-black text-emerald-500 mt-1">0 د.ت</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400">مواعيد المعاينة المبرمجة</span>
+                    <p id="ownerStatVisits" class="text-2xl font-black text-amber-500 mt-1">0</p>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400">التشكيات وطلبات الصيانة</span>
+                    <p id="ownerStatComplaints" class="text-2xl font-black text-red-500 mt-1">0</p>
+                </div>
+            </div>
+
+            <!-- Landlord Main Tabs -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Left Column: Owner's Listings List -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-building text-tnRed"></i> عقاراتك المسجلة وحالة كراء كل منها
+                        </h4>
+                        <span id="ownerPropertyCount" class="text-xs text-slate-500">0 عقار</span>
+                    </div>
+                    <div id="ownerPropertyList" class="space-y-4">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Right Column: Complaints & Visit Slots Desk -->
+                <div class="space-y-6">
+
+                    <!-- Tenant Complaints Panel -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-2">
+                            <h4 class="font-bold text-xs flex items-center gap-1.5 text-slate-900 dark:text-white">
+                                <i class="fa-solid fa-triangle-exclamation text-red-500"></i> تشكيات المكترين وطلبات الصيانة
+                            </h4>
+                        </div>
+                        <div id="landlordComplaintsFeed" class="space-y-2.5 text-xs">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Visit Slot Requests Panel -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-2">
+                            <h4 class="font-bold text-xs flex items-center gap-1.5 text-slate-900 dark:text-white">
+                                <i class="fa-solid fa-calendar-check text-emerald-500"></i> طلبيات موعد زيارة لمعاينة الدار
+                            </h4>
+                        </div>
+                        <div id="landlordVisitsFeed" class="space-y-2.5 text-xs">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================================================================================= -->
+        <!-- 3. ADMIN / BROKER VIEW (واجهة السمسار الإداري - شركة محيب) -->
+        <!-- ================================================================================= -->
+        <div id="viewAdmin" class="hidden space-y-6">
+
+            <!-- Admin Notice Header -->
+            <div class="bg-slate-900 text-white rounded-2xl p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-tnRed flex items-center justify-center font-black text-lg">
+                        <i class="fa-solid fa-shield-cat"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm">لوحة الإدارة والمراقبة المركزية - شركة محيب والمبنى أصدقاؤه</h3>
+                        <p class="text-xs text-slate-400">مراقبة التحويلات الماليّة (D17/Flouci)، التحقق من الهويات، وحل النزاعات.</p>
+                    </div>
+                </div>
+                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1 rounded-full">
+                    النظام شغال 100%
+                </span>
+            </div>
+
+            <!-- Financial Analytics & Verification Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Financial Chart -->
+                <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-tnRed"></i> إحصائيات عمولات السمسارة ومداخيل العربون (د.ت)
+                        </h4>
+                        <span class="text-[10px] bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md font-bold">شهر أكتوبر 2026</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="adminRevenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Verification Center CIN -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <h4 class="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-700 pb-2">
+                        <i class="fa-solid fa-id-card text-blue-500"></i> مركز التحقق من بطاقات التعريف (CIN)
+                    </h4>
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl space-y-1">
+                            <div class="flex justify-between font-bold"><span>مريم العبيدي (طالبة)</span> <span class="text-amber-500">قيد المراجعة</span></div>
+                            <p class="text-[10px] text-slate-400">CIN: 07988123 • كلية العلوم بالمنار</p>
+                            <div class="flex gap-2 pt-1">
+                                <button onclick="alert('تم تفعيل حساب الطالبة بنجاح!')" class="bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-md">قبول وتوثيق</button>
+                                <button onclick="alert('تم رفض الطلب')" class="bg-slate-300 dark:bg-slate-600 text-[10px] font-bold px-2.5 py-1 rounded-md">رفض</button>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl space-y-1">
+                            <div class="flex justify-between font-bold"><span>محسن بن سالم (مالك)</span> <span class="text-emerald-500">موثوق ✓</span></div>
+                            <p class="text-[10px] text-slate-400">CIN: 08876543 • تم الاستظهار بالملكية</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Anti-Scam Signalement Reports Desk -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                <h4 class="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-ban text-tnRed"></i> بلاغات السمسارة المزيفين والصور غير المطبقة (Signalements)
+                </h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                                <th class="p-3 rounded-r-xl">رقم الإعلان</th>
+                                <th class="p-3">اسم المظنون فيه</th>
+                                <th class="p-3">سبب التبليغ</th>
+                                <th class="p-3">المبلغ عنه</th>
+                                <th class="p-3 rounded-l-xl">الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                            <tr>
+                                <td class="p-3 font-mono font-bold">#102</td>
+                                <td class="p-3 font-semibold">حسام السمسار</td>
+                                <td class="p-3 text-slate-500">طلب عربون بدون كراس شروط خارج المنصة</td>
+                                <td class="p-3">أحمد القاسمي</td>
+                                <td class="p-3">
+                                    <button onclick="alert('تم تجميد الإعلان وحظر الحساب المشبوه!')" class="bg-tnRed text-white text-[10px] font-bold px-3 py-1 rounded-lg hover:bg-red-700">تجميد العرض</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Floating Dual-Simulated Smartphone Notifications Drawer -->
+    <div class="fixed bottom-4 left-4 z-30">
+        <button onclick="togglePhoneDrawer()" class="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-3 rounded-2xl shadow-2xl font-bold text-xs flex items-center gap-2 border border-slate-700 hover:scale-105 transition">
+            <i class="fa-solid fa-mobile-screen-button text-tnRed text-base"></i>
+            <span>محاكي هاتف المالك والمكتري</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+        </button>
+    </div>
+
+    <!-- Phone Drawer Modal Simulation -->
+    <div id="phoneDrawer" class="fixed inset-y-0 left-0 w-full sm:w-96 bg-slate-900 text-white z-50 shadow-2xl transform -translate-x-full transition-transform duration-300 p-4 overflow-y-auto custom-scrollbar flex flex-col justify-between border-r border-slate-800">
+        <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-mobile-retro text-tnRed"></i>
+                    <h3 class="font-bold text-xs">إشعارات الرسائل الفورية</h3>
+                </div>
+                <button onclick="togglePhoneDrawer()" class="text-slate-400 hover:text-white">✕</button>
+            </div>
+
+            <!-- Tenant Phone View -->
+            <div class="bg-slate-800 p-3 rounded-2xl border border-slate-700 space-y-2">
+                <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">📱 هاتف المكتري (Tenant)</p>
+                <div id="simTenantFeed" class="space-y-2 text-xs">
+                    <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/50">
+                        <span class="text-[9px] text-slate-500 block">منذ 5 دقائق • D17</span>
+                        <p class="font-bold text-emerald-400">تم حجز موعد معاينة بنجاح!</p>
+                        <p class="text-[10px] text-slate-300 mt-0.5">موعد الزيرة: الغد 15:00 بـ حي الغزالة.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Landlord Phone View -->
+            <div class="bg-slate-800 p-3 rounded-2xl border border-slate-700 space-y-2">
+                <p class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">📱 هاتف المالك (Landlord)</p>
+                <div id="simLandlordFeed" class="space-y-2 text-xs">
+                    <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/50">
+                        <span class="text-[9px] text-slate-500 block">منذ دقيقتين • WhatsApp</span>
+                        <p class="font-bold text-amber-300">طلب معاينة جديد للغرفة #101</p>
+                        <p class="text-[10px] text-slate-300 mt-0.5">الساكن: مريم العبيدي (طالبة).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-[10px] text-slate-500 pt-4 border-t border-slate-800">
+            شركة محيب والمبنى أصدقاؤه © 2026
+        </div>
+    </div>
+
+    <!-- MODAL 1: Property Details & Visit Slot Booking -->
+    <div id="detailsModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar p-6 relative border border-slate-200 dark:border-slate-700">
+            <button onclick="closeModal('detailsModal')" class="absolute top-4 left-4 w-9 h-9 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center font-bold text-slate-500 hover:bg-slate-200">✕</button>
+            <div id="detailsContent">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Roommate Matching (Coloc) -->
+    <div id="colocModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full p-6 relative border border-slate-200 dark:border-slate-700 space-y-4">
+            <button onclick="closeModal('colocModal')" class="absolute top-4 left-4 text-slate-400">✕</button>
+            <div class="text-center">
+                <i class="fa-solid fa-handshake text-3xl text-amber-500 mb-1"></i>
+                <h3 class="font-black text-lg">خدمة البحث عن شريك سكن (Coloc)</h3>
+                <p class="text-xs text-slate-500">اكتشف الطلبة والشباب الذين يبحثون عن مرافق يشاركهم سوم الدار.</p>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div class="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="font-bold text-slate-900 dark:text-white">أحمد التونسي (طالب INSAT)</p>
+                        <p class="text-[10px] text-slate-400">يبحث عن شريك بـ حي الغزالة • البودجي: 200 د.ت</p>
+                    </div>
+                    <button onclick="alert('تم إرسال طلب التواصل الواتساب إلى أحمد!')" class="bg-tnRed text-white px-3 py-1.5 rounded-xl font-bold">تواصل معه</button>
+                </div>
+                <div class="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="font-bold text-slate-900 dark:text-white">سارة ورباب (طالبات كلية المنار)</p>
+                        <p class="text-[10px] text-slate-400">تلوّج على بنت ثالثة بـ المنار 2 • البودجي: 250 د.ت</p>
+                    </div>
+                    <button onclick="alert('تم إرسال طلب التواصل الواتساب إلى سارة!')" class="bg-tnRed text-white px-3 py-1.5 rounded-xl font-bold">تواصل معهن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: STEG & SONEDE Bill Calculator -->
+    <div id="billModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 relative border border-slate-200 dark:border-slate-700 space-y-4">
+            <button onclick="closeModal('billModal')" class="absolute top-4 left-4 text-slate-400">✕</button>
+            <div class="text-center">
+                <i class="fa-solid fa-bolt text-3xl text-amber-400 mb-1"></i>
+                <h3 class="font-black text-lg">حاسبة تقاسم الفواتير (STEG / SONEDE)</h3>
+                <p class="text-xs text-slate-500">احسب باي كل مكتري في الدار بدون خلافات بكل شفافية.</p>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold mb-1">المبلغ الإجمالي للفاتورة (د.ت)</label>
+                    <input type="number" id="billTotalAmount" placeholder="مثال: 180" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600 outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1">عدد المكترين المقيمين بالدار</label>
+                    <input type="number" id="billPersonCount" placeholder="مثال: 3" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600 outline-none">
+                </div>
+                <button onclick="calculateBillShare()" class="w-full bg-tnRed text-white font-bold py-2.5 rounded-xl">حساب باي كل شخص</button>
+                <div id="billResult" class="hidden p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-center font-bold text-xs text-amber-700 dark:text-amber-300"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: Payment Window (D17, Flouci, Sobflous) -->
+    <div id="paymentModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 relative border border-slate-200 dark:border-slate-700 space-y-4">
+            <button onclick="closeModal('paymentModal')" class="absolute top-4 left-4 text-slate-400">✕</button>
+            <h3 class="font-black text-lg text-slate-900 dark:text-white">دفع عربون الكراء (Avance)</h3>
+            <div class="space-y-3 text-xs">
+                <label class="block font-bold">اختر الموزع التونسي المعالج:</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button type="button" onclick="confirmPayment('D17')" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 font-bold hover:border-tnRed flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-tnRed"></span> D17 Tunisie
+                    </button>
+                    <button type="button" onclick="confirmPayment('Flouci')" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 font-bold hover:border-violet-500 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-violet-600"></span> Flouci
+                    </button>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl space-y-1">
+                    <div class="flex justify-between"><span>مبلغ العربون المطلوب:</span> <span class="font-bold text-tnRed">150 د.ت</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: Add Property (For Landlords) -->
+    <div id="addPropertyModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto custom-scrollbar p-6 relative border border-slate-200 dark:border-slate-700">
+            <button onclick="closeModal('addPropertyModal')" class="absolute top-4 left-4 text-slate-400">✕</button>
+            <h3 class="font-black text-lg mb-1">إضافة دار أو غرفة كراء جديدة</h3>
+            <p class="text-xs text-slate-500 mb-4">أدخل تفاصيل ومواعيد المعاينة الدقيقة</p>
+
+            <form onsubmit="saveNewProperty(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold mb-1">عنوان العرض</label>
+                    <input type="text" id="addTitle" required placeholder="مثال: استوديو مفروش قرب INSAT" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600 outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold mb-1">الولاية</label>
+                        <select id="addCity" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600">
+                            <option value="Ariana">أريانة</option>
+                            <option value="Tunis">تونس</option>
+                            <option value="Monastir">المنستير</option>
+                            <option value="Sousse">سوسة</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1">نوع الكراء</label>
+                        <select id="addType" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600">
+                            <option value="Foyer">غرفة مبيت</option>
+                            <option value="Studio">استوديو</option>
+                            <option value="S+1">S+1</option>
+                            <option value="S+2">S+2</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold mb-1">العنوان الكامل والرقم السري للمبنى</label>
+                    <input type="text" id="addAddress" required placeholder="نهج الغزالة، عدد 12" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold mb-1">السعر الشهر (د.ت)</label>
+                        <input type="number" id="addPrice" required placeholder="350" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1">شروط المالك</label>
+                        <select id="addGender" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600">
+                            <option value="فتيات فقط">فتيات فقط</option>
+                            <option value="ذكور فقط">ذكور فقط</option>
+                            <option value="عائلات فقط">عائلات فقط</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold mb-1">تاريخ بداية الكراء (وقتش تتكرا)</label>
+                        <input type="date" id="addRentStart" required class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1">تاريخ نهاية الكراء (وقتش توفا)</label>
+                        <input type="date" id="addRentEnd" required class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold mb-1">أوقات وساعات معاينة الدار (وقت الزيارة)</label>
+                    <input type="text" id="addVisitSlots" required placeholder="مثال: كل يوم سبت وأحد من 14:00 إلى 17:00" class="w-full px-3 py-2 rounded-xl border dark:bg-slate-700 border-slate-200 dark:border-slate-600">
+                </div>
+                <button type="submit" class="w-full bg-tnRed hover:bg-red-700 text-white font-bold py-3 rounded-xl transition shadow-md">نشر العرض كمالك</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden Printable Contract Container -->
+    <div id="printableContract" class="hidden p-8 text-xs font-serif leading-relaxed text-black bg-white">
+        <!-- Injected via JS -->
+    </div>
+
+    <!-- Leaflet JS for Map -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Core App Logic -->
+    <script>
+        // State variables
+        let currentRole = 'visitor'; // 'visitor', 'landlord', 'admin'
+        let currentOwner = 'محسن بن سالم';
+        let leafletMapVisitor = null;
+        let activeSelectedListingId = null;
+
+        // Master Dataset for Housing
+        let allProperties = [
+            {
+                id: 201,
+                title: "غرفة لشخصين في مبيت خاص للفتيات (Foyer Privé)",
+                city: "Ariana",
+                district: "حي الغزالة",
+                address: "شارع التكنولوجيا، نهج 7050، حي الغزالة، أريانة (قرب ISETCom)",
+                type: "Foyer",
+                entry: "مدخل مستقل",
+                genderRequirement: "فتيات فقط",
+                price: 280,
+                status: "متاحة حالياً", // 'متاحة حالياً', 'قيد المعاينة', 'مكرية'
+                rentStartDate: "2026-10-01",
+                rentEndDate: "2027-06-30",
+                visitSlots: "يومياً من 14:00 إلى 18:00 (بالتنسيق مع الحارسة)",
+                ownerName: "الحاجة فضيلة الورفلي",
+                ownerPhone: "+216 98 443 210",
+                ownerVerified: true,
+                tenantName: "مريم العبيدي (طالبة)",
+                tenantCIN: "07988123",
+                paymentStatus: "خالص لشهر أكتوبر",
+                lat: 36.8920,
+                lng: 10.1830,
+                images: [
+                    "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80"
+                ],
+                description: "غرفة طالبات هادئة جداً، حراسة 24/24، ويفي عالي السرعة، مدخل مستقل مع كاميرات مراقبة."
+            },
+            {
+                id: 202,
+                title: "استوديو S+1 مفروش عالي الطراز للطلبة",
+                city: "Tunis",
+                district: "المنار 2",
+                address: "نهج ابن شرف، المنار 2، تونس (خلف مركب الجامعة)",
+                type: "Studio",
+                entry: "مدخل مشترك مع المالك",
+                genderRequirement: "ذكور فقط",
+                price: 450,
+                status: "قيد المعاينة",
+                rentStartDate: "2026-11-01",
+                rentEndDate: "2027-08-31",
+                visitSlots: "السبت والأحد من 10:00 إلى 13:00",
+                ownerName: "محسن بن سالم",
+                ownerPhone: "+216 22 119 887",
+                ownerVerified: true,
+                tenantName: "أحمد القاسمي (طالب)",
+                tenantCIN: "08812344",
+                paymentStatus: "في انتظار إرسال العربون",
+                lat: 36.8330,
+                lng: 10.1510,
+                images: [
+                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"
+                ],
+                description: "استوديو دافئ جداً ومفروش بالكامل (مطبخ مجهز، مطفأة، بيت حمام)، مدخل ممر خاص بالفيلا."
+            },
+            {
+                id: 203,
+                title: "شقة S+2 مجهزة للعائلات أو الطالبات",
+                city: "Monastir",
+                district: "السكناس",
+                address: "شارع علي بورقيبة، السكناس، المنستير (قريب من كلية الطب)",
+                type: "S+2",
+                entry: "مدخل مع عمارة ومصعد",
+                genderRequirement: "فتيات فقط",
+                price: 650,
+                status: "مكرية",
+                rentStartDate: "2026-09-15",
+                rentEndDate: "2027-06-15",
+                visitSlots: "غير متاحة حالياً للمعاينة",
+                ownerName: "السمسار رياض بالشيخ",
+                ownerPhone: "+216 55 900 123",
+                ownerVerified: true,
+                tenantName: "سارة وبثينة (طالبات طب)",
+                tenantCIN: "09988112",
+                paymentStatus: "خالص كامل السوم",
+                lat: 35.7640,
+                lng: 10.8110,
+                images: [
+                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80"
+                ],
+                description: "شقة في الإقامة الهادئة، مصعد شغال، غاز طبيعي، قريب جداً من كلية الطب ومحطة قطار الساحل."
+            }
+        ];
+
+        // Complaints Dataset
+        let complaintsList = [
+            { id: 1, owner: "محسن بن سالم", tenant: "أحمد القاسمي", text: "خلل في سخان الماء بالدوش ينقط ماء", date: "اليوم 10:30" },
+            { id: 2, owner: "الحاجة فضيلة الورفلي", tenant: "مريم العبيدي", text: "طلب تغيير مفتاح الباب الخارجي للمبيت", date: "أمس 18:00" }
+        ];
+
+        // Visit Requests Dataset
+        let visitRequestsList = [
+            { id: 10, owner: "محسن بن سالم", visitor: "سليم بن عمار", phone: "22 334 556", date: "السبت القادم 11:00", propertyTitle: "استوديو S+1 المنار" }
+        ];
+
+        // DOM Ready Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderVisitorGrid(allProperties);
+            populateCheckinSelect();
+            initAdminChart();
+        });
+
+        // ==================== ROLE SWITCHING SYSTEM ====================
+        function setRole(role) {
+            currentRole = role;
+
+            // Update Header Tab styling
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('bg-tnRed', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-600', 'dark:text-slate-300');
+            });
+
+            const activeBtn = document.getElementById('roleBtn' + role.charAt(0).toUpperCase() + role.slice(1));
+            if(activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'dark:text-slate-300');
+                activeBtn.classList.add('bg-tnRed', 'text-white', 'shadow-md');
+            }
+
+            // Hide all view sections
+            document.getElementById('viewVisitor').classList.add('hidden');
+            document.getElementById('viewLandlord').classList.add('hidden');
+            document.getElementById('viewAdmin').classList.add('hidden');
+
+            const bannerTitle = document.getElementById('bannerTitle');
+            const bannerDesc = document.getElementById('bannerDesc');
+            const bannerRoleTag = document.getElementById('bannerRoleTag');
+            const bannerActionArea = document.getElementById('bannerActionArea');
+
+            if(role === 'visitor') {
+                document.getElementById('viewVisitor').classList.remove('hidden');
+                bannerRoleTag.innerText = "واجهة الزائر والمكتري (Visiteur / Étudiant)";
+                bannerTitle.innerText = "ابحث عن مسكنك أو غرفتك بكل ثقة وسهولة";
+                bannerDesc.innerText = "اطّلع على مواعيد معاينة الدار، تاريخ الشغور وخروج المكتري، وشروط المالك المباشرة.";
+                bannerActionArea.classList.remove('hidden');
+                renderVisitorGrid(allProperties);
+            } 
+            else if(role === 'landlord') {
+                document.getElementById('viewLandlord').classList.remove('hidden');
+                bannerRoleTag.innerText = "واجهة مالك العقار (Propriétaire / Bailleur)";
+                bannerTitle.innerText = "إدارة عقاراتك، متابعة الخلاص، والزيارات";
+                bannerDesc.innerText = "تابع المكترين الخاصين بك، استلم طلبيات المعاينة، وتفقد التشكيات مباشرة.";
+                bannerActionArea.classList.add('hidden');
+                renderLandlordDashboard();
+            } 
+            else if(role === 'admin') {
+                document.getElementById('viewAdmin').classList.remove('hidden');
+                bannerRoleTag.innerText = "واجهة السمسار والإدارة المركزية (Administration)";
+                bannerTitle.innerText = "لوحة تحكم شركة محيب والمبنى أصدقاؤه";
+                bannerDesc.innerText = "مراقبة المعاملات المالية، تفعيل بطاقات التعريف (CIN)، وحل التشكيات والبلاغات.";
+                bannerActionArea.classList.add('hidden');
+            }
+        }
+
+        // ==================== VISITOR LOGIC ====================
+        function renderVisitorGrid(data) {
+            const container = document.getElementById('visitorGrid');
+            document.getElementById('visitorCountText').innerText = `العروض المتاحة (${data.length})`;
+            container.innerHTML = '';
+
+            data.forEach(item => {
+                let statusBadgeColor = item.status === 'متاحة حالياً' ? 'bg-emerald-500' : (item.status === 'قيد المعاينة' ? 'bg-amber-500' : 'bg-slate-500');
+
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition border border-slate-200 dark:border-slate-700 flex flex-col";
+                card.innerHTML = `
+                    <div class="relative h-52 bg-slate-200 overflow-hidden group">
+                        <img src="${item.images[0]}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 right-3 ${statusBadgeColor} text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-md">
+                            ${item.status}
+                        </span>
+                        <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
+                            ${item.entry}
+                        </span>
+                        <div class="absolute bottom-3 right-3 bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white px-3 py-1 rounded-xl text-xs font-black">
+                            ${item.price} د.ت <span class="text-[10px] font-normal text-slate-500">/ شهرياً</span>
+                        </div>
+                    </div>
+
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                            <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-1.5">
+                                <span class="font-bold text-tnRed"><i class="fa-solid fa-location-dot ml-1"></i>${item.city} - ${item.district}</span>
+                                <span class="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded font-bold">${item.genderRequirement}</span>
+                            </div>
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-white line-clamp-1">${item.title}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">${item.address}</p>
+                        </div>
+
+                        <!-- Rent Dates & Visit Slots Info -->
+                        <div class="bg-slate-50 dark:bg-slate-700/40 p-2.5 rounded-2xl text-[11px] space-y-1">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">تاريخ بداية الكراء:</span>
+                                <span class="font-bold text-emerald-600">${item.rentStartDate}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">وقتش توفا (نهاية العقد):</span>
+                                <span class="font-bold text-red-500">${item.rentEndDate}</span>
+                            </div>
+                            <div class="pt-1 border-t border-slate-200 dark:border-slate-600/50 flex items-center justify-between">
+                                <span class="text-slate-400">ساعات المعاينة:</span>
+                                <span class="font-bold text-amber-500 truncate max-w-[140px]">${item.visitSlots}</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-1 flex items-center gap-2">
+                            <button onclick="openVisitorDetails(${item.id})" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold py-2.5 rounded-xl text-xs transition">
+                                <i class="fa-solid fa-eye ml-1"></i> التفاصيل وموعد المعاينة
+                            </button>
+                            <button onclick="openPaymentModal(${item.id})" class="bg-tnRed hover:bg-red-700 text-white font-bold px-3 py-2.5 rounded-xl text-xs transition">
+                                عربون
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function applyVisitorFilters() {
+            const city = document.getElementById('filterCity').value;
+            const type = document.getElementById('filterType').value;
+            const status = document.getElementById('filterStatus').value;
+            const gender = document.getElementById('filterGender').value;
+            const kw = document.getElementById('filterKeyword').value.toLowerCase();
+
+            const filtered = allProperties.filter(item => {
+                const matchCity = (city === 'ALL' || item.city === city);
+                const matchType = (type === 'ALL' || item.type === type);
+                const matchStatus = (status === 'ALL' || item.status === status);
+                const matchGender = (gender === 'ALL' || item.genderRequirement.includes(gender));
+                const matchKw = (item.title.toLowerCase().includes(kw) || item.address.toLowerCase().includes(kw));
+
+                return matchCity && matchType && matchStatus && matchGender && matchKw;
+            });
+
+            renderVisitorGrid(filtered);
+        }
+
+        function switchVisitorTab(tab) {
+            document.querySelectorAll('.v-tab').forEach(btn => {
+                btn.classList.remove('bg-tnRed', 'text-white', 'shadow-md');
+                btn.classList.add('bg-slate-100', 'dark:bg-slate-700', 'text-slate-600', 'dark:text-slate-300');
+            });
+
+            const activeBtn = document.getElementById('vTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+            if(activeBtn) {
+                activeBtn.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-600', 'dark:text-slate-300');
+                activeBtn.classList.add('bg-tnRed', 'text-white', 'shadow-md');
+            }
+
+            document.getElementById('visitorGrid').classList.add('hidden');
+            document.getElementById('visitorMapContainer').classList.add('hidden');
+            document.getElementById('visitorCheckinContainer').classList.add('hidden');
+
+            if(tab === 'grid') {
+                document.getElementById('visitorGrid').classList.remove('hidden');
+            } else if(tab === 'map') {
+                document.getElementById('visitorMapContainer').classList.remove('hidden');
+                initVisitorMap();
+            } else if(tab === 'checkin') {
+                document.getElementById('visitorCheckinContainer').classList.remove('hidden');
+            }
+        }
+
+        function openVisitorDetails(id) {
+            const item = allProperties.find(x => x.id === id);
+            if(!item) return;
+
+            activeSelectedListingId = id;
+            const content = document.getElementById('detailsContent');
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <span class="bg-tnRed/10 text-tnRed text-xs font-bold px-3 py-1 rounded-full inline-block mb-1">${item.type} • ${item.status}</span>
+                        <h2 class="text-xl font-black text-slate-900 dark:text-white">${item.title}</h2>
+                        <p class="text-xs text-slate-500"><i class="fa-solid fa-map-pin text-tnRed ml-1"></i>${item.address}</p>
+                    </div>
+
+                    <div class="h-60 rounded-2xl overflow-hidden">
+                        <img src="${item.images[0]}" class="w-full h-full object-cover">
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl">
+                            <span class="text-[10px] text-slate-400 block">السعر الشهري</span>
+                            <span class="font-black text-tnRed">${item.price} د.ت</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl">
+                            <span class="text-[10px] text-slate-400 block">تاريخ الشغور</span>
+                            <span class="font-bold text-emerald-500">${item.rentStartDate}</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl">
+                            <span class="text-[10px] text-slate-400 block">وقتش توفا</span>
+                            <span class="font-bold text-red-500">${item.rentEndDate}</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl">
+                            <span class="text-[10px] text-slate-400 block">صاحب الدار</span>
+                            <span class="font-bold">${item.ownerName}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-2xl space-y-1 text-xs">
+                        <p class="font-bold text-amber-800 dark:text-amber-300"><i class="fa-solid fa-clock ml-1"></i>مواعيد وساعات المعاينة المتاحة:</p>
+                        <p class="text-slate-700 dark:text-slate-300 font-semibold">${item.visitSlots}</p>
+                    </div>
+
+                    <!-- Book Inspection Slot -->
+                    <div class="p-4 bg-slate-50 dark:bg-slate-700/40 rounded-2xl space-y-2 text-xs">
+                        <h4 class="font-bold">طلب موعد زيارة لمعاينة الدار (Demande de Visite)</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="visitVisitorName" placeholder="اسمك الكامل" class="px-3 py-2 rounded-xl border dark:bg-slate-700">
+                            <input type="tel" id="visitVisitorPhone" placeholder="رقم الهاتف" class="px-3 py-2 rounded-xl border dark:bg-slate-700">
+                        </div>
+                        <button onclick="submitVisitRequest(${item.id})" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl">
+                            تأكيد موعد المعاينة وتنبيه المالك
+                        </button>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="generatePrintableContract(${item.id})" class="flex-1 bg-slate-900 text-white font-bold py-3 rounded-xl text-xs">
+                            <i class="fa-solid fa-print ml-1"></i> استخراج عقد الكراء
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            openModal('detailsModal');
+        }
+
+        function submitVisitRequest(listingId) {
+            const item = allProperties.find(x => x.id === listingId);
+            const name = document.getElementById('visitVisitorName').value || "زائر جديد";
+            const phone = document.getElementById('visitVisitorPhone').value || "22 000 000";
+
+            visitRequestsList.unshift({
+                id: Date.now(),
+                owner: item.ownerName,
+                visitor: name,
+                phone: phone,
+                date: "غداً في أوقات المعاينة",
+                propertyTitle: item.title
+            });
+
+            pushSimNotification('simLandlordFeed', 'طلب معاينة دار جديدة!', `الزائر ${name} يطلب معاينة ${item.title}`);
+            pushSimNotification('simTenantFeed', 'تم تسجيل موعد الزيارة', `تم إرسال طلب المعاينة إلى ${item.ownerName}`);
+
+            alert("تم إرسال طلب موعد الزيارة بنجاح وتم إعلام المالك في محاكي الهاتف!");
+            closeModal('detailsModal');
+        }
+
+        // ==================== LANDLORD LOGIC ====================
+        function switchLandlordOwner(ownerName) {
+            currentOwner = ownerName;
+            renderLandlordDashboard();
+        }
+
+        function renderLandlordDashboard() {
+            const myProps = allProperties.filter(x => x.ownerName === currentOwner);
+            const myComplaints = complaintsList.filter(x => x.owner === currentOwner);
+            const myVisits = visitRequestsList.filter(x => x.owner === currentOwner);
+
+            document.getElementById('ownerStatTotal').innerText = myProps.length;
+            document.getElementById('ownerStatIncome').innerText = (myProps.length * 150) + " د.ت";
+            document.getElementById('ownerStatVisits').innerText = myVisits.length;
+            document.getElementById('ownerStatComplaints').innerText = myComplaints.length;
+            document.getElementById('ownerPropertyCount').innerText = `${myProps.length} عقار مسجل`;
+
+            // Render Owner's specific listings
+            const listContainer = document.getElementById('ownerPropertyList');
+            listContainer.innerHTML = '';
+
+            if(myProps.length === 0) {
+                listContainer.innerHTML = `<div class="p-6 text-center text-xs text-slate-400 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">لا توجد عقارات مسجلة باسمك حالياً. أضف عقارك الأول.</div>`;
+            } else {
+                myProps.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between text-xs";
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <img src="${item.images[0]}" class="w-16 h-16 rounded-xl object-cover">
+                            <div>
+                                <span class="bg-tnRed/10 text-tnRed font-bold px-2 py-0.5 rounded text-[10px]">${item.type} • ${item.status}</span>
+                                <h4 class="font-bold text-sm text-slate-900 dark:text-white mt-0.5">${item.title}</h4>
+                                <p class="text-slate-400">${item.address}</p>
+                                <p class="text-emerald-500 font-semibold mt-1">المكتري الحالي: ${item.tenantName} (${item.paymentStatus})</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1 w-full sm:w-auto">
+                            <button onclick="togglePropertyStatus(${item.id})" class="bg-slate-100 dark:bg-slate-700 font-bold px-3 py-1.5 rounded-xl text-center hover:bg-slate-200">
+                                تغيير حالة الشغور
+                            </button>
+                            <span class="text-[10px] text-slate-400 text-center">أوقات المعاينة: ${item.visitSlots}</span>
+                        </div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            }
+
+            // Render Complaints
+            const complaintsFeed = document.getElementById('landlordComplaintsFeed');
+            complaintsFeed.innerHTML = '';
+            if(myComplaints.length === 0) {
+                complaintsFeed.innerHTML = `<p class="text-slate-400 text-center py-2">لا توجد تشكيات حالياً 👍</p>`;
+            } else {
+                myComplaints.forEach(c => {
+                    complaintsFeed.innerHTML += `
+                        <div class="p-3 bg-red-500/10 border border-red-500/20 rounded-xl space-y-1">
+                            <div class="flex justify-between font-bold text-red-600 dark:text-red-400"><span>${c.tenant}</span> <span>${c.date}</span></div>
+                            <p class="text-slate-700 dark:text-slate-300 font-medium">${c.text}</p>
+                        </div>
+                    `;
+                });
+            }
+
+            // Render Visit Requests
+            const visitsFeed = document.getElementById('landlordVisitsFeed');
+            visitsFeed.innerHTML = '';
+            if(myVisits.length === 0) {
+                visitsFeed.innerHTML = `<p class="text-slate-400 text-center py-2">لا توجد طلبيات معاينة معلقة</p>`;
+            } else {
+                myVisits.forEach(v => {
+                    visitsFeed.innerHTML += `
+                        <div class="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl space-y-1">
+                            <div class="flex justify-between font-bold text-emerald-700 dark:text-emerald-400"><span>${v.visitor} (${v.phone})</span> <span>${v.date}</span></div>
+                            <p class="text-slate-600 dark:text-slate-300">${v.propertyTitle}</p>
+                            <button onclick="alert('تمت الموافقة على موعد المعاينة!')" class="bg-emerald-600 text-white font-bold text-[10px] px-2 py-1 rounded-md mt-1">تأكيد الموعد</button>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function togglePropertyStatus(id) {
+            const item = allProperties.find(x => x.id === id);
+            if(!item) return;
+
+            if(item.status === 'متاحة حالياً') item.status = 'قيد المعاينة';
+            else if(item.status === 'قيد المعاينة') item.status = 'مكرية';
+            else item.status = 'متاحة حالياً';
+
+            renderLandlordDashboard();
+        }
+
+        function saveNewProperty(e) {
+            e.preventDefault();
+            const newP = {
+                id: Date.now(),
+                title: document.getElementById('addTitle').value,
+                city: document.getElementById('addCity').value,
+                district: "حي سكني",
+                address: document.getElementById('addAddress').value,
+                type: document.getElementById('addType').value,
+                entry: "مدخل مستقل",
+                genderRequirement: document.getElementById('addGender').value,
+                price: parseInt(document.getElementById('addPrice').value),
+                status: "متاحة حالياً",
+                rentStartDate: document.getElementById('addRentStart').value,
+                rentEndDate: document.getElementById('addRentEnd').value,
+                visitSlots: document.getElementById('addVisitSlots').value,
+                ownerName: currentOwner,
+                ownerPhone: "+216 -- --- ---",
+                ownerVerified: true,
+                tenantName: "غير مكرية بعد",
+                tenantCIN: "---",
+                paymentStatus: "---",
+                lat: 36.8065,
+                lng: 10.1815,
+                images: ["https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80"],
+                description: "عقار جديد مسجل من المالك."
+            };
+
+            allProperties.unshift(newP);
+            closeModal('addPropertyModal');
+            renderLandlordDashboard();
+            alert("تم إدراج عقارك الجديد بنجاح في المنصة!");
+        }
+
+        // ==================== UTILITY & HELPERS ====================
+        function calculateBillShare() {
+            const total = parseFloat(document.getElementById('billTotalAmount').value);
+            const count = parseInt(document.getElementById('billPersonCount').value);
+            if(!total || !count) return;
+
+            const share = (total / count).toFixed(3);
+            const res = document.getElementById('billResult');
+            res.classList.remove('hidden');
+            res.innerText = `باي كل مكتري في الفاتورة: ${share} د.ت (DT)`;
+        }
+
+        function initVisitorMap() {
+            if(leafletMapVisitor) return;
+            leafletMapVisitor = L.map('visitorMap').setView([36.8065, 10.1815], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletMapVisitor);
+
+            allProperties.forEach(item => {
+                L.marker([item.lat, item.lng]).addTo(leafletMapVisitor)
+                    .bindPopup(`<b>${item.title}</b><br>${item.price} د.ت/شهر`);
+            });
+        }
+
+        function initAdminChart() {
+            const ctx = document.getElementById('adminRevenueChart');
+            if(!ctx) return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['أسبوع 1', 'أسبوع 2', 'أسبوع 3', 'أسبوع 4'],
+                    datasets: [{
+                        label: 'عمولات شركة محيب (د.ت)',
+                        data: [450, 780, 1100, 950],
+                        backgroundColor: '#E70013',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function generatePrintableContract(id) {
+            const item = allProperties.find(x => x.id === id);
+            const printable = document.getElementById('printableContract');
+            printable.innerHTML = `
+                <div style="text-align:center; font-weight:bold; font-size:16px; margin-bottom:20px;">
+                    الجمهورية التونسية<br>
+                    عقد كراء محل معد للسكني / طالب (شركة محيب والمبنى أصدقاؤه)
+                </div>
+                <p><strong>المُكري (صاحب الدار):</strong> ${item.ownerName}</p>
+                <p><strong>المُكتري (الساكن/الطالب):</strong> ${item.tenantName} (CIN: ${item.tenantCIN})</p>
+                <p><strong>المحل المكترى:</strong> ${item.address}</p>
+                <p><strong>معين الكراء:</strong> ${item.price} د.ت شهرياً</p>
+                <p><strong>مدّة العقد:</strong> تبدأ من ${item.rentStartDate} وتستوفي بتاريخ ${item.rentEndDate}</p>
+                <div style="margin-top:40px; display:flex; justify-between:space-between;">
+                    <div>توقيع المُكري</div>
+                    <div>توقيع المُكتري</div>
+                </div>
+            `;
+            window.print();
+        }
+
+        function confirmPayment(method) {
+            closeModal('paymentModal');
+            pushSimNotification('simLandlordFeed', `وصول عربون عبر ${method}`, `قام المكتري بطلب حجز الشقة وحول مبلغ 150 د.ت.`);
+            pushSimNotification('simTenantFeed', `تأكيد الدفع ${method}`, `تم إرسال وصل العربون إلى المالك بنجاح.`);
+            alert("تم إرسال وصل العربون بنجاح!");
+        }
+
+        function pushSimNotification(feedId, title, text) {
+            const feed = document.getElementById(feedId);
+            if(!feed) return;
+            const div = document.createElement('div');
+            div.className = "bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/50";
+            div.innerHTML = `<span class="text-[9px] text-slate-500 block">الآن</span><p class="font-bold text-amber-400">${title}</p><p class="text-[10px] text-slate-300">${text}</p>`;
+            feed.prepend(div);
+        }
+
+        function populateCheckinSelect() {
+            const sel = document.getElementById('checkinListingSelect');
+            if(!sel) return;
+            sel.innerHTML = allProperties.map(p => `<option value="${p.id}">${p.title} - ${p.ownerName}</option>`).join('');
+        }
+
+        function generateCheckInQR() {
+            document.getElementById('qrResult').classList.remove('hidden');
+        }
+
+        function togglePhoneDrawer() {
+            document.getElementById('phoneDrawer').classList.toggle('-translate-x-full');
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
+    </script>
+</body>
+</html>

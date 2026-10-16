@@ -8,7 +8,7 @@
         :root {
             --primary: #0f172a;
             --accent: #10b981;
-            --bg-color: #f1f5f9;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-color: #1e293b;
             --danger: #ef4444;
@@ -22,7 +22,7 @@
             margin: 0;
             padding: 0;
         }
-        /* شريط العلوي تماماً كما في الـ Demo */
+        /* الشريط العلوي */
         .top-nav {
             background: #ffffff;
             padding: 12px 25px;
@@ -73,11 +73,6 @@
             color: white;
             border-color: var(--primary);
         }
-        .role-btn.tenant-active {
-            background: #8b5cf6;
-            color: white;
-            border-color: #8b5cf6;
-        }
 
         /* الهيدر الأسود الفخم */
         .hero-banner {
@@ -87,8 +82,8 @@
             text-align: center;
             position: relative;
         }
-        .hero-banner h1 { margin: 0 0 10px 0; font-size: 28px; font-weight: 800; }
-        .hero-banner p { color: #94a3b8; font-size: 14px; margin: 0; }
+        .hero-banner h1 { margin: 0 0 10px 0; font-size: 26px; font-weight: 800; }
+        .hero-banner p { color: #94a3b8; font-size: 13px; margin: 0; }
         
         .coloc-badge-btn {
             position: absolute;
@@ -115,12 +110,12 @@
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.04);
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
             border: 1px solid #e2e8f0;
         }
-        .filter-group label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 13px; color: #64748b; }
+        .filter-group label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 12px; color: #64748b; }
         select, input {
             width: 100%;
             padding: 10px;
@@ -132,13 +127,15 @@
             font-size: 13px;
         }
 
-        /* شريط الأزرار الفرعية (قائمة العقارات، الخريطة، QR) */
         .sub-nav-bar {
             display: flex;
             gap: 10px;
             margin-bottom: 25px;
             flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
         }
+        .sub-btns-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .sub-btn {
             background: white;
             border: 1px solid #cbd5e1;
@@ -148,15 +145,8 @@
             font-weight: bold;
             font-size: 13px;
             color: #334155;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
-        .sub-btn.active {
-            background: #ef4444;
-            color: white;
-            border-color: #ef4444;
-        }
+        .sub-btn.active { background: #ef4444; color: white; border-color: #ef4444; }
 
         /* شبكة العقارات */
         .property-grid {
@@ -170,9 +160,7 @@
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0,0,0,0.04);
             border: 1px solid #e2e8f0;
-            transition: transform 0.2s;
         }
-        .property-card:hover { transform: translateY(-4px); }
         .img-wrap { position: relative; }
         .property-img { width: 100%; height: 180px; object-fit: cover; }
         .tag-badge {
@@ -187,28 +175,24 @@
             font-weight: bold;
         }
         .property-details { padding: 18px; }
-        .property-details h3 { margin: 0 0 6px 0; font-size: 17px; color: var(--primary); }
-        .location-text { color: #64748b; font-size: 12px; margin-bottom: 8px; }
-        .price-text { color: var(--accent); font-weight: 800; font-size: 17px; margin-bottom: 12px; }
+        .property-details h3 { margin: 0 0 6px 0; font-size: 16px; color: var(--primary); }
+        .location-text { color: #64748b; font-size: 12px; margin-bottom: 6px; }
+        .distance-fac { color: #0284c7; font-size: 12px; font-weight: bold; margin-bottom: 8px; }
+        .price-text { color: var(--accent); font-weight: 800; font-size: 17px; margin-bottom: 10px; }
         
-        .whatsapp-btn {
-            background-color: #25D366;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: pointer;
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
         }
-        .whatsapp-btn:hover { opacity: 0.9; }
+        .btn-booking { background: #ef4444; color: white; border: none; padding: 10px 14px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; flex: 1; }
+        .btn-details { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer; flex: 1.5; text-align: center; }
 
-        /* لوحات التحكم والبطاقات للمالك والإدارة */
+        /* لوحات التحكم */
         .stats-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
             margin-bottom: 25px;
         }
         .stat-box {
@@ -218,8 +202,8 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.04);
             border-right: 5px solid var(--accent);
         }
-        .stat-box h3 { margin: 0 0 8px 0; font-size: 14px; color: #64748b; }
-        .stat-box .num { font-size: 24px; font-weight: bold; color: var(--primary); }
+        .stat-box h3 { margin: 0 0 8px 0; font-size: 13px; color: #64748b; }
+        .stat-box .num { font-size: 22px; font-weight: bold; color: var(--primary); }
 
         .panel-card {
             background: white;
@@ -231,45 +215,50 @@
         }
         .panel-card h3 { margin-top: 0; color: var(--primary); font-size: 18px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
 
-        .action-btn {
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
+        /* واجهة تسجيل الدخول (Login & Sign Up) المطابقة لصورة الأستاذ */
+        .login-wrapper {
+            max-width: 420px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            text-align: center;
         }
+        .login-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .login-tab { flex: 1; padding: 10px; border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .login-tab.active { background: #0ea5e9; color: white; border-color: #0ea5e9; }
+        .google-btn { background: white; border: 1px solid #cbd5e1; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; margin-bottom: 15px; }
+        .action-btn { background-color: #0ea5e9; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- الشريط العلوي الاحترافي المطابق للصورة -->
+    <!-- الشريط العلوي -->
     <div class="top-nav">
         <div class="brand-title">
             <span>تونس 🇹🇳</span> شركة مهيب والمبنى أصدقاؤه
         </div>
         <div class="role-buttons-group">
-            <button class="role-btn tenant-active active" onclick="switchRole('tenant', this)">👤 الزائر / المكتري</button>
+            <button class="role-btn active" onclick="switchRole('tenant', this)">👤 الزائر / المكتري</button>
             <button class="role-btn" onclick="switchRole('landlord', this)">🏠 المالك (Propriétaire)</button>
             <button class="role-btn" onclick="switchRole('admin', this)">⚡ السمسار / الإدارة</button>
+            <button class="role-btn" style="background:#0ea5e9; color:white;" onclick="switchRole('auth', this)">🔐 تسجيل الدخول</button>
         </div>
     </div>
 
     <div class="hero-banner">
         <button class="coloc-badge-btn" onclick="alert('خاصية البحث عن Coloc مفعلة')">🔥 نلوج على Coloc (شريك سكن)</button>
         <h1>ابحث عن مسكنك أو غرفتك بكل ثقة وسهولة</h1>
-        <p>المنصة الذكية لإدارة العقارات والمبيات في تونس — تصفح العروض، تاريخ الشفور، وخروج المكتري، وشروط المالك المباشرة.</p>
+        <p>تاريخ الشفور، خروج المكتري، شروط المالك المباشرة، وحاسبة فواتير STEG و SONEDE.</p>
     </div>
 
     <div class="container">
 
-        <!-- 1. واجهة الطالب / المكتري (الزائر) -->
+        <!-- 1. واجهة الزائر / المكتري -->
         <div id="tenantView" class="dashboard-section active">
             
-            <!-- شريط الفلترة المتطور للـ Demo -->
+            <!-- شريط الفلترة المتطور -->
             <div class="filters-bar">
                 <div class="filter-group">
                     <label>الولاية / المنطقة</label>
@@ -290,6 +279,10 @@
                     </select>
                 </div>
                 <div class="filter-group">
+                    <label>بحث بالعنوان / الكلية</label>
+                    <input type="text" placeholder="مثال: قرب INSAT أو FST">
+                </div>
+                <div class="filter-group">
                     <label>حالة الشفور / الكراء</label>
                     <select>
                         <option>جميع الحالات</option>
@@ -307,11 +300,15 @@
                 </div>
             </div>
 
-            <!-- الأزرار الفرعية -->
             <div class="sub-nav-bar">
-                <button class="sub-btn active">📍 قائمة العقارات</button>
-                <button class="sub-btn" onclick="alert('خريطة العقارات التفاعلية قيد التحميل')">🗺️ الخريطة القريبة</button>
-                <button class="sub-btn" onclick="alert('خاصية QR Code Check-in مفعلة')">📱 توثيق الدخول (Check-in QR)</button>
+                <div class="sub-btns-group">
+                    <button class="sub-btn active">📍 قائمة العقارات</button>
+                    <button class="sub-btn" onclick="alert('جاري فتح خرائط Google Maps للموقع الدقيق وتحديد المسافة')">🗺️ الخريطة القريبة (Map)</button>
+                    <button class="sub-btn" onclick="alert('خاصية توثيق الدخول Check-in QR مفعلة')">📱 توثيق الدخول (Check-in QR)</button>
+                </div>
+                <div>
+                    <button class="sub-btn" style="background:#8b5cf6; color:white;" onclick="switchRole('admin', document.querySelectorAll('.role-btn')[2])">💡 حاسبة فواتير STEG / SONEDE</button>
+                </div>
             </div>
 
             <div class="property-grid" id="propertyGrid">
@@ -323,9 +320,18 @@
                     </div>
                     <div class="property-details">
                         <h3>غرفة لشخصين في مبيت خاص للفتيات (Foyer Privé)</h3>
-                        <div class="location-text">📍 Ariana - حي الغزالة (قرب ISETCom)</div>
+                        <div class="location-text">📍 Ariana - حي الغزالة، نهج 7050</div>
+                        <div class="distance-fac">🎓 يبعد 3 دقائق عن ISETCom / INSAT</div>
                         <div class="price-text">280 د.ت / شهرياً</div>
-                        <button class="whatsapp-btn" onclick="openWhatsApp('غرفة مبيت أريانة للفتيات', '280 د.ت')">💬 احجز عبر الواتساب</button>
+                        <div style="font-size: 12px; color: #64748b; margin-bottom: 10px;">
+                            📅 تاريخ بداية الكراء: 2026-10-01<br>
+                            ⏳ وفاش توفى نهاية العقد: 2027-06-30<br>
+                            ⏰ ساعات المعاينة: يومياً من 14:00 إلى 18:00
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-booking" onclick="openWhatsApp('غرفة مبيت أريانة للفتيات', '280 د.ت', 'عربون')">💳 دفع العربون</button>
+                            <button class="btn-details" onclick="openWhatsApp('غرفة مبيت أريانة للفتيات', '280 د.ت', 'معاينة')">📅 حجز موعد معاينة</button>
+                        </div>
                     </div>
                 </div>
 
@@ -337,8 +343,17 @@
                     <div class="property-details">
                         <h3>استوديو S+1 مفروش عالي الطراز للطلبة</h3>
                         <div class="location-text">📍 Tunis - المنار 2 (خلف مركب الجامعات)</div>
+                        <div class="distance-fac">🎓 يبعد 5 دقائق عن جامعة المنار</div>
                         <div class="price-text">450 د.ت / شهرياً</div>
-                        <button class="whatsapp-btn" onclick="openWhatsApp('استوديو المنار S+1', '450 د.ت')">💬 احجز عبر الواتساب</button>
+                        <div style="font-size: 12px; color: #64748b; margin-bottom: 10px;">
+                            📅 تاريخ بداية الكراء: 2026-11-01<br>
+                            ⏳ وفاش توفى نهاية العقد: 2027-08-31<br>
+                            ⏰ ساعات المعاينة: السبت والأحد من 10:00 إلى 13:00
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-booking" onclick="openWhatsApp('استوديو المنار S+1', '450 د.ت', 'عربون')">💳 دفع العربون</button>
+                            <button class="btn-details" onclick="openWhatsApp('استوديو المنار S+1', '450 د.ت', 'معاينة')">📅 حجز موعد معاينة</button>
+                        </div>
                     </div>
                 </div>
 
@@ -349,9 +364,18 @@
                     </div>
                     <div class="property-details">
                         <h3>شقة S+2 مجهزة للعائلات أو الطالبات</h3>
-                        <div class="location-text">📍 Monastir - السقانس</div>
+                        <div class="location-text">📍 Monastir - السقانس، شارع علي بورقيبة</div>
+                        <div class="distance-fac">🎓 يبعد 4 دقائق عن كلية الطب بالمنستير</div>
                         <div class="price-text">650 د.ت / شهرياً</div>
-                        <button class="whatsapp-btn" onclick="openWhatsApp('شقة سقانس المنستير', '650 د.ت')">💬 احجز عبر الواتساب</button>
+                        <div style="font-size: 12px; color: #64748b; margin-bottom: 10px;">
+                            📅 تاريخ بداية الكراء: 2026-09-15<br>
+                            ⏳ وفاش توفى نهاية العقد: 2027-06-15<br>
+                            🔒 الحالة: غير متاحة حالياً للمعاينة
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-booking" style="background:#cbd5e1; cursor:not-allowed;">مكرية بالكامل</button>
+                            <button class="btn-details" onclick="openWhatsApp('شقة سقانس', '650 د.ت', 'استفسار')">💬 استفسار بديل</button>
+                        </div>
                     </div>
                 </div>
 
@@ -367,29 +391,42 @@
                     <div class="num">1 عقار</div>
                 </div>
                 <div class="stat-box" style="border-right-color: var(--warning);">
-                    <h3>المداخيل المستلمة هذا الشهر</h3>
-                    <div class="num">450 د.ت</div>
+                    <h3>العربون المداخيل هذا الشهر</h3>
+                    <div class="num">150 د.ت</div>
+                </div>
+                <div class="stat-box" style="border-right-color: var(--secondary);">
+                    <h3>مواعيد المعاينة المبرمجة</h3>
+                    <div class="num">1 موعد</div>
                 </div>
                 <div class="stat-box" style="border-right-color: var(--danger);">
                     <h3>التشكيّات وطلبات الصيانة</h3>
-                    <div class="num">1 طلب جديد</div>
+                    <div class="num">1 شكوى</div>
                 </div>
             </div>
 
             <div class="panel-card">
-                <h3>عقاراتك المسجلة وحالة كراء كل منها</h3>
-                <p><strong>استوديو S+1 مفروش (المنار):</strong> المكتري الحالي: <em>أحمد القاسمي (طالب)</em> - الحالة: مؤكد وموثق ✅</p>
+                <h3>⚠️ تشكيّات المكترين وطلبات الصيانة الواردة</h3>
+                <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 12px; border-radius: 8px;">
+                    <strong>أحمد القاسمي (طالب - استوديو المنار):</strong> خلل في سخان الماء بالدوش ينقط ماء (تاريخ التشكّي: اليوم 10:30).
+                    <button class="action-btn" style="background: #ef4444; margin-top: 8px;" onclick="alert('تم إعلام الصيانة بالطلب')">إرسال الفني للإصلاح 🔧</button>
+                </div>
             </div>
 
-            <div class="panel-card" style="border-right: 5px solid var(--danger);">
-                <h3>⚠️ تشكيّات المكترين وطلبات الصيانة</h3>
-                <p><strong>أحمد القاسمي:</strong> خلل في سخان الماء بالدوش (ضغط ماء ضعيف).</p>
+            <div class="panel-card">
+                <h3>📅 طلبات موعد زيارة لمعاينة الدار</h3>
+                <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <strong>سليم بن عمار (22 334 253)</strong> — طالب يريد معاينة استوديو S+1 المنار.
+                        <div style="font-size: 12px; color: #64748b;">الموعد المقترح: السبت القادم 11:00 صباحاً</div>
+                    </div>
+                    <button class="action-btn" style="background: var(--accent); width: auto; padding: 8px 16px;" onclick="alert('تم تأكيد الموعد وإرسال تأكيد عبر الواتساب')">تأكيد الموعد ✓</button>
+                </div>
             </div>
         </div>
 
         <!-- 3. واجهة السمسار / الإدارة -->
         <div id="adminView" class="dashboard-section">
-            <h2>⚡ لوحة تحكم السمسار والإدارة العامة (سي مهيب - 21629461304+)</h2>
+            <h2>⚡ لوحة تحكم السمسار وإدارة شركة مهيب أصدقاؤه</h2>
             <div class="stats-row">
                 <div class="stat-box" style="border-right-color: var(--danger);">
                     <h3>إجمالي العربون والمداخيل (د.ت)</h3>
@@ -406,9 +443,12 @@
                 <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                     <div>
                         <strong>مريم العبيدي (طالبة) - CIN: 07988123</strong>
-                        <div style="color: #64748b; font-size: 13px;">كلية العلوم بالمنار - تم التحقق من الهوية</div>
+                        <div style="color: #64748b; font-size: 13px;">كلية العلوم بالمنار - قيد المراجعة والتوثيق</div>
                     </div>
-                    <button style="background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;">قبوله وتوثيقه ✓</button>
+                    <div>
+                        <button style="background: var(--accent); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold;" onclick="alert('تم توثيق الطالبة بنجاح')">قبول وتوثيق ✓</button>
+                        <button style="background: var(--danger); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold;" onclick="alert('تم رفض الهوية')">رفض ✕</button>
+                    </div>
                 </div>
             </div>
 
@@ -422,44 +462,87 @@
             </div>
         </div>
 
+        <!-- 4. واجهة تسجيل الدخول (Login & Sign Up) -->
+        <div id="authView" class="dashboard-section">
+            <div class="login-wrapper">
+                <h2>🔐 Login / Sign Up</h2>
+                <p style="color: #64748b; font-size: 13px; margin-bottom: 20px;">منصة سي مهيب العقارية الذكية في تونس</p>
+
+                <div class="login-tabs">
+                    <button class="login-tab active" onclick="setAuthMode('login', this)">تسجيل الدخول</button>
+                    <button class="login-tab" onclick="setAuthMode('signup', this)">حساب جديد</button>
+                </div>
+
+                <button class="google-btn" onclick="alert('جاري الربط بحساب Google...')">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.15C3.15 21.32 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.61H1.18C.43 8.13 0 9.87 0 12s.43 3.87 1.18 5.39l4.09-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.15 2.68 1.18 6.61l4.09 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+                    Continue with Google
+                </button>
+
+                <div style="text-align: center; color: #94a3b8; font-size: 12px; margin: 10px 0;">or</div>
+
+                <input type="text" id="authInput" placeholder="البريد الإلكتروني أو رقم الهاتف*" style="margin-bottom: 12px;">
+                <input type="password" placeholder="كلمة المرور*" style="margin-bottom: 15px;">
+
+                <button class="action-btn" onclick="submitAuth()">متابعة</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
         const adminPhone = "21629461304";
+        let currentAuthMode = 'login';
 
         function switchRole(role, btn) {
-            document.querySelectorAll('.role-btn').forEach(b => {
-                b.classList.remove('active', 'tenant-active');
-            });
-            btn.classList.add('active');
-            if(role === 'tenant') btn.classList.add('tenant-active');
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
 
             document.getElementById('tenantView').classList.remove('active');
             document.getElementById('landlordView').classList.remove('active');
             document.getElementById('adminView').classList.remove('active');
+            document.getElementById('authView').classList.remove('active');
 
             if(role === 'tenant') document.getElementById('tenantView').classList.add('active');
             else if(role === 'landlord') document.getElementById('landlordView').classList.add('active');
             else if(role === 'admin') document.getElementById('adminView').classList.add('active');
+            else if(role === 'auth') document.getElementById('authView').classList.add('active');
         }
 
-        function openWhatsApp(property, price) {
-            const message = `مرحباً سي مهيب، أريد الاستفسار أو حجز المعاينة للعقار التالي:%0A- العقار: ${property}%0A- السعر: ${price}`;
+        function openWhatsApp(property, price, type) {
+            let message = '';
+            if(type === 'عربون') {
+                message = `مرحباً سي مهيب، أريد دفع العربون وحجز العقار التالي:%0A- العقار: ${property}%0A- السعر: ${price}`;
+            } else if(type === 'معاينة') {
+                message = `مرحباً سي مهيب، أريد حجز موعد معاينة للعقار:%0A- العقار: ${property}%0A- السعر: ${price}`;
+            } else {
+                message = `مرحباً سي مهيب، عندي استفسار بخصوص العقار: ${property}`;
+            }
             window.open(`https://wa.me/${adminPhone}?text=${message}`, '_blank');
+        }
+
+        function setAuthMode(mode, tab) {
+            currentAuthMode = mode;
+            document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        }
+
+        function submitAuth() {
+            const val = document.getElementById('authInput').value;
+            if(!val) { alert('الرجاء إدخال البريد أو رقم الهاتف!'); return; }
+            if(currentAuthMode === 'login') {
+                alert('مرحباً بك مجدداً! تم تسجيل الدخول بنجاح.');
+            } else {
+                alert('تم إنشاء حسابك الجديد بنجاح في منصة سي مهيب!');
+            }
+            switchRole('tenant', document.querySelectorAll('.role-btn')[0]);
         }
 
         function calculateBill() {
             const bill = parseFloat(document.getElementById('totalBill').value);
             const days = parseFloat(document.getElementById('tenantDays').value);
-
-            if(isNaN(bill) || isNaN(days)) {
-                alert('الرجاء إدخال مبلغ الفاتورة وعدد الأيام بشكل صحيح!');
-                return;
-            }
-
+            if(isNaN(bill) || isNaN(days)) { alert('الرجاء إدخال القيم بدقة!'); return; }
             const tenantShare = (bill / 30) * days;
             const landlordShare = bill - tenantShare;
-
             document.getElementById('calcResult').innerHTML = `
                 📊 نتيجة الحساب الآلي:<br>
                 - نصيب المكتري (${days} يوم): <strong>${tenantShare.toFixed(3)} د.ت</strong><br>
@@ -475,7 +558,6 @@
             cards.forEach(card => {
                 const cardCity = card.getAttribute('data-city');
                 const cardType = card.getAttribute('data-type');
-
                 const matchCity = (city === 'all' || cardCity === city);
                 const matchType = (type === 'all' || cardType === type);
 

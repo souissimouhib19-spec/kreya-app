@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة سي مهيب - إدارة العقارات</title>
+    <title>منصة سي مهيب - إدارة العقارات في تونس</title>
     <style>
         :root {
             --primary: #2c3e50;
@@ -40,14 +40,14 @@
             box-shadow: inset 0 -3px 0 rgba(0,0,0,0.1);
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 30px auto;
             background: var(--card-bg);
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
-        .role-selection, .dashboard-view {
+        .view-section {
             display: none;
         }
         .active-view {
@@ -84,6 +84,7 @@
         button.landlord-btn { background-color: #d35400; }
         button.tenant-btn { background-color: #2980b9; }
         button.whatsapp-btn { background-color: #25D366; }
+        button.calc-btn { background-color: #8e44ad; }
         
         .card {
             background: #fafafa;
@@ -92,6 +93,40 @@
             border-radius: 8px;
             margin-top: 20px;
         }
+        
+        /* شبكة عرض الديار */
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .property-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        .property-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+        .property-info {
+            padding: 15px;
+        }
+        .property-info h3 {
+            margin: 0 0 10px 0;
+            color: var(--primary);
+        }
+        .property-price {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
         input, select {
             width: 100%;
             padding: 10px;
@@ -102,10 +137,11 @@
         }
         .back-link {
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 25px;
             color: #7f8c8d;
             cursor: pointer;
             text-decoration: underline;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -122,116 +158,86 @@
 
     <div class="container">
         
-        <!-- واجهة اختيار الصفة -->
-        <div id="roleView" class="role-selection active-view">
-            <h2>اختر صفتك للدخول أو إنشاء عقد جديد:</h2>
-            <div class="btn-group">
-                <button class="tenant-btn" onclick="selectRole('tenant')">👤 طالب / مكتري</button>
-                <button class="landlord-btn" onclick="selectRole('landlord')">🏠 مالك العقار</button>
-                <button class="admin-btn" onclick="selectRole('admin')">⚙️ الإدارة (سي مهيب)</button>
+        <!-- 1. الشاشة الرئيسية لاختيار الصفة -->
+        <div id="roleSelectionView" class="view-section active-view">
+            <h2>مرحباً بك! اختر صفتك للولوج إلى النظام:</h2>
+            <p>حدد صفتك لفتح لوحة التحكم الخاصة بك:</p>
+            <div class="btn-group" style="margin-top: 30px;">
+                <button class="tenant-btn" onclick="switchView('tenantDashboard')">👤 طالب / مكتري (تصفح الديار)</button>
+                <button class="landlord-btn" onclick="switchView('landlordDashboard')">🏠 مالك العقار</button>
+                <button class="admin-btn" onclick="switchView('adminDashboard')">⚙️ الإدارة (سي مهيب)</button>
             </div>
+        </div>
+
+        <!-- 2. لوحة الطالب / المكتري -->
+        <div id="tenantDashboard" class="view-section">
+            <h2>🏠 قائمة الديار والعقارات المتاحة للكراء</h2>
+            <p>اختر الدار التي تناسبك واحجز معاينة مباشرة:</p>
             
-            <div class="card" style="margin-top: 35px;">
-                <h3>📝 إنشاء عقد كراء جديد وتنبيه الأطراف</h3>
-                <input type="text" id="contractName" placeholder="اسم المكتري (الطالب) الثلاثي">
-                <input type="text" id="contractPhone" placeholder="رقم هاتفه (لإرسال إشعار العقد له)">
-                <input type="text" id="propertyTitle" placeholder="عنوان العقار (مثال: شقة صفاقس)">
-                <input type="number" id="rentAmount" placeholder="معلوم الكراء بالمليم (DT)">
-                <button class="whatsapp-btn" onclick="sendContractAlerts()">💬 إرسال العقد عبر الواتساب للأطراف</button>
+            <div class="property-grid">
+                <div class="property-card">
+                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500" class="property-img" alt="شقة">
+                    <div class="property-info">
+                        <h3>شقة فاخرة في أريانة</h3>
+                        <p>S+2 قريبة من وسائل النقل والجامعات.</p>
+                        <div class="property-price">750 د.ت / شهرياً</div>
+                        <button class="whatsapp-btn" onclick="bookProperty('شقة فاخرة في أريانة', '750 د.ت')">💬 حجز معاينة عبر الواتساب</button>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500" class="property-img" alt="استوديو">
+                    <div class="property-info">
+                        <h3>استوديو مجهز للطلبة</h3>
+                        <p>مفروش بالكامل، شامل فواتير STEG و SONEDE.</p>
+                        <div class="property-price">450 د.ت / شهرياً</div>
+                        <button class="whatsapp-btn" onclick="bookProperty('استوديو مجهز للطلبة', '450 د.ت')">💬 حجز معاينة عبر الواتساب</button>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500" class="property-img" alt="منزل">
+                    <div class="property-info">
+                        <h3>منزل عربي أصيل في مدينة تونس</h3>
+                        <p>مساحة واسعة، هادئ ومناسب للعائلات أو الطلبة.</p>
+                        <div class="property-price">900 د.ت / شهرياً</div>
+                        <button class="whatsapp-btn" onclick="bookProperty('منزل عربي في مدينة تونس', '900 د.ت')">💬 حجز معاينة عبر الواتساب</button>
+                    </div>
+                </div>
             </div>
+
+            <span class="back-link" onclick="switchView('roleSelectionView')">← العودة لاختيار الصفة الرئيسية</span>
         </div>
 
-        <!-- لوحة الطالب / المكتري -->
-        <div id="tenantDashboard" class="dashboard-view">
-            <h2>لوحة تحكم الطالب / المكتري</h2>
+        <!-- 3. لوحة المالك -->
+        <div id="landlordDashboard" class="view-section">
+            <h2>🏠 لوحة تحكم مالك العقار</h2>
             <div class="card">
-                <p>مرحباً بك. يمكنك إرسال استفسار أو طلب حجز زيارة مباشرة إلى الإدارة أو المالك:</p>
-                <input type="text" id="tenantNameInput" placeholder="اسمك الكامل">
-                <input type="text" id="tenantPhoneInput" placeholder="رقم هاتفك">
-                <input type="text" id="tenantMessage" placeholder="رسالتك أو طلبك (مثال: أريد معاينة الشقة)">
-                <button class="whatsapp-btn" onclick="tenantSendMessage()">💬 إرسال رسالة إلى سي مهيب (المدير)</button>
+                <p>مرحباً بك سيدي المالك. من هنا يمكنك متابعة مداخيل عقاراتك، إدارة المستأجرين، وتنسيق فواتير STEG و SONEDE.</p>
+                <input type="text" id="landlordPropName" placeholder="عنوان عقارك الجديد (مثال: شقة سوسة)">
+                <input type="number" id="landlordPropRent" placeholder="معلوم الكراء المقترح (بالمليم / بالدينار)">
+                <button class="whatsapp-btn" onclick="submitLandlordProperty()">💬 إرسال العقار للإدارة لاعتماده</button>
             </div>
-            <span class="back-link" onclick="goHome()">← العودة لاختيار الصفة الرئيسية</span>
+            <span class="back-link" onclick="switchView('roleSelectionView')">← العودة لاختيار الصفة الرئيسية</span>
         </div>
 
-        <!-- لوحة المالك -->
-        <div id="landlordDashboard" class="dashboard-view">
-            <h2>لوحة تحكم المالك</h2>
-            <div class="card">
-                <p>متابعة مداخيل العقارات، تقاسم فواتير الكهرباء والماء (STEG / SONEDE)، والتواصل مع المستأجرين.</p>
-                <button class="whatsapp-btn" onclick="landlordAction()">💬 ربط وتنسيق مع الإدارة</button>
+        <!-- 4. لوحة الإدارة (سي مهيب) مع آلة حسبان فواتير STEG / SONEDE -->
+        <div id="adminDashboard" class="view-section">
+            <h2>⚙️ لوحة تحكم الإدارة العامة (سي مهيب)</h2>
+            <div class="card" style="border-right: 5px solid #e74c3c;">
+                <p>مرحباً بك سي مهيب. رقم هاتفك الرسمي لاستقبال التنبيهات: <strong>+216 29 461 304</strong></p>
+                <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+                
+                <h3>📝 إنشاء عقد كراء رسمي جديد</h3>
+                <input type="text" id="contractName" placeholder="اسم المكتري الثلاثي">
+                <input type="text" id="contractPhone" placeholder="رقم هاتف المكتري">
+                <input type="text" id="propertyTitle" placeholder="العقار المعني بالكراء">
+                <input type="number" id="rentAmount" placeholder="معلوم الكراء (بالدينار)">
+                <button class="whatsapp-btn" onclick="sendContractAlerts()">💬 إرسال تفاصيل العقد وتوثيقه</button>
             </div>
-            <span class="back-link" onclick="goHome()">← العودة لاختيار الصفة الرئيسية</span>
-        </div>
 
-        <!-- لوحة الأدمن (سي مهيب) -->
-        <div id="adminDashboard" class="dashboard-view">
-            <h2>لوحة تحكم الإدارة (سي مهيب)</h2>
-            <div class="card">
-                <p>أنت تتحكم الآن في المنصة بالكامل. رقم هاتفك الأساسي للإشعارات هو: <strong>+216 29 461 304</strong></p>
-                <button onclick="alert('تم تحديث جميع تقارير العقارات بنجاح!')">عرض جميع الطلبات والعقود الواردة</button>
-            </div>
-            <span class="back-link" onclick="goHome()">← العودة لاختيار الصفة الرئيسية</span>
-        </div>
-
-    </div>
-
-    <script>
-        // رقم هاتفك الأساسي كأدمن (سي مهيب)
-        const adminPhone = "21629461304"; 
-
-        function selectRole(role) {
-            document.getElementById('roleView').classList.remove('active-view');
-            document.getElementById('tenantDashboard').classList.remove('active-view');
-            document.getElementById('landlordDashboard').classList.remove('active-view');
-            document.getElementById('adminDashboard').classList.remove('active-view');
-
-            if (role === 'tenant') document.getElementById('tenantDashboard').classList.add('active-view');
-            else if (role === 'landlord') document.getElementById('landlordDashboard').classList.add('active-view');
-            else if (role === 'admin') document.getElementById('adminDashboard').classList.add('active-view');
-        }
-
-        function goHome() {
-            document.getElementById('tenantDashboard').classList.remove('active-view');
-            document.getElementById('landlordDashboard').classList.remove('active-view');
-            document.getElementById('adminDashboard').classList.remove('active-view');
-            document.getElementById('roleView').classList.add('active-view');
-        }
-
-        function sendContractAlerts() {
-            const name = document.getElementById('contractName').value;
-            const phone = document.getElementById('contractPhone').value;
-            const property = document.getElementById('propertyTitle').value;
-            const amount = document.getElementById('rentAmount').value;
-
-            if(!name || !phone || !property || !amount) {
-                alert('الرجاء تعبئة جميع خانات العقد بدقة!');
-                return;
-            }
-
-            // إرسال الإشعار لسي مهيب عبر الواتساب الخاص بك
-            const msgToAdmin = `📋 عقد كراء جديد في منصة سي مهيب:%0A- المكتري: ${name}%0A- الهاتف: ${phone}%0A- العقار: ${property}%0A- المعلوم: ${amount} مليم`;
-            window.open(`https://wa.me/${adminPhone}?text=${msgToAdmin}`, '_blank');
-        }
-
-        function tenantSendMessage() {
-            const name = document.getElementById('tenantNameInput').value;
-            const phone = document.getElementById('tenantPhoneInput').value;
-            const msg = document.getElementById('tenantMessage').value;
-
-            if(!name || !phone || !msg) {
-                alert('الرجاء ملء جميع خانات الرسالة!');
-                return;
-            }
-
-            const tenantMsg = `📩 رسالة من طالب/مكتري:%0A- الاسم: ${name}%0A- الهاتف: ${phone}%0A- الطلب: ${msg}`;
-            window.open(`https://wa.me/${adminPhone}?text=${tenantMsg}`, '_blank');
-        }
-
-        function landlordAction() {
-            const landlordMsg = `🏠 طلب تنسيق جديد من مالك عقار مع الإدارة (سي مهيب).`;
-            window.open(`https://wa.me/${adminPhone}?text=${landlordMsg}`, '_blank');
-        }
-    </script>
-</body>
-</html>
+            <!-- إضافة ممتازة: حاسبة فواتير STEG & SONEDE -->
+            <div class="card" style="border-right: 5px solid #8e44ad; margin-top: 30px;">
+                <h3>💡 حاسبة فواتير STEG & SONEDE الآلية</h3>
+                <p>احسب نصيب المكتري والمالك من الفاتورة الإجمالية بسهولة:</p>
+                <input type="number" id="totalBill" placeholder="مبلغ الفاتورة الإجمالي

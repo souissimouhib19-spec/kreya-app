@@ -15,7 +15,6 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-serif;line-height:1.6}
 
-/* شاشة اختيار الدور الأول */
 .welcome-screen{
   min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:20px;background:linear-gradient(135deg, #fff1f2 0%, #f8f9fa 100%);
@@ -35,13 +34,11 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
   background:var(--red);color:#fff;border:none;padding:10px 20px;border-radius:99px;font-weight:700;cursor:pointer;width:100%;margin-top:8px;
 }
 
-/* نوافذ منبثقة */
 .modal-ov{position:fixed;inset:0;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-ov.on{display:flex}
-.modal-box{background:var(--card);border-radius:20px;max-width:450px;width:100%;padding:24px;box-shadow:var(--shadow-lg);text-align:center;max-height:90vh;overflow-y:auto}
+.modal-box{background:var(--card);border-radius:20px;max-width:450px;width:100%;padding:24px;box-shadow:var(--shadow-lg);text-align:center}
 .modal-box input{width:100%;padding:10px 14px;margin-bottom:12px;border:1px solid var(--line);border-radius:10px;font-family:inherit}
 
-/* لوحة المنصة */
 .main-app{display:none}
 .nav{
   position:sticky;top:0;z-index:20;background:rgba(255,255,255,0.9);backdrop-filter:blur(10px);
@@ -56,7 +53,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
 .hero h1{margin:0 0 6px;font-size:26px;font-weight:800}
 .wrap{max-width:1200px;margin:0 auto;padding:24px 16px}
 
-/* التخطيط */
 .layout{display:grid;grid-template-columns:1fr 380px;gap:20px}
 @media(max-width:900px){.layout{grid-template-columns:1fr}}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
@@ -72,7 +68,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
 .acts button.pri{background:var(--red);color:#fff;border-color:var(--red)}
 .acts button.dep{background:var(--warn);color:#fff;border-color:var(--warn)}
 
-/* لوحة الجانب (طرق الخلاص والعربون) */
 .sidebar{display:flex;flex-direction:column;gap:20px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
 .panel h3{margin-top:0;color:var(--red);font-size:16px}
@@ -84,7 +79,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
 </head>
 <body>
 
-<!-- شاشة اختيار الدور الأول -->
 <div class="welcome-screen" id="welcomeScreen">
   <h1>مرحباً بك في منصة مهيب وأصدقاؤه</h1>
   <p>اختر صفتك لتصفح أكثر من 20 عقار ومبيت في تونس</p>
@@ -113,7 +107,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
   </div>
 </div>
 
-<!-- نافذة إدخال بيانات قوقل -->
 <div class="modal-ov" id="googleModal">
   <div class="modal-box">
     <h3 style="margin-top:0">تسجيل عبر Google 🌐</h3>
@@ -126,7 +119,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
   </div>
 </div>
 
-<!-- نافذة دفع العربون -->
 <div class="modal-ov" id="depositModal">
   <div class="modal-box">
     <h3 style="margin-top:0">💳 دفع عربون الحجز</h3>
@@ -135,17 +127,15 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
       <b>قيمة العربون (20% من الشهر):</b> <span id="depositAmount" style="color:var(--red);font-weight:800"></span> د.ت<br>
       <b>رقم الحساب البنكي / D17 للسمسار:</b> <code>14 000 00029384812 (RIB)</code> أو هاتف <code>29461304</code>
     </div>
-    <p style="font-size:12px;color:var(--mut)">بعد تحويل العربون، اضغط أدناه لإرسال وصل الدفع وتأكيد الحجز فوراً عبر الواتساب:</p>
     <button class="role-btn" onclick="confirmDepositWhatsApp()" style="background:var(--ok)">إرسال إثبات العربون عبر الواتساب ✓</button>
     <button onclick="document.getElementById('depositModal').classList.remove('on')" style="background:none;border:none;color:var(--mut);margin-top:10px;cursor:pointer">إغلاق</button>
   </div>
 </div>
 
-<!-- لوحة المنصة -->
 <div class="main-app" id="mainApp">
   <div class="nav">
     <div class="brand">🏠 مهيب وأصدقاؤه</div>
-    <div><span id="currentUserBadge" class="pill"></span> <button onclick="location.reload()" style="background:none;border:1px solid var(--line);padding:4px 10px;border-radius:6px;cursor:pointer;margin-right:8px">خروج</button></div>
+    <div><span id="currentUserBadge" class="pill"></span> <button onclick="localStorage.clear();location.reload()" style="background:none;border:1px solid var(--line);padding:4px 10px;border-radius:6px;cursor:pointer;margin-right:8px">خروج</button></div>
   </div>
 
   <div class="hero">
@@ -162,7 +152,6 @@ let db=JSON.parse(localStorage.getItem(KEY))||{users:[], me:null};
 let selectedRole='tenant';
 let activePropForDeposit=null;
 
-// قاعدة بيانات تضم أكثر من 20 عقاراً حقيقياً في تونس مع إحداثيات الخريطة وتواريخ انتهاء الكراء
 const allProperties = [
   {id:'p1', title:'غرفة لشخصين في مبيت فتيات', city:'أريانة', addr:'حي الغزالة، نهج 7050', fac:'ISETCom / INSAT', min:3, price:280, st:'available', end:'—', lat:'36.89', lng:'10.18'},
   {id:'p2', title:'استوديو S+1 مفروش للطلبة', city:'تونس', addr:'المنار 2', fac:'جامعة المنار', min:5, price:450, st:'rented', end:'30 جوان 2026', lat:'36.83', lng:'10.15'},
@@ -178,7 +167,7 @@ const allProperties = [
   {id:'p12', title:'استوديو قرب المستشفى الجامعي', city:'المنستير', addr:'المدينة العتيقة', fac:'كلية الصيدلة', min:3, price:380, st:'available', end:'—', lat:'35.76', lng:'10.83'},
   {id:'p13', title:'غرفة مزدوجة للطلبة', city:'صفاقس', addr:'المهدية كلم 3', fac:'ENIS صفاقس', min:9, price:200, st:'available', end:'—', lat:'34.75', lng:'10.78'},
   {id:'p14', title:'شقة مفروشة بالزهور', city:'تونس', addr:'الزهور 4', fac:'المركب الجامعي الحلفاوين', min:11, price:480, st:'available', end:'—', lat:'36.79', lng:'10.12'},
-  {id:'p15', title:'استوديو جامعي', city:'نابل',, addr:'المعمورة', fac:'كلية الفنون الجميلة', min:6, price:350, st:'rented', end:'1 أكتوبر 2026', lat:'36.44', lng:'10.78'},
+  {id:'p15', title:'استوديو جامعي', city:'نابل', addr:'المعمورة', fac:'كلية الفنون الجميلة', min:6, price:350, st:'rented', end:'1 أكتوبر 2026', lat:'36.44', lng:'10.78'},
   {id:'p16', title:'مبيت طالبات الهادي شاكر', city:'صفاقس', addr:'طريق المهدية', fac:'المستشفى الجامعي', min:4, price:260, st:'available', end:'—', lat:'34.73', lng:'10.77'},
   {id:'p17', title:'غرفة كولوك ممتازة', city:'تونس', addr:'مرسي البحر الأزرق', fac:'جامعة القرجاني', min:15, price:300, st:'available', end:'—', lat:'36.87', lng:'10.32'},
   {id:'p18', title:'شقة طلبة س+2', city:'أريانة', addr:'رواد، مدينة العرفان', fac:'ISI أريانة', min:2, price:550, st:'available', end:'—', lat:'36.91', lng:'10.17'},
@@ -226,12 +215,12 @@ function openDepositModal(id){
 
 function confirmDepositWhatsApp(){
   const depVal = Math.round(activePropForDeposit.price * 0.2);
-  const msg = `مرحباً سي مهيب، قمت بتحويل عربون الحجز بقيمة ${depVal} د.ت للعقار: "${activePropForDeposit.title}" (${activePropForDeposit.price} د.ت/شهر). وهذا وصل الدفع.`;
+  const msg = `مرحباً سي مهيب، قمت بتحويل عربون الحجز بقيمة ${depVal} د.ت للعقار: "${activePropForDeposit.title}" (${activePropForDeposit.price} د.ت/شهر).`;
   window.open(`https://wa.me/21629461304?text=${encodeURIComponent(msg)}`, '_blank');
   document.getElementById('depositModal').classList.remove('on');
 }
 
-function openMap(lat, lng, title){
+function openMap(lat, lng){
   window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
 }
 
@@ -252,7 +241,6 @@ function renderDashboard(u){
       </div>
     `;
   } else {
-    // لوحة المكتري / الطالب: عرض أكثر من 20 عقار + خريطة تفاعلية + طرق الدفع والعربون
     content.innerHTML = `
       <div class="layout">
         <div>
@@ -270,7 +258,7 @@ function renderDashboard(u){
                   <div class="dist">🎓 تبعد ${p.min} دقائق عن ${p.fac}</div>${p.st==='rented'?`<div style="font-size:11.5px;color:var(--red);font-weight:700">📅 يوفى الكراء في: ${p.end}</div>`:''}
                   <div class="price">${p.price} د.ت / شهر</div>
                   <div class="acts">
-                    <button onclick="openMap('${p.lat}','lng','${p.title}')">🗺️ الخريطة</button>
+                    <button onclick="openMap('${p.lat}','${p.lng}')">🗺️ الخريطة</button>
                     ${p.st==='available'?`<button class="dep" onclick="openDepositModal('${p.id}')">💳 عربون</button>`:`<button disabled style="opacity:0.5">مكرية</button>`}
                   </div>
                 </div>
@@ -281,20 +269,9 @@ function renderDashboard(u){
         
         <div class="sidebar">
           <div class="panel">
-            <h3>💳 كيفاش تنجم تخلص العربون؟</h3>
-            <p style="font-size:12.5px;color:var(--mut);margin-bottom:10px">لحجز أي عقار، تخلص عربون بقيمة 20% من الشهر عبر الطرق الآتية:</p>
-            <div class="pay-method"><span>📱</span> <b>خدمة D17 (البريد التونسي):</b> تحويل مباشر لرقم <code>29 461 304</code></div>
-            <div class="pay-method"><span>🏦</span> <b>تحويل بنكي (RIB):</b> حساب السمسار المعتمد في أي بنك تونسي</div>
-            <div class="pay-method"><span>💵</span> <b>الدفع نقداً (Espèces):</b> في مكتب السمسار بعد تحديد موعد معاينة</div>
-          </div>
-
-          <div class="panel">
-            <h3>ℹ️ معلومات هامة للمكتري</h3>
-            <div style="font-size:12.5px;color:var(--mut);display:flex;flex-direction:column;gap:8px">
-              <div>✅ كل العقارات مرفقة بمسافتها الدقيقة لكل جامعة.</div>
-              <div>✅ تنجم تضغط على زر "الخريطة" باش يتحلّك المكان بضبط في Google Maps.</div>
-              <div>✅ بعد دفع العربون، ابعث الوصل عبر زر الواتساب باش يتأكد حجزك فوراً.</div>
-            </div>
+            <h3>💳 طرق دفع العربون</h3>
+            <div class="pay-method"><span>📱</span> <b>D17 البريد:</b> تحويل لرقم <code>29 461 304</code></div>
+            <div class="pay-method"><span>🏦</span> <b>تحويل بنكي (RIB):</b> حساب السمسار المعتمد</div>
           </div>
         </div>
       </div>

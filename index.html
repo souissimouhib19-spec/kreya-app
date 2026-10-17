@@ -3,12 +3,13 @@
   داره (Darek) — منصة العقارات والمبيتات في تونس
   ⚠️ CSP: هذه الصفحة لا تشغّل إلا السكربت والتنسيق اللذين تطابق بصمتهما (sha256) سطر Content-Security-Policy أدناه.
   إذا عدّلت السكربت أو التنسيق: افتح الصفحة، انسخ بصمة 'sha256-…' التي يطبعها المتصفح في Console، وضعها مكان القديمة.
+  أو آلياً: node tools/csp-hash.mjs (يحسب بصمتَي السكربت والتنسيق ويحدّث السطر)، و --check للتحقق فقط.
   إن لم تفعل، سيظهر شريط أحمر وتتوقف المنصة (حماية مقصودة ضد حقن السكربتات).
 -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-FXfdYZEvA0eYHqbclNHrLx5prWFGLySXbVcxIKZGd5U='; style-src 'sha256-93sVEkTkD3YT2DC3f8c6gpv4SINmy8a+Q2sYqiAfKic=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Xlm6g1/C0wGlE2eQcVP6iwgyfnKJ+D0Z5QgDdUATupw='; style-src 'sha256-USuabot+ekORncyBqxdxmn0aiiUDOLlMrmywjeVbz/A=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="داره: ابحث عن مبيت أو شقة في تونس، اطلب معاينة، وادفع العربون بإثبات تحويل تؤكده الإدارة.">
@@ -54,6 +55,7 @@ dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
 .fld .opt{font-weight:400}
 input,select,textarea{width:100%;padding:10px 14px;margin-top:4px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:var(--ink);font-size:15px}
 input[type=file]{padding:8px;font-size:13px}
+textarea{min-height:96px;resize:vertical}
 input[dir=ltr]{text-align:left}
 .err{color:var(--red);font-size:13px;min-height:1.4em;margin:4px 0 8px;font-weight:600}
 .seg{display:flex;background:#f1f5f9;border-radius:99px;padding:4px;margin-bottom:14px}
@@ -113,7 +115,7 @@ input[dir=ltr]{text-align:left}
 .grow{flex:1;min-width:0}
 .rowact{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .pill{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--red);white-space:nowrap}
-.pill.g{background:var(--okb);color:var(--ok)}.pill.x{background:#f1f5f9;color:var(--no)}
+.pill.g{background:var(--okb);color:var(--ok)}.pill.x{background:#f1f5f9;color:var(--no)}.pill.w{background:#fef3c7;color:var(--warn)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
 .stat{background:var(--soft);border-radius:12px;padding:10px 12px}.stat b{display:block;font-size:22px;color:var(--red)}
 .filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
@@ -124,7 +126,7 @@ input[dir=ltr]{text-align:left}
 .chat{background:#f1f5f9;border-radius:12px;padding:12px;height:300px;overflow-y:auto;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
 .msg{background:#fff;padding:8px 12px;border-radius:10px;max-width:80%;box-shadow:0 1px 2px rgba(0,0,0,.05);align-self:flex-end}
 .msg.me{background:var(--soft);align-self:flex-start}
-.msg .txt{white-space:pre-wrap;overflow-wrap:anywhere}
+.txt{white-space:pre-wrap;overflow-wrap:anywhere}
 .chatf{display:flex;gap:8px}.chatf input{margin:0}
 .fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 12px}
 .thumbbtn{border:0;padding:0;background:none;margin-top:6px;display:block}
@@ -139,14 +141,14 @@ input[dir=ltr]{text-align:left}
 </style>
 </head>
 <body>
-<div class="jsfail" id="jsfail" role="alert">تعذّر تشغيل المنصة. فعّل JavaScript أو حدّث بصمة CSP في أعلى الملف.</div>
+<div class="jsfail" id="jsfail" role="alert">تعذّر تشغيل المنصة: JavaScript لا يعمل هنا. افتح الملف في متصفح (Safari أو Chrome) عبر رابط http(s)، لا في معاينة الملفات. إن استمر المشكل، حدّث بصمة CSP في أعلى الملف.</div>
 
 <main class="welcome" id="w">
   <h1>منصة داره (Darek) للعقارات والمبيتات</h1>
   <p>اختر صفتك للدخول: تصفح، حجز، معاينة، وتواصل مباشر</p>
   <div class="roles">
-    <div class="role" data-act="role" data-id="tenant"><div class="ic" aria-hidden="true">🧑‍🎓</div><h2>مكتري / طالب</h2><p>بحث، طلب معاينة، دفع العربون بإثبات تحويل، ومراسلة الإدارة.</p><button type="button" class="btn">دخول كمكتري</button></div>
-    <div class="role" data-act="role" data-id="landlord"><div class="ic" aria-hidden="true">🏠</div><h2>مالك عقار</h2><p>أضف عقاراتك، اربط صور Canva، وتابع المداخيل.</p><button type="button" class="btn">دخول كمالك</button></div>
+    <div class="role" data-act="role" data-id="tenant"><div class="ic" aria-hidden="true">🧑‍🎓</div><h2>مكتري / طالب</h2><p>بحث، طلب معاينة، دفع العربون بإثبات تحويل، ثم فضاء «داري» بعد تأكيد الحجز.</p><button type="button" class="btn">دخول كمكتري</button></div>
+    <div class="role" data-act="role" data-id="landlord"><div class="ic" aria-hidden="true">🏠</div><h2>مالك عقار</h2><p>أضف عقاراتك، تابع المداخيل، وراسل مكتريك وتابع فواتيرهم وتشكياتهم.</p><button type="button" class="btn">دخول كمالك</button></div>
     <div class="role" data-act="role" data-id="broker"><div class="ic" aria-hidden="true">⚡</div><h2>سمسار / إدارة</h2><p>مراجعة العقارات، المعاينات، إثباتات الدفع والرسائل.</p><button type="button" class="btn">دخول الإدارة</button></div>
   </div>
 </main>
@@ -254,6 +256,7 @@ const CITIES = ['تونس','أريانة','بن عروس','منوبة','نابل
 const CATS = { girls:'بنات فقط', students:'طلبة', family:'عائلات', all:'الكل' };
 const TERMS = { day:'يوم', month:'شهر', year:'سنة' };
 const RL = { tenant:'مكتري', landlord:'مالك', broker:'الإدارة' };
+const BILL = { steg:'⚡ STEG (كهرباء)', sonede:'💧 SONEDE (ماء)' };
 const PROS = [['عمي صالح (سباك محترف)','98123456','تونس الكبرى','إصلاح قنوات المياه والتسربات'],['سامي (كهربائي معتمد)','22456789','أريانة ومرناق','تركيب الأضواء وإصلاح الأعطال']];
 const SEED = [
   ['p1','غرفة لشخصين في مبيت فتيات','أريانة','حي الغزالة، نهج 7050','ISETCom / INSAT',3,280,'available','—','girls','month'],
@@ -274,6 +277,12 @@ const dF = new Intl.DateTimeFormat('ar-TN-u-nu-latn', { day:'numeric', month:'sh
 const dtF = new Intl.DateTimeFormat('ar-TN-u-nu-latn', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
 const fmt = (s, f) => { const d = new Date(s); return isNaN(d) ? E(s) : f.format(d); };
 const fDate = s => fmt(s, dF), fDT = s => fmt(s, dtF);
+const nf3 = new Intl.NumberFormat('en-US', { maximumFractionDigits:3 });
+const dinar = n => nf3.format(+n || 0) + ' د.ت';
+const MONTH_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
+const mF = new Intl.DateTimeFormat('ar-TN-u-nu-latn', { month:'long', year:'numeric' });
+const fMonth = m => MONTH_RE.test(m) ? mF.format(new Date(m + '-15T12:00:00')) : '—';
+const thisMonth = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
 const arr = v => Array.isArray(v) ? v : [];
 const obj = v => v && typeof v === 'object' && !Array.isArray(v) ? v : {};
 const str = (v, m = 200) => typeof v === 'string' ? v.slice(0, m) : typeof v === 'number' ? String(v) : '';
@@ -322,7 +331,11 @@ function normalize(r) {
     ov,
     views: arr(r.views).filter(v => v && v.id).map(v => ({ id:str(v.id,40), pid:str(v.pid,40), uid:str(v.uid,40), name:str(v.name,60), slot:str(v.slot,80), at:str(v.at,40), st:oneOf(v.st,['pending','confirmed','cancelled'],'pending') })),
     payments: arr(r.payments).filter(p => p && p.id).map(p => ({ id:str(p.id,40), pid:str(p.pid,40), uid:str(p.uid,40), name:str(p.name,60), type:oneOf(p.type,['dep','rent'],'dep'), amt:num(p.amt,1e6), img:/^i\w+$/.test(p.img) ? p.img : '', at:str(p.at,40), st:oneOf(p.st,['pending','confirmed','rejected'],'pending') })),
-    chats: arr(r.chats).filter(c => c && c.id && c.thr).map(c => ({ id:str(c.id,40), thr:str(c.thr,40), from:c.from === 'broker' ? 'broker' : 'user', name:str(c.name,60), txt:str(c.txt,1000), at:str(c.at,40) }))
+    chats: arr(r.chats).filter(c => c && c.id && c.thr).map(c => ({ id:str(c.id,40), thr:str(c.thr,40), from:c.from === 'broker' ? 'broker' : 'user', name:str(c.name,60), txt:str(c.txt,1000), at:str(c.at,40) })),
+    /* محادثات المكتري ↔ المالك: خيط لكل (عقار، مكتري) */
+    dms: arr(r.dms).filter(c => c && c.id && c.pid && c.uid).map(c => ({ id:str(c.id,40), pid:str(c.pid,40), uid:str(c.uid,40), from:c.from === 'owner' ? 'owner' : 'tenant', name:str(c.name,60), txt:str(c.txt,1000), at:str(c.at,40) })),
+    bills: arr(r.bills).filter(b => b && b.id).map(b => ({ id:str(b.id,40), pid:str(b.pid,40), uid:str(b.uid,40), name:str(b.name,60), kind:oneOf(b.kind,Object.keys(BILL),'steg'), amt:num(b.amt,1e5), month:MONTH_RE.test(b.month) ? b.month : '', img:/^i\w+$/.test(b.img) ? b.img : '', at:str(b.at,40) })),
+    issues: arr(r.issues).filter(x => x && x.id).map(x => ({ id:str(x.id,40), pid:str(x.pid,40), uid:str(x.uid,40), name:str(x.name,60), txt:str(x.txt,1000), img:/^i\w+$/.test(x.img) ? x.img : '', at:str(x.at,40), st:oneOf(x.st,['open','resolved'],'open'), by:str(x.by,60), rat:str(x.rat,40) }))
   };
 }
 /* ترحيل بيانات النسخة الأولى (الصور كانت داخل قاعدة البيانات) */
@@ -478,7 +491,7 @@ async function shrink(file, max, q) {
 const imgErr = e => ({ type:'الملف ليس صورة.', size:'الصورة أكبر من 15 ميغابايت.', decode:'تعذّرت قراءة الصورة. استعمل JPG أو PNG.' }[e && e.message] || 'تعذّرت معالجة الصورة.');
 
 /* ================= الجلسة والدخول ================= */
-let me = null, role = 'tenant', authMode = 'login', tab = 'props', curThr = null, payCtx = null, viewCtx = null, prevUrl = null;
+let me = null, role = 'tenant', authMode = 'login', tab = 'props', curThr = null, curHome = null, curDm = null, payCtx = null, viewCtx = null, prevUrl = null;
 const F = { q:'', city:'', cat:'', term:'', max:0 };
 function restore() {
   const b = lget(ss, SESS);
@@ -544,15 +557,16 @@ function startSession(u) {
   enterApp();
 }
 function enterApp() {
-  tab = { tenant:'props', landlord:'my_props', broker:'broker_all' }[me.role];
+  const home = housed();
+  tab = { tenant:home ? 'home' : 'props', landlord:'my_props', broker:'broker_all' }[me.role];
   $('who').textContent = RL[me.role] + ' · ' + me.name;
-  $('heroP').textContent = { tenant:'ابحث، عاين، واحجز مبيتك بثقة', landlord:'أضف عقاراتك وتابع حجوزاتها ومداخيلها', broker:'راجع الطلبات والمدفوعات من مكان واحد' }[me.role];
+  $('heroP').textContent = { tenant:home ? 'دارك: محادثة المالك، الفواتير والتشكيات في مكان واحد' : 'ابحث، عاين، واحجز مبيتك بثقة', landlord:'أضف عقاراتك وتابع حجوزاتها ومداخيلها', broker:'راجع الطلبات والمدفوعات من مكان واحد' }[me.role];
   $('w').hidden = true; $('app').hidden = false;
   render(); window.scrollTo(0, 0);
 }
 function logout() {
   ldel(ss, SESS); ldel(ls, SESS);
-  me = null; curThr = null; Object.assign(F, { q:'', city:'', cat:'', term:'', max:0 });
+  me = null; curThr = null; curHome = null; curDm = null; Object.assign(F, { q:'', city:'', cat:'', term:'', max:0 });
   toggleMenu(false); $('dash').innerHTML = '';
   $('app').hidden = true; $('w').hidden = false; window.scrollTo(0, 0);
 }
@@ -563,14 +577,20 @@ function counts() {
     props: db.props.filter(p => !p.ok).length,
     views: db.views.filter(v => v.st === 'pending').length,
     pays: db.payments.filter(p => p.st === 'pending').length,
-    inbox: threads().filter(t => t.unread).length
+    inbox: threads().filter(t => t.unread).length,
+    issues: db.issues.filter(x => x.st === 'open').length
   };
 }
 function tabsFor(r) {
-  if (r === 'tenant') return [['props','🏘️ تصفح العقارات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة']];
-  if (r === 'landlord') return [['my_props','🏠 عقاراتي وتصاميم Canva'],['pays','💰 متابعة المداخيل'],['props','🏘️ تصفح العقارات'],['support','💬 الدعم']];
+  if (r === 'tenant') {
+    /* بعد تأكيد العربون: لا قائمة عقارات، بل فضاء «داري» */
+    if (housed()) return [['home','🏠 داري',dmThreads().filter(t => t.unread).length],['bills','🧾 الفواتير'],['issues','⚠️ التشكيات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة']];
+    return [['props','🏘️ تصفح العقارات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة']];
+  }
+  const dmN = dmThreads().filter(t => t.unread).length, issN = ownIssues().filter(x => x.st === 'open').length;
+  if (r === 'landlord') return [['my_props','🏠 عقاراتي وتصاميم Canva'],['tenants','💬 مكترِيّ',dmN],['ll_bills','🧾 الفواتير'],['ll_issues','⚠️ التشكيات',issN],['pays','💰 متابعة المداخيل'],['props','🏘️ تصفح العقارات'],['support','💬 الدعم']];
   const c = counts();
-  return [['broker_all','⚡ لوحة التحكم',c.props + c.views],['pays','💳 المدفوعات',c.pays],['inbox','💬 رسائل الدعم',c.inbox],['props','🏘️ العقارات المنشورة'],['settings','🔐 الأمان والبيانات']];
+  return [['broker_all','⚡ لوحة التحكم',c.props + c.views],['pays','💳 المدفوعات',c.pays],['inbox','💬 رسائل الدعم',c.inbox],['tenants','🏠 مكترو الإدارة',dmN],['ll_issues','⚠️ التشكيات',issN],['ll_bills','🧾 الفواتير'],['props','🏘️ العقارات المنشورة'],['settings','🔐 الأمان والبيانات']];
 }
 function paintNav(items) {
   const h = items.map(([k, l, n]) => `<button type="button" data-act="tab" data-id="${k}"${tab === k ? ' class="on" aria-current="page"' : ''}>${E(l)}${n ? `<span class="cnt">${n}</span>` : ''}</button>`).join('');
@@ -585,10 +605,44 @@ function toggleMenu(f) {
 
 /* ================= العرض ================= */
 const empty = t => `<div class="empty">${t}</div>`;
-const PILL = { pending:['قيد المراجعة',''], confirmed:['مؤكد ✓','g'], rejected:['مرفوض','x'], cancelled:['ملغى','x'], available:['متاح','g'], rented:['مكرى','x'] };
+const PILL = { pending:['قيد المراجعة',''], confirmed:['مؤكد ✓','g'], rejected:['مرفوض','x'], cancelled:['ملغى','x'], available:['متاح','g'], rented:['مكرى','x'], open:['مفتوحة','w'], resolved:['تمّ الإصلاح ✓','g'] };
 const pill = s => { const [l, c] = PILL[s] || [s, '']; return `<span class="pill ${c}">${E(l)}</span>`; };
 const btn = (act, id, label, cls = '') => `<button type="button" class="btn sm ${cls}" data-act="${act}" data-id="${E(id)}">${label}</button>`;
 const uname = id => (db.users.find(x => x.id === id) || {}).name || (id === 'broker' ? 'الإدارة' : 'مستخدم');
+const thumb = (act, id, img, label) => img ? `<button type="button" class="thumbbtn" data-act="${act}" data-id="${E(id)}" aria-label="${label}"><img class="thumb" src="${img}" alt="" loading="lazy" decoding="async"></button>` : '';
+
+/* ================= السكن بعد تأكيد العربون ================= */
+/* مساكن المكتري = عقارات أكّدت الإدارة عربونه فيها */
+const homesOf = tu => [...new Set(db.payments.filter(p => p.uid === tu && p.type === 'dep' && p.st === 'confirmed').map(p => p.pid))].map(prop).filter(Boolean);
+const housed = () => !!me && me.role === 'tenant' && homesOf(me.id).length > 0;
+function myHomes() {
+  const H = homesOf(me.id);
+  if (!H.some(p => p.id === curHome)) curHome = H.length ? H[0].id : null;
+  return H;
+}
+/* المالك (أو الإدارة لعقاراتها) يرى ما يخصّ عقاراته فقط؛ الإدارة ترى الفواتير والتشكيات كلها */
+const ownsProp = pid => { const p = prop(pid); return !!(me && p && p.owner === me.id); };
+const ownIssues = () => isBroker() ? db.issues : db.issues.filter(x => ownsProp(x.pid));
+const ownBills = () => isBroker() ? db.bills : db.bills.filter(b => ownsProp(b.pid));
+/* مكترو المالك المؤكدون: [{ key, pid, uid }] */
+function tenantsOf(owner) {
+  const m = new Map();
+  for (const py of db.payments) {
+    if (py.type !== 'dep' || py.st !== 'confirmed') continue;
+    const p = prop(py.pid); if (!p || p.owner !== owner) continue;
+    const key = py.pid + '|' + py.uid; m.set(key, { key, pid:py.pid, uid:py.uid });
+  }
+  return [...m.values()];
+}
+/* خيوط المحادثة مع المالك، مرتبة بآخر رسالة؛ «غير مقروءة» إن كانت آخر رسالة من الطرف الآخر */
+function dmThreads() {
+  if (!me) return [];
+  const T = me.role === 'tenant' ? homesOf(me.id).map(p => ({ key:p.id + '|' + me.id, pid:p.id, uid:me.id })) : tenantsOf(me.id);
+  const other = me.role === 'tenant' ? 'owner' : 'tenant';
+  return T.map(t => { let last = null; for (const c of db.dms) if (c.pid === t.pid && c.uid === t.uid) last = c; return { ...t, last, unread:!!last && last.from === other }; })
+    .sort((a, b) => String(b.last ? b.last.at : '').localeCompare(String(a.last ? a.last.at : '')));
+}
+const homePick = H => H.length > 1 ? `<section class="panel"><label class="fld">المسكن<select id="home">${H.map(p => opt(p.id, p.title, curHome)).join('')}</select></label></section>` : '';
 
 function render() {
   if (!me) return;
@@ -693,6 +747,57 @@ const VIEWS = {
 
   pros: () => `<section class="panel"><h2>🛠️ خدمات الصيانة وحرفاء داره</h2>${PROS.map(([n, ph, z, s]) => `<div class="row"><div class="grow"><b>${E(n)}</b><div class="mut">${E(z)} · ${E(s)}</div></div><a class="btn sm wa" href="https://wa.me/216${E(ph)}" target="_blank" rel="noopener noreferrer">واتساب</a></div>`).join('')}</section>`,
 
+  home: () => {
+    const H = myHomes(), p = prop(curHome); if (!p) return empty('لا يوجد مسكن مؤكد.');
+    const B = db.bills.filter(b => b.pid === p.id && b.uid === me.id), I = db.issues.filter(x => x.pid === p.id && x.uid === me.id);
+    return `${homePick(H)}<section class="panel"><h2>🏠 داري</h2>
+      <div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">📍 ${E(p.city)} - ${E(p.addr)}</div><div class="mut">المالك: ${E(uname(p.owner))} · ${money(p.price)} / ${E(TERMS[p.term])}</div></div><div class="rowact">${btn('rent', p.id, 'خلاص الكراء', 'ok')}</div></div>
+      <div class="stats"><div class="stat"><b>${B.length}</b><span class="mut">فاتورة مسجّلة</span></div><div class="stat"><b>${I.filter(x => x.st === 'open').length}</b><span class="mut">تشكية مفتوحة</span></div><div class="stat"><b>${I.filter(x => x.st === 'resolved').length}</b><span class="mut">تشكية تمّ حلّها</span></div></div></section>
+    <section class="panel"><h2>💬 محادثة مع المالك (${E(uname(p.owner))})</h2>${dmBox(p.id, me.id)}</section>`;
+  },
+
+  bills: () => {
+    const H = myHomes(), p = prop(curHome); if (!p) return empty('لا يوجد مسكن مؤكد.');
+    const L = db.bills.filter(b => b.pid === p.id && b.uid === me.id).sort((a, b) => b.month.localeCompare(a.month) || byAtDesc(a, b));
+    return `${homePick(H)}<section class="panel"><h2>🧾 تسجيل فاتورة</h2><form id="fBill" novalidate><div class="fr">
+      <label class="fld">النوع<select name="kind">${Object.entries(BILL).map(([v, l]) => opt(v, l, 'steg')).join('')}</select></label>
+      <label class="fld">المبلغ (د.ت)<input name="amt" type="number" min="0.001" max="100000" step="0.001" inputmode="decimal" dir="ltr"></label>
+      <label class="fld">الشهر<input name="month" type="month" value="${thisMonth()}" max="${thisMonth()}" dir="ltr"></label>
+      <label class="fld">صورة الفاتورة<input name="file" type="file" accept="image/*"></label>
+      </div><p class="err" role="alert"></p><button type="submit" class="btn sm">حفظ الفاتورة</button></form></section>
+    <section class="panel"><h2>فواتيري · ${E(p.title)}</h2>${billStats(L)}${L.map(b => billRow(b, true)).join('') || empty('لم تسجّل أي فاتورة بعد.')}</section>`;
+  },
+
+  issues: () => {
+    const H = myHomes(), p = prop(curHome); if (!p) return empty('لا يوجد مسكن مؤكد.');
+    const L = db.issues.filter(x => x.pid === p.id && x.uid === me.id).sort(byOpenThenNew);
+    return `${homePick(H)}<section class="panel"><h2>⚠️ تشكية جديدة</h2><p class="mut">صِف العطب (ماء، كهرباء، قفل، رطوبة…). تصل التشكية إلى المالك وإلى الإدارة.</p><form id="fIssue" novalidate>
+      <label class="fld">وصف العطب<textarea name="txt" maxlength="1000" placeholder="مثال: تسرّب ماء تحت حوض المطبخ منذ يومين"></textarea></label>
+      <label class="fld">صورة العطب <span class="opt">(مستحسنة)</span><input name="file" type="file" accept="image/*"></label>
+      <p class="err" role="alert"></p><button type="submit" class="btn sm">إرسال التشكية</button></form></section>
+    <section class="panel"><h2>تشكياتي</h2>${L.map(x => issueRow(x, false)).join('') || empty('لا توجد تشكيات.')}</section>`;
+  },
+
+  tenants: () => {
+    const T = dmThreads(), title = isBroker() ? '🏠 مكترو عقارات الإدارة' : '💬 مكترِيّ';
+    if (!T.length) return `<section class="panel"><h2>${title}</h2>${empty('لا يوجد مكترون مؤكدون بعد. يظهر المكتري هنا بعد أن تؤكد الإدارة عربونه.')}</section>`;
+    if (!T.some(t => t.key === curDm)) curDm = T[0].key;
+    const cur = T.find(t => t.key === curDm), u = db.users.find(x => x.id === cur.uid) || {}, p = prop(cur.pid);
+    return `<section class="panel"><h2>${title}</h2><label class="fld">المحادثة<select id="dmThr">${T.map(t => opt(t.key, (t.unread ? '● ' : '') + uname(t.uid) + ' — ' + ((prop(t.pid) || {}).title || ''), curDm)).join('')}</select></label>
+      <div class="row"><div class="grow"><b>${E(uname(cur.uid))}</b><div class="mut">${E(p ? p.title : '')}${u.email ? ' · ' + E(u.email) : ''}</div></div>${u.phone ? `<a class="btn sm wa" href="https://wa.me/216${E(u.phone)}" target="_blank" rel="noopener noreferrer">واتساب</a>` : ''}</div>
+      ${dmBox(cur.pid, cur.uid)}</section>`;
+  },
+
+  ll_bills: () => {
+    const L = ownBills().slice().sort((a, b) => b.month.localeCompare(a.month) || byAtDesc(a, b));
+    return `<section class="panel"><h2>🧾 ${isBroker() ? 'كل الفواتير' : 'فواتير عقاراتي'}</h2>${billStats(L)}${L.map(b => billRow(b, false)).join('') || empty('لم يسجّل المكترون أي فاتورة بعد.')}</section>`;
+  },
+
+  ll_issues: () => {
+    const L = ownIssues().slice().sort(byOpenThenNew);
+    return `<section class="panel"><h2>⚠️ ${isBroker() ? 'كل التشكيات' : 'تشكيات عقاراتي'}</h2>${L.map(x => issueRow(x, true)).join('') || empty('لا توجد تشكيات.')}</section>`;
+  },
+
   settings: () => {
     let bytes = 0;
     if (ls) for (let i = 0; i < ls.length; i++) { const k = ls.key(i); if (k && k.startsWith('darek')) bytes += (k.length + (ls.getItem(k) || '').length) * 2; }
@@ -718,6 +823,29 @@ function threads() {
   const m = new Map();
   for (const c of db.chats) m.set(c.thr, c);
   return [...m.entries()].map(([id, last]) => ({ id, last, unread: last.from === 'user' })).sort((a, b) => String(b.last.at).localeCompare(String(a.last.at)));
+}
+const byOpenThenNew = (a, b) => ((b.st === 'open') - (a.st === 'open')) || byAtDesc(a, b);
+function billStats(L) {
+  const t = k => L.filter(b => b.kind === k).reduce((a, b) => a + b.amt, 0);
+  return `<div class="stats">${Object.entries(BILL).map(([k, l]) => `<div class="stat"><b>${dinar(t(k))}</b><span class="mut">${E(l)}</span></div>`).join('')}<div class="stat"><b>${L.length}</b><span class="mut">فاتورة</span></div></div>`;
+}
+function billRow(b, own) {
+  const p = prop(b.pid);
+  return `<div class="row"><div class="grow"><b>${E(BILL[b.kind])}</b> <span class="mut">· ${fMonth(b.month)}${own ? '' : ` · ${E(b.name)} · ${E(p ? p.title : 'عقار محذوف')}`}</span>
+    <div class="mut">${dinar(b.amt)} · سُجّلت ${fDate(b.at)}</div>${thumb('bill-img', b.id, imgGet(b.img), 'عرض الفاتورة بالحجم الكامل')}</div>
+    <div class="rowact">${own ? btn('bill-del', b.id, 'حذف', 'no') : ''}</div></div>`;
+}
+function issueRow(x, staff) {
+  const p = prop(x.pid);
+  return `<div class="row"><div class="grow">${staff ? `<b>${E(x.name)}</b> <span class="mut">· ${E(p ? p.title : 'عقار محذوف')}</span>` : `<span class="mut">${fDT(x.at)}</span>`}
+    <div class="txt">${E(x.txt)}</div>
+    <div class="mut">${staff ? fDT(x.at) : ''}${x.st === 'resolved' ? `${staff ? ' · ' : ''}تمّ الحل بواسطة ${E(x.by)} · ${fDate(x.rat)}` : ''}</div>${thumb('iss-img', x.id, imgGet(x.img), 'عرض صورة العطب بالحجم الكامل')}</div>
+    <div class="rowact">${pill(x.st)}${staff && x.st === 'open' ? btn('iss-ok', x.id, 'تمّ الإصلاح', 'ok') : ''}</div></div>`;
+}
+function dmBox(pid, tu) {
+  const asOwner = me.role !== 'tenant', msgs = db.dms.filter(c => c.pid === pid && c.uid === tu);
+  return `<div class="chat" id="chBox" role="log" aria-live="polite">${msgs.map(c => { const mine = (c.from === 'owner') === asOwner; return `<div class="msg${mine ? ' me' : ''}"><b>${E(c.name)}</b><div class="txt">${E(c.txt)}</div><div class="mut">${fDT(c.at)}</div></div>`; }).join('') || '<div class="mut">لا توجد رسائل بعد. ابدأ المحادثة.</div>'}</div>
+  <form id="fDm" class="chatf"><label class="sr" for="chIn">رسالتك</label><input id="chIn" name="txt" maxlength="1000" autocomplete="off" placeholder="اكتب رسالتك..."><button type="submit" class="btn sm">إرسال</button></form>`;
 }
 function chatBox(thr) {
   const msgs = db.chats.filter(c => c.thr === thr);
@@ -813,6 +941,62 @@ function onChat(f) {
   if (!commit(() => db.chats.pop())) return;
   render(); const n = $('chIn'); if (n) n.focus();
 }
+function onDm(f) {
+  if (!me) return;
+  const t = f.elements.txt.value.trim(); if (!t) return;
+  const T = dmThreads(), th = me.role === 'tenant' ? T.find(x => x.pid === curHome) : T.find(x => x.key === curDm);
+  if (!th) return;
+  db.dms.push({ id:'d' + uid(), pid:th.pid, uid:th.uid, from:me.role === 'tenant' ? 'tenant' : 'owner', name:me.name, txt:t.slice(0, 1000), at:now() });
+  if (!commit(() => db.dms.pop())) return;
+  render(); const n = $('chIn'); if (n) n.focus();
+}
+async function onBill(f) {
+  if (!housed()) return;
+  const p = prop(curHome); if (!p || !homesOf(me.id).some(h => h.id === p.id)) return;
+  const el = f.elements, kind = oneOf(el.kind.value, Object.keys(BILL), ''), amt = Math.round(Number(el.amt.value) * 1000) / 1000, month = el.month.value.trim(), file = el.file.files[0];
+  if (!kind) return setErr(f, 'اختر نوع الفاتورة.');
+  if (!(amt > 0 && amt <= 100000)) return setErr(f, 'أدخل مبلغاً صحيحاً (مثال: 48.250).');
+  if (!MONTH_RE.test(month) || month > thisMonth()) return setErr(f, 'اختر شهراً صحيحاً (الصيغة 2026-03).');
+  if (db.bills.some(b => b.pid === p.id && b.uid === me.id && b.kind === kind && b.month === month)) return setErr(f, 'فاتورة هذا الشهر مسجّلة مسبقاً لهذا النوع. احذفها أولاً لتعويضها.');
+  if (!file) return setErr(f, 'اختر صورة الفاتورة.');
+  busy(f, true);
+  try {
+    const img = imgPut(await shrink(file, 1400, 0.72)); if (!img) return setErr(f, 'مساحة التخزين ممتلئة. لا يمكن حفظ الصورة.');
+    db.bills.push({ id:'b' + uid(), pid:p.id, uid:me.id, name:me.name, kind, amt, month, img, at:now() });
+    if (!commit(() => { db.bills.pop(); imgDel(img); })) return;
+    toast('تم حفظ الفاتورة.'); render();
+  } catch (e) { setErr(f, imgErr(e)); } finally { busy(f, false); }
+}
+async function onIssue(f) {
+  if (!housed()) return;
+  const p = prop(curHome); if (!p || !homesOf(me.id).some(h => h.id === p.id)) return;
+  const txt = f.elements.txt.value.trim(), file = f.elements.file.files[0];
+  if (txt.length < 10) return setErr(f, 'صِف العطب بوضوح (10 أحرف على الأقل).');
+  busy(f, true);
+  try {
+    let img = '';
+    if (file) { img = imgPut(await shrink(file, 1400, 0.72)); if (!img) return setErr(f, 'مساحة التخزين ممتلئة. لا يمكن حفظ الصورة.'); }
+    db.issues.push({ id:'k' + uid(), pid:p.id, uid:me.id, name:me.name, txt:txt.slice(0, 1000), img, at:now(), st:'open', by:'', rat:'' });
+    if (!commit(() => { db.issues.pop(); imgDel(img); })) return;
+    toast('تم إرسال التشكية إلى المالك والإدارة.'); render();
+  } catch (e) { setErr(f, imgErr(e)); } finally { busy(f, false); }
+}
+function delBill(id) {
+  const i = db.bills.findIndex(b => b.id === id); if (i < 0) return;
+  const b = db.bills[i]; if (!me || b.uid !== me.id) return;
+  if (!confirm('حذف هذه الفاتورة؟')) return;
+  db.bills.splice(i, 1);
+  if (!commit(() => db.bills.splice(i, 0, b))) return;
+  imgDel(b.img); toast('تم حذف الفاتورة.'); render();
+}
+function resolveIssue(id) {
+  const x = db.issues.find(k => k.id === id); if (!x || x.st !== 'open') return;
+  if (!(isBroker() || ownsProp(x.pid))) return;
+  if (!confirm('تأكيد أن العطب تمّ إصلاحه؟')) return;
+  Object.assign(x, { st:'resolved', by:me.name, rat:now() });
+  if (!commit(() => Object.assign(x, { st:'open', by:'', rat:'' }))) return;
+  toast('تم تعليم التشكية كمحلولة.'); render();
+}
 async function onAdmin(f) {
   if (!isBroker()) return;
   const a = f.elements.p1.value, b = f.elements.p2.value;
@@ -867,16 +1051,29 @@ function delProp(id) {
   if (ov) imgDel(ov.photo);
   toast('تم حذف العقار.'); render();
 }
-function showReceipt(id) {
-  const py = db.payments.find(p => p.id === id); if (!py) return;
-  if (!(isBroker() || (me && py.uid === me.id) || (me && (prop(py.pid) || {}).owner === me.id))) return;
-  $('imgFull').src = imgGet(py.img); $('imgCap').textContent = `${py.name} · ${money(py.amt)} · ${fDate(py.at)}`;
+function showImg(title, src, cap) {
+  if (!src) return;
+  $('imgT').textContent = title; $('imgFull').alt = title; $('imgFull').src = src; $('imgCap').textContent = cap;
   openDlg('dlgImg');
+}
+/* الصورة يراها صاحبها، مالك العقار، والإدارة */
+const canSee = r => !!r && (isBroker() || (me && r.uid === me.id) || ownsProp(r.pid));
+function showReceipt(id) {
+  const py = db.payments.find(p => p.id === id); if (!canSee(py)) return;
+  showImg('إيصال الدفع', imgGet(py.img), `${py.name} · ${money(py.amt)} · ${fDate(py.at)}`);
+}
+function showBill(id) {
+  const b = db.bills.find(x => x.id === id); if (!canSee(b)) return;
+  showImg('🧾 ' + BILL[b.kind], imgGet(b.img), `${b.name} · ${fMonth(b.month)} · ${dinar(b.amt)}`);
+}
+function showIssue(id) {
+  const x = db.issues.find(k => k.id === id); if (!canSee(x)) return;
+  showImg('⚠️ صورة العطب', imgGet(x.img), `${x.name} · ${fDT(x.at)}`);
 }
 function exportData() {
   if (!isBroker()) return;
   const images = {}, add = i => { const d = imgGet(i); if (d) images[i] = d; };
-  db.payments.forEach(p => add(p.img)); Object.values(db.ov).forEach(o => add(o.photo));
+  db.payments.forEach(p => add(p.img)); db.bills.forEach(b => add(b.img)); db.issues.forEach(x => add(x.img)); Object.values(db.ov).forEach(o => add(o.photo));
   const data = { app:'darek', v:2, exportedAt:now(), db:{ ...db, users:db.users.map(({ salt, hash, iter, ...u }) => u) }, images };
   const url = URL.createObjectURL(new Blob([JSON.stringify(data)], { type:'application/json' }));
   const a = document.createElement('a'); a.href = url; a.download = 'darek-backup-' + now().slice(0, 10) + '.json';
@@ -893,13 +1090,13 @@ const A = {
   ask: id => { const p = prop(id); if (p) waB(`مرحباً، نحب نستفسر على العقار "${p.title}" (${p.city}).`); },
   wa: () => waB('مرحباً، نحب نستفسر على منصة داره'), 'wa-help': () => waB('مرحباً، نحتاج مساعدة في منصة داره'),
   copy: (id, el) => copy(el.dataset.copy), 'copy-admin': () => copy($('adminOut').dataset.line || ''),
-  img: showReceipt, export: exportData,
+  img: showReceipt, 'bill-img': showBill, 'iss-img': showIssue, 'bill-del': delBill, 'iss-ok': resolveIssue, export: exportData,
   'pay-ok': id => setPay(id, 'confirmed'), 'pay-no': id => setPay(id, 'rejected'),
   'view-ok': id => setView(id, 'confirmed'), 'view-no': id => setView(id, 'cancelled'), 'view-cancel': id => setView(id, 'cancelled'),
   pub: id => setPub(id, true), unpub: id => setPub(id, false), 'prop-st': setPropSt, 'prop-del': delProp,
   'reset-filters': () => { Object.assign(F, { q:'', city:'', cat:'', term:'', max:0 }); render(); }
 };
-const FORMS = { fAuth:onAuth, fPin:onPin, fPay:onPay, fView:onView, fProp:onProp, fPhoto:onPhoto, fChat:onChat, fAdmin:onAdmin };
+const FORMS = { fAuth:onAuth, fPin:onPin, fPay:onPay, fView:onView, fProp:onProp, fPhoto:onPhoto, fChat:onChat, fDm:onDm, fBill:onBill, fIssue:onIssue, fAdmin:onAdmin };
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-act]'); if (!t) return;
   const fn = A[t.dataset.act]; if (!fn) return;
@@ -918,6 +1115,8 @@ document.addEventListener('change', e => {
   const t = e.target, k = t.dataset.filter;
   if (k && k !== 'q' && k !== 'max') { F[k] = t.value; paintGrid(); }
   else if (t.id === 'thr') { curThr = t.value; render(); }
+  else if (t.id === 'home') { curHome = t.value; render(); }
+  else if (t.id === 'dmThr') { curDm = t.value; render(); }
   else if (t.id === 'payProof') { clearPreview(); const f = t.files[0]; if (f && /^image\//.test(f.type)) { prevUrl = URL.createObjectURL(f); const i = $('payPrev'); i.src = prevUrl; i.hidden = false; } }
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('menu').classList.contains('open')) { toggleMenu(false); $('hb').focus(); } });

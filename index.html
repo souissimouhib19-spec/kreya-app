@@ -35,7 +35,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
   background:var(--red);color:#fff;border:none;padding:10px 20px;border-radius:99px;font-weight:700;cursor:pointer;width:100%;margin-top:8px;
 }
 
-/* نافذة تسجيل حساب قوقل */
+/* نافذة إدخال بيانات قوقل */
 .modal-ov{position:fixed;inset:0;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-ov.on{display:flex}
 .modal-box{background:var(--card);border-radius:20px;max-width:420px;width:100%;padding:24px;box-shadow:var(--shadow-lg);text-align:center}
@@ -49,12 +49,34 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
 }
 .brand{font-weight:800;font-size:20px;color:var(--red);display:flex;align-items:center;gap:8px}
 .hero{
-  padding:60px 20px;text-align:center;
+  padding:50px 20px;text-align:center;
   background:linear-gradient(rgba(0,0,0,0.55),rgba(200,16,46,0.75)),url('hero.jpg') center/cover no-repeat;
   color:#fff;
 }
-.hero h1{margin:0 0 8px;font-size:28px;font-weight:800}
-.wrap{max-width:1100px;margin:0 auto;padding:24px 16px}
+.hero h1{margin:0 0 6px;font-size:26px;font-weight:800}
+.wrap{max-width:1200px;margin:0 auto;padding:24px 16px}
+
+/* تخطيط استعراض العقارات والخريطة */
+.layout{display:grid;grid-template-columns:1fr 400px;gap:20px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.cover{height:160px;background:var(--soft);position:relative;display:flex;align-items:center;justify-content:center;color:var(--mut);font-weight:600}
+.badge{position:absolute;top:10px;right:10px;font-size:11px;font-weight:700;color:#fff;padding:4px 10px;border-radius:99px}
+.b-available{background:var(--ok)} .b-rented{background:#64748b}
+.body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.price{color:var(--red);font-weight:800;font-size:18px}
+.dist{background:var(--soft);color:var(--red);font-weight:700;font-size:12px;padding:4px 10px;border-radius:6px;width:fit-content}
+.acts{display:flex;gap:6px;margin-top:auto;padding-top:10px}
+.acts button{flex:1;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;font-size:12px}
+.acts button.pri{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* قسم الخريطة الوهمية الحية */
+.map-box{background:var(--card);border:1px solid var(--line);border-radius:16px;height:450px;position:sticky;top:80px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.map-header{padding:12px 16px;background:var(--soft);font-weight:700;border-bottom:1px solid var(--line);color:var(--red)}
+.map-body{flex:1;background:#e2e8f0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.map-pin{position:absolute;background:var(--red);color:#fff;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.3);cursor:pointer}
+
 .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:var(--shadow)}
 .row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
 .pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--red)}
@@ -65,37 +87,37 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
 <!-- شاشة اختيار الدور الأول -->
 <div class="welcome-screen" id="welcomeScreen">
   <h1>مرحباً بك في منصة مهيب وأصدقاؤه</h1>
-  <p>اختر صفتك وسجل دخولك بحساب Google ليتم حفظه لدى إدارة السمسار</p>
+  <p>اختر صفتك وسجل دخولك بحساب Google للمتابعة</p>
   
   <div class="role-grid">
     <div class="role-card" onclick="openGoogleModal('tenant')">
       <div class="role-icon">🧑‍🎓</div>
       <h3>مكتري / طالب</h3>
-      <p>ابحث عن مبيت أو استوديو بكل ثقة.</p>
+      <p>ابحث عن مبيت أو استوديو بكل ثقة مع معرفة المسافة للكلية.</p>
       <button class="role-btn">تسجيل بحساب Google</button>
     </div>
 
     <div class="role-card" onclick="openGoogleModal('landlord')">
       <div class="role-icon">🏠</div>
       <h3>مالك عقار</h3>
-      <p>اعرض عقاراتك للطلبة الموثقين.</p>
+      <p>اعرض عقاراتك ومتابعة فترات الكراء.</p>
       <button class="role-btn">تسجيل بحساب Google</button>
     </div>
 
     <div class="role-card" onclick="openGoogleModal('broker')">
       <div class="role-icon">⚡</div>
       <h3>سمسار / إدارة</h3>
-      <p>إدارة الحسابات والطلبات والعرابين.</p>
+      <p>لوحة التحكم الشاملة لإدارة الحسابات والطلبات.</p>
       <button class="role-btn">دخول الإدارة</button>
     </div>
   </div>
 </div>
 
-<!-- نافذة إدخال بيانات قوقل الحقيقية -->
+<!-- نافذة إدخال بيانات قوقل -->
 <div class="modal-ov" id="googleModal">
   <div class="modal-box">
-    <h3 id="modalTitle" style="margin-top:0">تسجيل عبر Google 🌐</h3>
-    <p class="mut" style="font-size:13px;margin-bottom:16px">أدخل بياناتك وسيتم إرسال حسابك مباشرة إلى لوحة تحكم السمسار.</p>
+    <h3 style="margin-top:0">تسجيل عبر Google 🌐</h3>
+    <p style="font-size:13px;color:var(--mut);margin-bottom:16px">أدخل بياناتك لإنشاء حساب حقيقي ومتابعة طلباتك.</p>
     <input id="gName" placeholder="الاسم الكامل">
     <input id="gEmail" type="email" placeholder="البريد الإلكتروني (Gmail)">
     <input id="gPhone" inputmode="numeric" placeholder="رقم الهاتف (8 أرقام)">
@@ -104,7 +126,19 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
   </div>
 </div>
 
-<!-- لوحة التحكم للمنصة -->
+<!-- نافذة حجز موعد معاينة -->
+<div class="modal-ov" id="visitModal">
+  <div class="modal-box">
+    <h3 style="margin-top:0">📅 حجز موعد معاينة</h3>
+    <p id="visitPropTitle" style="font-size:13px;color:var(--mut);margin-bottom:12px"></p>
+    <input type="date" id="visitDate">
+    <input type="time" id="visitTime">
+    <button class="role-btn" onclick="confirmVisit()">تأكيد وإرسال للسمسار (واتساب)</button>
+    <button onclick="document.getElementById('visitModal').classList.remove('on')" style="background:none;border:none;color:var(--mut);margin-top:10px;cursor:pointer">إغلاق</button>
+  </div>
+</div>
+
+<!-- لوحة المنصة -->
 <div class="main-app" id="mainApp">
   <div class="nav">
     <div class="brand">🏠 مهيب وأصدقاؤه</div>
@@ -112,8 +146,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
   </div>
 
   <div class="hero">
-    <h1 id="heroTitle">مرحباً بك في المنصة</h1>
-    <p>نظام ذكي لإدارة العقارات والمبيتات في تونس</p>
+    <h1>لوّج على دارك، مبيتك أو شريك سكن بكل ثقة</h1>
+    <p>اختر عقارك، تونس الكبرى والساحل، مع تحديد المسافة بالدقيقة لكل كلية</p>
   </div>
 
   <div class="wrap" id="dashboardContent"></div>
@@ -123,11 +157,18 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-ser
 const KEY='mouhib_users_db';
 let db=JSON.parse(localStorage.getItem(KEY))||{users:[], me:null};
 let selectedRole='tenant';
+let activePropForVisit=null;
+
+// عينات عقارات ذكية تحتوي على حالة الكراء وتاريخ نهاية العقد والمسافة للكلية
+const sampleProps=[
+  {id:'p1', title:'غرفة لشخصين في مبيت للفتيات', city:'أريانة', addr:'حي الغزالة، نهج 7050', fac:'ISETCom / INSAT', min:3, price:280, st:'available', end:'—', lat:40, lng:30},
+  {id:'p2', title:'استوديو S+1 مفروش للطلبة', city:'تونس', addr:'المنار 2', fac:'جامعة المنار', min:5, price:450, st:'rented', end:'30 جوان 2026', lat:55, lng:50},
+  {id:'p3', title:'شقة S+2 مجهزة للعائلات', city:'المنستير', addr:'السقانس', fac:'كلية الطب بالمنستير', min:4, price:650, st:'available', end:'—', lat:70, lng:20}
+];
 
 function openGoogleModal(role){
   selectedRole=role;
   if(role==='broker'){
-    // دخول السمسار مباشرة
     loginUser({name:'السمسار مهيب', email:'admin@kreya.tn', role:'broker'});
     return;
   }
@@ -138,19 +179,9 @@ function submitGoogleReg(){
   const name=document.getElementById('gName').value.trim();
   const email=document.getElementById('gEmail').value.trim();
   const phone=document.getElementById('gPhone').value.trim();
-  
   if(!name || !email) return alert('الرجاء إدخال الاسم والبريد الإلكتروني');
   
-  const newUser = {
-    id: 'u_' + Date.now(),
-    name,
-    email,
-    phone: phone || 'غير محدد',
-    role: selectedRole,
-    at: new Date().toLocaleDateString('ar-TN')
-  };
-
-  // حفظ الحساب في قاعدة البيانات المحلية التي يراها السمسار
+  const newUser = {id: 'u_' + Date.now(), name, email, phone: phone || 'غير محدد', role: selectedRole, at: new Date().toLocaleDateString('ar-TN')};
   db.users.push(newUser);
   localStorage.setItem(KEY, JSON.stringify(db));
 
@@ -163,45 +194,84 @@ function loginUser(user){
   document.getElementById('welcomeScreen').style.display='none';
   document.getElementById('mainApp').style.display='block';
   document.getElementById('currentUserBadge').textContent = user.name + ' (' + (user.role==='broker'?'السمسار':user.role==='landlord'?'مالك':'مكتري') + ')';
-  
   renderDashboard(user);
+}
+
+function openVisitModal(id){
+  activePropForVisit = sampleProps.find(p=>p.id===id);
+  document.getElementById('visitPropTitle').textContent = activePropForVisit.title;
+  document.getElementById('visitModal').classList.add('on');
+}
+
+function confirmVisit(){
+  const d = document.getElementById('visitDate').value;
+  const t = document.getElementById('visitTime').value;
+  if(!d || !t) return alert('الرجاء اختيار اليوم والتوقيت');
+  
+  const msg = `مرحباً سي مهيب، أريد حجز موعد معاينة للعقار: "${activePropForVisit.title}" يوم ${d} على الساعة ${t}.`;
+  window.open(`https://wa.me/21629461304?text=${encodeURIComponent(msg)}`, '_blank');
+  document.getElementById('visitModal').classList.remove('on');
 }
 
 function renderDashboard(u){
   const content = document.getElementById('dashboardContent');
   if(u.role === 'broker'){
-    // لوحة تحكم السمسار: يرى فيها كل الحسابات التي تسجلت لديه!
     content.innerHTML = `
       <div class="panel">
-        <h3>⚡ لوحة تحكم السمسار (إدارة الحسابات المسجلة)</h3>
-        <p class="mut">هذه قائمة بجميع المكترين والمالكين الذين أنشؤوا حسابات جديدة عبر المنصة:</p>
+        <h3>⚡ لوحة تحكم السمسار (المستخدمين المسجلين)</h3>
         <div style="margin-top:14px">
           ${db.users.filter(x=>x.role!=='broker').length ? db.users.filter(x=>x.role!=='broker').map(x=>`
             <div class="row">
-              <div>
-                <b>${x.name}</b> (${x.email}) - هاتف: ${x.phone}
-                <div class="mut">تاريخ التسجيل: ${x.at}</div>
-              </div>
+              <div><b>${x.name}</b> (${x.email}) - هاتف: ${x.phone}<div class="mut">تاريخ التسجيل: ${x.at}</div></div>
               <div><span class="pill">${x.role==='tenant'?'مكتري / طالب':'مالك عقار'}</span></div>
             </div>
           `).join('') : '<div style="color:var(--mut);text-align:center;padding:20px">لا توجد حسابات مسجلة حتى الآن</div>'}
         </div>
       </div>
     `;
-    document.getElementById('heroTitle').textContent = 'لوحة التحكم الإدارية';
   } else {
-    // لوحة المكتري أو المالك
+    // لوحة المكتري / الطالب: عرض العقارات مع الخريطة وحالة الكراء والمسافة
     content.innerHTML = `
-      <div class="panel">
-        <h3>مرحباً بك ${u.name} في حسابك الرسمي ✓</h3>
-        <p>تم تسجيل حسابك بنجاح وأصبح مسجلاً لدى إدارة السمسار.</p>
-        <div style="background:var(--soft);padding:15px;border-radius:10px;margin-top:15px">
-          <b>بريدك الإلكتروني المسجل:</b> ${u.email}<br>
-          <b>الصفة:</b> ${u.role==='tenant'?'مكتري / طالب':'مالك عقار'}
+      <div class="layout">
+        <div>
+          <h2 style="margin-top:0;margin-bottom:16px">🏘️ العقارات والمبيتات المتاحة</h2>
+          <div class="grid">
+            ${sampleProps.map(p=>`
+              <div class="card">
+                <div class="cover">
+                  <span class="badge ${p.st==='available'?'b-available':'b-rented'}">${p.st==='available'?'✅ متاح حالياً':'❌ مكرية'}</span>
+                  صورة العقار
+                </div>
+                <div class="body">
+                  <h3 style="margin:0;font-size:15px">${p.title}</h3>
+                  <div class="mut" style="font-size:12px">📍 ${p.city} -${p.addr}</div>
+                  <div class="dist">🎓 تبعد ${p.min} دقائق مشي عن ${p.fac}</div>${p.st==='rented'?`<div style="font-size:12px;color:var(--red);font-weight:700">📅 يوفى الكراء في: ${p.end}</div>`:''}
+                  <div class="price">${p.price} د.ت / شهر</div>
+                  <div class="acts">
+                    ${p.st==='available'?`<button class="pri" onclick="openVisitModal('${p.id}')">📅 معاينة</button>`:`<button disabled style="opacity:0.6">غير متاح</button>`}
+                    <button onclick="alert('التفاصيل الكاملة للعقار')">تفاصيل</button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div>
+          <div class="map-box">
+            <div class="map-header">🗺️ خريطة العقارات والجامعات التونسية</div>
+            <div class="map-body">
+              <div style="color:var(--mut);font-size:13px;text-align:center;padding:20px">
+                خريطة تفاعلية توضح مكان الدار والمسافة بالدقيقة لكل كلية 📍
+              </div>
+              <!-- دبابيس وهمية تمثل مواقع العقارات على الخريطة -->
+              <div class="map-pin" style="top:30%;left:40%" onclick="alert('غرفة الغزالة - أريانة')">🏠 الغزالة</div>
+              <div class="map-pin" style="top:50%;left:60%;background:var(--mut)" onclick="alert('استوديو المنار - تونس')">🏠 المنار</div>
+            </div>
+          </div>
         </div>
       </div>
     `;
-    document.getElementById('heroTitle').textContent = u.role==='tenant' ? 'لوحة المكتري' : 'لوحة المالك';
   }
 }
 </script>

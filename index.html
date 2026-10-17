@@ -15,47 +15,144 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-serif;line-height:1.6}
 
+/* شاشة اختيار الدور الأول */
+.welcome-screen{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;background:linear-gradient(135deg, #fff1f2 0%, #f8f9fa 100%);
+}
+.welcome-screen h1{font-size:28px;font-weight:800;color:var(--ink);margin-bottom:8px;text-align:center}
+.welcome-screen p{color:var(--mut);margin-bottom:30px;font-size:15px;text-align:center}
+.role-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;width:100%;max-width:900px}
+.role-card{
+  background:var(--card);border:2px solid var(--line);border-radius:20px;padding:30px;text-align:center;
+  cursor:pointer;transition:all 0.25s ease;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:15px;
+}
+.role-card:hover{border-color:var(--red);transform:translateY(-5px);box-shadow:var(--shadow-lg)}
+.role-icon{font-size:55px;margin-bottom:5px}
+.role-card h3{margin:0;font-size:20px;color:var(--ink)}
+.role-card p{margin:0;font-size:13px;color:var(--mut)}
+.role-btn{
+  background:var(--red);color:#fff;border:none;padding:10px 24px;border-radius:99px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;
+}
+
+/* زر قوقل */
+.google-btn{
+  display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;color:#333;
+  border:1px solid var(--line);border-radius:12px;padding:12px;font-weight:700;width:100%;cursor:pointer;box-shadow:var(--shadow);margin-top:12px;transition:background 0.2s;
+}
+.google-btn:hover{background:#f1f5f9}
+
+/* التصميم العام للمنصة بعد الدخول */
+.main-app{display:none}
 .nav{
-  position:sticky;top:0;z-index:20;
-  background:rgba(255, 255, 255, 0.9);backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line);
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 24px;
+  position:sticky;top:0;z-index:20;background:rgba(255,255,255,0.9);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:12px 24px;
 }
 .brand{font-weight:800;font-size:20px;color:var(--red);display:flex;align-items:center;gap:8px}
-
+.brand img{height:36px;object-fit:contain}
 .hero{
-  padding:70px 20px;text-align:center;
+  padding:65px 20px;text-align:center;
   background:linear-gradient(rgba(0,0,0,0.55),rgba(200,16,46,0.75)),url('hero.jpg') center/cover no-repeat;
   color:#fff;
 }
-.hero h1{margin:0 0 10px;font-size:32px;font-weight:800}
-.hero p{margin:0 auto 20px;opacity:.9;font-size:16px;max-width:600px}
-.hero button{background:#fff;color:var(--red);border:none;padding:12px 24px;font-weight:800;border-radius:99px;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,0.2)}
-
-.wrap{max-width:1180px;margin:0 auto;padding:30px 16px}
-.test-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px;text-align:center;box-shadow:var(--shadow)}
+.hero h1{margin:0 0 8px;font-size:30px;font-weight:800}
+.hero p{margin:0 auto 18px;opacity:.92;font-size:15px;max-width:600px}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 16px 60px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.cover{height:180px;background:var(--soft);position:relative}
+.cover img{width:100%;height:100%;object-fit:cover}
+.body{padding:16px;display:flex;flex-direction:column;gap:8px}
+.price{color:var(--red);font-weight:800;font-size:18px}
 </style>
 </head>
 <body>
 
-<div class="nav">
-  <div class="brand">🏠 مهيب وأصدقاؤه</div>
-  <div><button class="pri" style="background:var(--red);color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:600">دخول</button></div>
-</div>
+<!-- شاشة اختيار الدور الأول (كيف TakiAcademy) -->
+<div class="welcome-screen" id="welcomeScreen">
+  <h1>مرحباً بك في منصة مهيب وأصدقاؤه</h1>
+  <p>اختر صففتك للبدء في تصفح أو إضافة العقارات بكل سهولة</p>
+  
+  <div class="role-grid">
+    <div class="role-card" onclick="selectRole('tenant')">
+      <div class="role-icon">🧑‍🎓</div>
+      <h3>مكتري / طالب</h3>
+      <p>لوّج على مبيت، استوديو أو شقة قريبة لكلتك بكل ثقة.</p>
+      <button class="role-btn">دخول كمكتري</button>
+    </div>
 
-<div class="hero">
-  <h1>لوّج على دارك، مبيتك أو شريك سكن بكل ثقة</h1>
-  <p>عقارات موثّقة، المسافة للكلية بالدقيقة، وتواصل مباشر عبر واتساب</p>
-  <button>▶ اكتشف المنصة</button>
-</div>
+    <div class="role-card" onclick="selectRole('landlord')">
+      <div class="role-icon">🏠</div>
+      <h3>مالك عقار</h3>
+      <p>عليك العرض ونحن نوصلك بالطلبة الموثقين مباشرة.</p>
+      <button class="role-btn">دخول كمالك</button>
+    </div>
 
-<div class="wrap">
-  <div class="test-box">
-    <h2>الخطوة الأولى ناجحة 100% ✓</h2>
-    <p>الواجهة والخلفية يخدمو ببريق. جاهز نزيدوك الخطوة الثانية (الفلاتر والعقارات)؟</p>
+    <div class="role-card" onclick="selectRole('broker')">
+      <div class="role-icon">⚡</div>
+      <h3>سمسار / إدارة</h3>
+      <p>إدارة العقارات، توثيق البطاقات ومتابعة الطلبات والعرابين.</p>
+      <button class="role-btn">دخول كسمسار</button>
+    </div>
+  </div>
+
+  <div style="max-width:400px;width:100%;margin-top:25px">
+    <button class="google-btn" onclick="loginGoogle()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.95H1.2v3.15C3.18 21.31 7.24 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.25c-.25-.72-.38-1.49-.38-2.25s.13-1.53.38-2.25V6.6H1.2C.44 8.15 0 9.92 0 12s.44 3.85 1.2 5.4l4.08-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.24 0 3.18 2.69 1.2 6.6l4.08 3.15c.95-2.84 3.6-4.95 6.72-4.95z"/></svg>
+      المتابعة بواسطة حساب Google
+    </button>
   </div>
 </div>
 
+<!-- الواجهة الرئيسية للمنصة (تفتح بعد الاختيار) -->
+<div class="main-app" id="mainApp">
+  <div class="nav">
+    <div class="brand"><img src="logo.png" alt="مهيب وأصدقاؤه" onerror="this.outerHTML='🏠 مهيب وأصدقاؤه'"></div>
+    <div><button onclick="location.reload()" style="background:var(--soft);color:var(--red);border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-weight:700">تغيير الحساب</button></div>
+  </div>
+
+  <div class="hero">
+    <h1>لوّج على دارك، مبيتك أو شريك سكن بكل ثقة</h1>
+    <p>عقارات موثّقة، المسافة للكلية بالدقيقة، وتواصل مباشر عبر واتساب</p>
+  </div>
+
+  <div class="wrap">
+    <h2 id="userRoleTitle" style="margin-bottom:20px">العقارات المتاحة</h2>
+    <div class="grid" id="propGrid">
+      <!-- بطاقات تجريبية سريعة -->
+      <div class="card">
+        <div class="cover"><div style="padding:20px;color:var(--mut)">تصويرة العقار</div></div>
+        <div class="body">
+          <h3>استوديو S+1 مفروش للطلبة</h3>
+          <div class="mut">📍 المنار 2، تونس</div>
+          <div class="price">450 د.ت / شهر</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cover"><div style="padding:20px;color:var(--mut)">تصويرة العقار</div></div>
+        <div class="body">
+          <h3>غرفة لشخصين في مبيت خاص</h3>
+          <div class="mut">📍 أريانة، حي الغزالة</div>
+          <div class="price">280 د.ت / شهر</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectRole(role){
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  const titles = {tenant: '👤 لوحة المكتري / الطالب', landlord: '🏠 لوحة المالك', broker: '⚡ لوحة السمسار'};
+  document.getElementById('userRoleTitle').textContent = titles[role] || 'العقارات المتاحة';
+}
+
+function loginGoogle(){
+  // محاكاة تسجيل دخول حقيقي وسريع بقوقل
+  alert('تم الاتصال بحساب Google بنجاح! مرحبا بك في منصة مهيب وأصدقاؤه.');
+  selectRole('tenant');
+}
+</script>
 </body>
 </html>

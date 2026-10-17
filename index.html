@@ -157,7 +157,7 @@ let db={users:[],me:null,deps:[],views:[],extra:[],ov:{},payments:[],chats:[],lo
 let store=null;try{store=window.localStorage;store.getItem(KEY)}catch(e){store=null}
 try{db={...db,...JSON.parse((store&&store.getItem(KEY))||'{}')}}catch(e){}
 const S=()=>({...DS,...db.set});
-let tT;const say=m=>{const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('on'),3500)};
+let tT;const say=m=>{const t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('on');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('on'),3500)};
 const save=()=>{if(!store)return;try{store.setItem(KEY,JSON.stringify(db))}catch(e){say('الذاكرة ممتلئة.')}};
 const $=i=>document.getElementById(i);
 const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -175,7 +175,7 @@ const P=[
 const all=()=>[...P,...db.extra].map(p=>({...p,...(db.ov[p.id]||{})}));
 const find=id=>all().find(p=>p.id===id);
 const art=id=>{const h=[...id].reduce((a,c)=>a+c.charCodeAt(0)*7,0)%360;
- return 'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 150'><rect width='300' height='150' fill='hsl(${h},70%,82%)'/><rect y='110' width='300' height='40' fill='hsl(${(h+120)%360},35%,55%)'/><rect x='95' y='60' width='110' height='55' fill='hsl(${(h+25)%360},40%,92%)'/><polygon points='85,64 150,22 215,64' fill='hsl(${(h+190)%360},45%,38%)'/><rect x='140' y='85' width='20' height='30' fill='hsl(${(h+190)%360},45%,38%)'/><rect x='105' y='75' width='22' height='18' fill='#bfe3f5'/><rect x='173' y='75' width='22' height='18' fill='#bfe3f5'/><circle cx='255' cy='30' r='14' fill='#ffd54a'/></svg>`)};
+ return 'data:image/svg+xml;utf8,+encodeURIComponent(`<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 300 150\'><rect width=\'300\' height=\'150\' fill=\'hsl(${h},70%,82%)\'/><rect y=\'110\' width=\'300\' height=\'40\' fill=\'hsl(${(h+120)%360},35%,55%)\'/><rect x=\'95\' y=\'60\' width=\'110\' height=\'55\' fill=\'hsl(${(h+25)%360},40%,92%)\'/><polygon points=\'85,64 150,22 215,64\' fill=\'hsl(${(h+190)%360},45%,38%)\'/><rect x=\'140\' y=\'85\' width=\'20\' height=\'30\' fill=\'hsl(${(h+190)%360},45%,38%)\'/><rect x=\'105\' y=\'75\' width=\'22\' height=\'18\' fill=\'#bfe3f5\'/><rect x=\'173\' y=\'75\' width=\'22\' height=\'18\' fill=\'#bfe3f5\'/><circle cx=\'255\' cy=\'30\' r=\'14\' fill=\'#ffd54a\'/></svg>`)};
 function sha256js(s){const K=[],H=[],u=new TextEncoder().encode(s),r=(x,n)=>x>>>n|x<<32-n;let n=2;
   for(let i=0;i<64;n++){let p=1;for(let d=2;d*d<=n;d++)if(n%d==0){p=0;break}if(p){if(i<8)H[i]=Math.pow(n,.5)*2**32|0;K[i++]=Math.pow(n,1/3)*2**32|0}}
   const l=u.length,m=new Uint8Array((l+72>>6)<<6);m.set(u);m[l]=128;new DataView(m.buffer).setUint32(m.length-4,l*8);
@@ -191,7 +191,16 @@ function shrink(file,cb,mx,q){
   const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,(mx||800)/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',q||.7))};im.src=r.result};r.readAsDataURL(file)
 }
 
-function openRole(r){role=r;$('eReg').textContent='';$('ePin').textContent='';openM(r==='broker'?'mPin':'mReg')}
+function openRole(r){
+  role=r;
+  $('eReg').textContent='';$('ePin').textContent='';
+  if(r==='broker'){
+    openM('mPin');
+  } else {
+    openM('mReg');
+  }
+}
+
 function submitReg(){
   const name=$('gN').value.trim(),email=$('gE').value.trim(),phone=$('gP').value.trim();
   if(!name)return $('eReg').textContent='أدخل الاسم';
@@ -199,16 +208,39 @@ function submitReg(){
   if(phone&&!/^\d{8}$/.test(phone))return$('eReg').textContent='رقم الهاتف يجب أن يتكون من 8 أرقام';
   let u=db.users.find(x=>x.email.toLowerCase()===email.toLowerCase()&&x.role===role);
   if(!u){u={id:'u'+Date.now(),name,email,phone:phone||'',role,at:new Date().toLocaleDateString('ar-TN')};db.users.push(u)}
-  closeM('mReg');login(u);
+  closeM('mReg');
+  login(u);
 }
-async function submitPin(){
-  if(await sha($('pin').value)!==S().pin)return$('ePin').textContent='الرمز غير صحيح';
-  $('pin').value='';closeM('mPin');login({id:'broker',name:'السمسار مهيب',role:'broker'});
-}
-function login(u){db.me=u;tab='props';save();$('badge').textContent=RL[u.role]+' · '+u.name;$('tk').textContent=S().ann;$('w').style.display='none';$('app').style.display='block';render()}
-function logout(){db.me=null;save();toggleMenu(false);$('app').style.display='none';$('w').style.display='flex';window.scrollTo(0,0)}
 
-// فتح نافذة الدفع الفوري
+async function submitPin(){
+  const pVal = $('pin').value;
+  const hashVal = await sha(pVal);
+  if(hashVal!==S().pin)return $('ePin').textContent='الرمز غير صحيح';
+  $('pin').value='';
+  closeM('mPin');
+  login({id:'broker',name:'السمسار مهيب',role:'broker'});
+}
+
+function login(u){
+  db.me=u;
+  if(u.role==='landlord') tab='my_props';
+  else if(u.role==='broker') tab='broker_all';
+  else tab='props';
+  save();
+  $('badge').textContent=(RL[u.role]||'مستخدم')+' · '+u.name;
+  $('tk').textContent=S().ann;
+  $('w').style.display='none';$('app').style.display='block';
+  render();
+}
+
+function logout(){
+  db.me=null;
+  save();
+  toggleMenu(false);
+  $('app').style.display='none';$('w').style.display='flex';
+  window.scrollTo(0,0);
+}
+
 function openPayModal(id, type){
   actProp=find(id); actPayType=type;
   const amt=type==='dep'?Math.round(actProp.price*S().dep/100):actProp.price;
@@ -216,6 +248,7 @@ function openPayModal(id, type){
   $('pAmt').textContent=amt;
   openM('mPay');
 }
+
 function submitInstantPay(){
   const f=$('payProofFile').files[0];
   if(!f)return say('الرجاء اختيار صورة إيصال الدفع');
@@ -246,29 +279,40 @@ const pubProp=id=>{db.extra.find(x=>x.id===id).ok=true;save();render()};
 const setPay=(id,st)=>{db.payments.find(p=>p.id===id).st=st;if(st==='confirmed')db.ov[db.payments.find(p=>p.id===id).pid]={...(db.ov[db.payments.find(p=>p.id===id).pid]||{}),st:'rented'};save();render()};
 
 function sendMsg(){
-  const t=$('chIn').value.trim();if(!t)return;
+  const inp = $('chIn');
+  if(!inp) return;
+  const t=inp.value.trim();
+  if(!t)return;
   const thr=db.me.role==='broker'?curThr:db.me.id;if(!thr)return;
   db.chats.push({id:'c'+Date.now(),thr,from:db.me.role==='broker'?'broker':'user',name:db.me.name,txt:t,at:new Date().toLocaleString('ar-TN')});
   save();render();
 }
+
 const chatBox=thr=>`<div class="chat" id="chBox">${db.chats.filter(c=>c.thr===thr).map(c=>`<div class="msg ${(c.from==='broker')===(db.me.role==='broker')?'me':''}"><b>${E(c.name)}</b><div>${E(c.txt)}</div><div class="mut">${E(c.at)}</div></div>`).join('')||'<div class="mut">لا توجد رسائل بعد.</div>'}</div>
   <div style="display:flex;gap:8px"><input id="chIn" style="margin:0" maxlength="500" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendMsg()"><button class="btn sm" onclick="sendMsg()">إرسال</button></div>`;
+
 const payRow=(py,canOk)=>{const p=find(py.pid);return `<div class="row"><div><b>${E(py.name)}</b> <span class="mut">· ${E(p?p.title:py.pid)}</span><div class="mut">${py.type==='dep'?'عربون':'كراء'} · ${py.amt} د.ت · ${E(py.at)}</div>${safe(py.img)?`<img class="thumb" src="${safe(py.img)}">`:''}</div>
     <div><span class="pill ${py.st==='confirmed'?'g':''}">${py.st==='pending'?'قيد المراجعة':'مؤكد ✓'}</span>
     ${canOk&&py.st==='pending'?`<button class="btn sm ok" onclick="setPay('${py.id}','confirmed')">قبول الدفع</button>`:''}</div></div>`};
 
 function renderMenu(){
   const u=db.me;
+  if(!u) return;
   let items=[{k:'props',l:'🏘️ تصفح العقارات'}];
   if(u.role==='tenant') items.push({k:'my_rents',l:'📋 طلباتي ومدفوعاتي'},{k:'dispute',l:'💬 الدعم الفوري'},{k:'pros',l:'🛠️ خدمات الصيانة'});
   if(u.role==='landlord') items.push({k:'my_props',l:'🏠 عقاراتي وتصاميم Canva'},{k:'pays',l:'💰 متابعة المداخيل'});
   if(u.role==='broker') items.push({k:'broker_all',l:'⚡ لوحة تحكم الإدارة'},{k:'pays',l:'💳 مراقبة المدفوعات'});
-  $('menu').innerHTML=`<div class="row" style="border:0;padding-top:0"><b>القائمة</b><button class="link" style="margin:0;font-size:18px" onclick="toggleMenu(false)">✕</button></div>`+items.map(i=>`<button class="${tab===i.k?'on':''}" onclick="tab='${i.k}';toggleMenu(false);render()">${i.l}</button>`).join('');
+  const mElem = $('menu');
+  if(mElem) {
+    mElem.innerHTML=`<div class="row" style="border:0;padding-top:0"><b>القائمة</b><button class="link" style="margin:0;font-size:18px" onclick="toggleMenu(false)">✕</button></div>`+items.map(i=>`<button class="${tab===i.k?'on':''}" onclick="tab='${i.k}';toggleMenu(false);render()">${i.l}</button>`).join('');
+  }
 }
 
 function render(){
   renderMenu();
   const u=db.me, D=$('dash');
+  if(!u || !D) return;
+  
   if(tab==='props'){
     const L=all().filter(p=>p.ok&&(!F.city||p.city===F.city)&&(!F.cat||p.cat===F.cat)&&(!F.term||p.term===F.term)&&(!F.q||(p.title+p.addr+p.city).toLowerCase().includes(F.q.toLowerCase())));
     D.innerHTML=`<div class="filters">
@@ -329,11 +373,23 @@ function uploadCanvaPhoto(){
 }
 
 const safe=u=>/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(u||'')?u:'';
-const _render=render;render=()=>{const a=document.activeElement,qf=a&&a.id==='q',pos=qf?a.selectionStart:0;_render();
+const _render=render;
+render=()=>{
+  if(!db.me) return;
+  const a=document.activeElement,qf=a&&a.id==='q',pos=qf?a.selectionStart:0;
+  _render();
   const c=$('chBox');if(c)c.scrollTop=c.scrollHeight;
-  if(qf&&$('q')){$('q').focus();$('q').setSelectionRange(pos,pos)}};
-function toggleMenu(f){const o=typeof f==='boolean'?f:!$('menu').classList.contains('open');$('menu').classList.toggle('open',o);$('scrim').classList.toggle('on',o);$('hb').setAttribute('aria-expanded',String(o))}
-if(db.me)login(db.me);
+  if(qf&&$('q')){$('q').focus();$('q').setSelectionRange(pos,pos)}
+};
+
+function toggleMenu(f){
+  const o=typeof f==='boolean'?f:!$('menu').classList.contains('open');$('menu').classList.toggle('open',o);
+  $('scrim').classList.toggle('on',o);$('hb').setAttribute('aria-expanded',String(o));
+}
+
+if(db.me){
+  login(db.me);
+}
 </script>
 </body>
 </html>

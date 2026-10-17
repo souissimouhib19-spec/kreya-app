@@ -80,6 +80,8 @@ input,select,textarea{width:100%;padding:10px 14px;margin-bottom:10px;border:1px
 .ico svg{width:14px;height:14px;stroke:var(--red);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .calc{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .calc input{width:130px;margin:0}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:60;background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-size:14px;max-width:90vw;text-align:center;box-shadow:var(--shl);display:none}
+.toast.on{display:block}
 .chipb{border:1px solid var(--line);background:#fff;border-radius:99px;padding:3px 12px;cursor:pointer;font:inherit;font-size:12px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}.tick span,.fwa{animation:none}}
 </style>
@@ -135,6 +137,7 @@ input,select,textarea{width:100%;padding:10px 14px;margin-bottom:10px;border:1px
   <button class="link" onclick="closeM('mView')">إلغاء</button>
 </div></div>
 
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div id="app">
   <div class="nav"><div class="navl"><button class="hb" id="hb" onclick="toggleMenu()" aria-label="القائمة">☰</button><div class="brand">🏠 داره (Darek)</div></div>
     <div><span id="badge" class="pill"></span> <button class="link" style="border:1px solid var(--line);padding:4px 10px;border-radius:6px;margin:0 8px 0 0" onclick="logout()">خروج</button></div></div>
@@ -151,9 +154,11 @@ const KEY='darek_db_v1';
 const PIN0='8bfa6ec511c7840857b9bb932cadbbcea45d49b6f9fba4a808f6e0a255a9bd78';
 const DS={ann:'🔥 عروض مميزة: حجز فوري للعقارات والمبيتات في تونس والساحل عبر منصة داره!',wa:'21629461304',rib:'14 000 00029384812',d17:'29461304',dep:20,pin:PIN0};
 let db={users:[],me:null,deps:[],views:[],extra:[],ov:{},payments:[],chats:[],log:[],set:{}};
-try{db={...db,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){}
+let store=null;try{store=window.localStorage;store.getItem(KEY)}catch(e){store=null}
+try{db={...db,...JSON.parse((store&&store.getItem(KEY))||'{}')}}catch(e){}
 const S=()=>({...DS,...db.set});
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){alert('الذاكرة ممتلئة.')}};
+let tT;const say=m=>{const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('on'),3500)};
+const save=()=>{if(!store)return;try{store.setItem(KEY,JSON.stringify(db))}catch(e){say('الذاكرة ممتلئة.')}};
 const $=i=>document.getElementById(i);
 const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let role='tenant',tab='props',actProp=null,actPayType='dep',actSlot=null,F={city:'',cat:'',term:'',q:'',max:0},curThr=null,chPid='p1';
@@ -171,9 +176,16 @@ const all=()=>[...P,...db.extra].map(p=>({...p,...(db.ov[p.id]||{})}));
 const find=id=>all().find(p=>p.id===id);
 const art=id=>{const h=[...id].reduce((a,c)=>a+c.charCodeAt(0)*7,0)%360;
  return 'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 150'><rect width='300' height='150' fill='hsl(${h},70%,82%)'/><rect y='110' width='300' height='40' fill='hsl(${(h+120)%360},35%,55%)'/><rect x='95' y='60' width='110' height='55' fill='hsl(${(h+25)%360},40%,92%)'/><polygon points='85,64 150,22 215,64' fill='hsl(${(h+190)%360},45%,38%)'/><rect x='140' y='85' width='20' height='30' fill='hsl(${(h+190)%360},45%,38%)'/><rect x='105' y='75' width='22' height='18' fill='#bfe3f5'/><rect x='173' y='75' width='22' height='18' fill='#bfe3f5'/><circle cx='255' cy='30' r='14' fill='#ffd54a'/></svg>`)};
-async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function sha256js(s){const K=[],H=[],u=new TextEncoder().encode(s),r=(x,n)=>x>>>n|x<<32-n;let n=2;
+  for(let i=0;i<64;n++){let p=1;for(let d=2;d*d<=n;d++)if(n%d==0){p=0;break}if(p){if(i<8)H[i]=Math.pow(n,.5)*2**32|0;K[i++]=Math.pow(n,1/3)*2**32|0}}
+  const l=u.length,m=new Uint8Array((l+72>>6)<<6);m.set(u);m[l]=128;new DataView(m.buffer).setUint32(m.length-4,l*8);
+  for(let o=0;o<m.length;o+=64){const w=[],h=H.slice();for(let i=0;i<64;i++){w[i]=i<16?new DataView(m.buffer).getUint32(o+i*4):(r(w[i-2],17)^r(w[i-2],19)^w[i-2]>>>10)+w[i-7]+(r(w[i-15],7)^r(w[i-15],18)^w[i-15]>>>3)+w[i-16]|0;
+    const t1=h[7]+(r(h[4],6)^r(h[4],11)^r(h[4],25))+(h[4]&h[5]^~h[4]&h[6])+K[i]+w[i]|0,t2=(r(h[0],2)^r(h[0],13)^r(h[0],22))+(h[0]&h[1]^h[0]&h[2]^h[1]&h[2])|0;h.unshift(t1+t2|0);h.pop();h[4]=h[4]+t1|0}
+    for(let i=0;i<8;i++)H[i]=H[i]+h[i]|0}
+  return H.map(x=>(x>>>0).toString(16).padStart(8,'0')).join('')}
+async function sha(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return sha256js(s)}}
 const openM=i=>$(i).classList.add('on'),closeM=i=>$(i).classList.remove('on');
-const goWA=(num,txt)=>window.open('https://wa.me/'+num+'?text='+encodeURIComponent(txt),'_blank','noopener');
+const goWA=(num,txt)=>{const u='https://wa.me/'+num+'?text='+encodeURIComponent(txt),a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()};
 const waB=t=>goWA(S().wa.replace(/\D/g,''),t);
 function shrink(file,cb,mx,q){
   const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,(mx||800)/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',q||.7))};im.src=r.result};r.readAsDataURL(file)
@@ -183,6 +195,8 @@ function openRole(r){role=r;$('eReg').textContent='';$('ePin').textContent='';op
 function submitReg(){
   const name=$('gN').value.trim(),email=$('gE').value.trim(),phone=$('gP').value.trim();
   if(!name)return $('eReg').textContent='أدخل الاسم';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return$('eReg').textContent='أدخل بريدًا إلكترونيًا صحيحًا';
+  if(phone&&!/^\d{8}$/.test(phone))return$('eReg').textContent='رقم الهاتف يجب أن يتكون من 8 أرقام';
   let u=db.users.find(x=>x.email.toLowerCase()===email.toLowerCase()&&x.role===role);
   if(!u){u={id:'u'+Date.now(),name,email,phone:phone||'',role,at:new Date().toLocaleDateString('ar-TN')};db.users.push(u)}
   closeM('mReg');login(u);
@@ -191,8 +205,8 @@ async function submitPin(){
   if(await sha($('pin').value)!==S().pin)return$('ePin').textContent='الرمز غير صحيح';
   $('pin').value='';closeM('mPin');login({id:'broker',name:'السمسار مهيب',role:'broker'});
 }
-function login(u){db.me=u;tab='props';save();$('w').style.display='none';$('app').style.display='block';render()}
-function logout(){db.me=null;save();location.reload()}
+function login(u){db.me=u;tab='props';save();$('badge').textContent=RL[u.role]+' · '+u.name;$('tk').textContent=S().ann;$('w').style.display='none';$('app').style.display='block';render()}
+function logout(){db.me=null;save();toggleMenu(false);$('app').style.display='none';$('w').style.display='flex';window.scrollTo(0,0)}
 
 // فتح نافذة الدفع الفوري
 function openPayModal(id, type){
@@ -204,11 +218,11 @@ function openPayModal(id, type){
 }
 function submitInstantPay(){
   const f=$('payProofFile').files[0];
-  if(!f)return alert('الرجاء اختيار صورة إيصال الدفع');
+  if(!f)return say('الرجاء اختيار صورة إيصال الدفع');
   shrink(f,img=>{
-    const amt=+pAmt.textContent;
+    const amt=+$('pAmt').textContent;
     db.payments.push({id:'y'+Date.now(),pid:actProp.id,uid:db.me.id,name:db.me.name,type:actPayType,amt,img,at:new Date().toLocaleDateString('ar-TN'),st:'pending'});
-    save(); closeM('mPay'); alert('تم إرسال عملية الدفع الفوري بنجاح! في انتظار تأكيد الإدارة.'); render();
+    $('payProofFile').value='';save(); closeM('mPay'); say('تم إرسال عملية الدفع الفوري بنجاح! في انتظار تأكيد الإدارة.'); render();
   });
 }
 
@@ -217,19 +231,31 @@ function openView(id){actProp=find(id);actSlot=null;$('vT').textContent=actProp.
   $('vS').innerHTML=slots().map((s,i)=>`<button class="slot" data-i="${i}" onclick="pick(${i})">${s}</button>`).join('');openM('mView')}
 function pick(i){actSlot=slots()[i];document.querySelectorAll('#vS .slot').forEach(b=>b.classList.toggle('on',+b.dataset.i===i))}
 function confirmView(){
-  if(!actSlot)return alert('اختر موعدًا');
+  if(!actSlot)return say('اختر موعدًا');
   db.views.push({id:'v'+Date.now(),pid:actProp.id,uid:db.me.id,name:db.me.name,slot:actSlot,st:'pending'});save();closeM('mView');render();
   waB(`مرحباً، نحب نعاين العقار "${actProp.title}" يوم ${actSlot}.`);
 }
 
 function addProp(){
   const t=$('lt').value.trim(),a=$('la').value.trim(),p=+$('lp').value;
-  if(!t||!a||!(p>0))return alert('أكمل البيانات');
+  if(!t||!a||!(p>0))return say('أكمل البيانات');
   db.extra.push({id:'n'+Date.now(),title:t,city:$('lc').value,addr:a,price:p,fac:'—',min:0,st:'available',end:'—',cat:$('lk').value,term:$('lm').value,owner:db.me.id,ok:false});
-  save(); alert('تمت إضافة العقار بنجاح، في انتظار الموافقة عليه من الإدارة.'); render();
+  save(); say('تمت إضافة العقار بنجاح، في انتظار الموافقة عليه من الإدارة.'); render();
 }
 const pubProp=id=>{db.extra.find(x=>x.id===id).ok=true;save();render()};
 const setPay=(id,st)=>{db.payments.find(p=>p.id===id).st=st;if(st==='confirmed')db.ov[db.payments.find(p=>p.id===id).pid]={...(db.ov[db.payments.find(p=>p.id===id).pid]||{}),st:'rented'};save();render()};
+
+function sendMsg(){
+  const t=$('chIn').value.trim();if(!t)return;
+  const thr=db.me.role==='broker'?curThr:db.me.id;if(!thr)return;
+  db.chats.push({id:'c'+Date.now(),thr,from:db.me.role==='broker'?'broker':'user',name:db.me.name,txt:t,at:new Date().toLocaleString('ar-TN')});
+  save();render();
+}
+const chatBox=thr=>`<div class="chat" id="chBox">${db.chats.filter(c=>c.thr===thr).map(c=>`<div class="msg ${(c.from==='broker')===(db.me.role==='broker')?'me':''}"><b>${E(c.name)}</b><div>${E(c.txt)}</div><div class="mut">${E(c.at)}</div></div>`).join('')||'<div class="mut">لا توجد رسائل بعد.</div>'}</div>
+  <div style="display:flex;gap:8px"><input id="chIn" style="margin:0" maxlength="500" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendMsg()"><button class="btn sm" onclick="sendMsg()">إرسال</button></div>`;
+const payRow=(py,canOk)=>{const p=find(py.pid);return `<div class="row"><div><b>${E(py.name)}</b> <span class="mut">· ${E(p?p.title:py.pid)}</span><div class="mut">${py.type==='dep'?'عربون':'كراء'} · ${py.amt} د.ت · ${E(py.at)}</div>${safe(py.img)?`<img class="thumb" src="${safe(py.img)}">`:''}</div>
+    <div><span class="pill ${py.st==='confirmed'?'g':''}">${py.st==='pending'?'قيد المراجعة':'مؤكد ✓'}</span>
+    ${canOk&&py.st==='pending'?`<button class="btn sm ok" onclick="setPay('${py.id}','confirmed')">قبول الدفع</button>`:''}</div></div>`};
 
 function renderMenu(){
   const u=db.me;
@@ -246,7 +272,7 @@ function render(){
   if(tab==='props'){
     const L=all().filter(p=>p.ok&&(!F.city||p.city===F.city)&&(!F.cat||p.cat===F.cat)&&(!F.term||p.term===F.term)&&(!F.q||(p.title+p.addr+p.city).toLowerCase().includes(F.q.toLowerCase())));
     D.innerHTML=`<div class="filters">
-      <input style="flex:1;min-width:140px" placeholder="🔍 بحث حي، مدينة..." value="${E(F.q)}" oninput="F.q=this.value;render()">
+      <input id="q" style="flex:1;min-width:140px" placeholder="🔍 بحث حي، مدينة..." value="${E(F.q)}" oninput="F.q=this.value;render()">
       <select onchange="F.city=this.value;render()"><option value="">كل الولايات</option>${CITIES.map(c=>`<option${F.city===c?' selected':''}>${c}</option>`).join('')}</select>
       <select onchange="F.cat=this.value;render()"><option value="">كل الفئات</option>${Object.entries(CATS).map(([v,l])=>`<option value="${v}"${F.cat===v?' selected':''}>${l}</option>`).join('')}</select>
     </div>
@@ -265,25 +291,49 @@ function render(){
     <button class="btn sm" onclick="uploadCanvaPhoto()">حفظ تصميم Canva للعقار</button></div>
     <div class="panel"><h3>عقاراتي</h3>${mine.map(p=>`<div class="row"><div><b>${E(p.title)}</b><div class="mut">${p.price} د.ت</div></div><span class="pill ${p.ok?'g':''}">${p.ok?'منشور':'قيد المراجعة'}</span></div>`).join('')||'<div class="mut">لا توجد عقارات.</div>'}</div>`;
   }
-  else if(tab==='pays'||tab==='broker_all'){
-    D.innerHTML=`<div class="panel"><h3>💳 مراقبة المدفوعات والعرابين</h3>
-    ${db.payments.map(py=>`<div class="row"><div><b>${E(py.name)}</b><div class="mut">${py.amt} د.ت · ${py.at}</div><img class="thumb" src="${py.img}"></div>
-    <div><span class="pill ${py.st==='confirmed'?'g':''}">${py.st==='pending'?'قيد المراجعة':'مؤكد ✓'}</span>
-    ${py.st==='pending'?`<button class="btn sm ok" onclick="setPay('${py.id}','confirmed')">قبول الدفع</button>`:''}</div></div>`).join('')||'<div class="mut">لا توجد مدفوعات حالياً.</div>'}</div>`;
+  else if(tab==='pays'){
+    const L=u.role==='broker'?db.payments:db.payments.filter(py=>{const p=find(py.pid);return p&&p.owner===u.id});
+    const tot=L.filter(py=>py.st==='confirmed').reduce((a,py)=>a+py.amt,0);
+    D.innerHTML=`<div class="panel"><h3>💳 مراقبة المدفوعات والعرابين</h3><div class="mut">مجموع المدفوعات المؤكدة: <b>${tot}</b> د.ت</div>
+    ${L.map(py=>payRow(py,u.role==='broker')).join('')||'<div class="mut">لا توجد مدفوعات حالياً.</div>'}</div>`;
+  }
+  else if(tab==='broker_all'){
+    const pend=db.extra.filter(p=>!p.ok),thrs=[...new Set(db.chats.map(c=>c.thr))];
+    if(!curThr||!thrs.includes(curThr))curThr=thrs[0]||null;
+    const uname=id=>(db.users.find(x=>x.id===id)||{}).name||id;
+    D.innerHTML=`<div class="panel"><h3>⚡ ملخص</h3><div class="mut">المستخدمون: ${db.users.length} · العقارات: ${all().length} · مدفوعات قيد المراجعة: ${db.payments.filter(p=>p.st==='pending').length} · معاينات: ${db.views.length}</div></div>
+    <div class="panel"><h3>🏠 عقارات في انتظار الموافقة</h3>${pend.map(p=>`<div class="row"><div><b>${E(p.title)}</b><div class="mut">${E(p.city)} -${E(p.addr)} · ${p.price} د.ت · ${E(uname(p.owner))}</div></div><div><button class="btn sm ok" onclick="pubProp('${p.id}')">نشر</button></div></div>`).join('')||'<div class="mut">لا توجد عقارات في الانتظار.</div>'}</div>
+    <div class="panel"><h3>📅 طلبات المعاينة</h3>${db.views.map(v=>{const p=find(v.pid);return `<div class="row"><div><b>${E(v.name)}</b><div class="mut">${E(p?p.title:v.pid)} · ${E(v.slot)}</div></div><span class="pill">${v.st==='pending'?'قيد الانتظار':'مؤكد'}</span></div>`}).join('')||'<div class="mut">لا توجد طلبات.</div>'}</div>
+    <div class="panel"><h3>💬 رسائل الدعم</h3>${thrs.length?`<select onchange="curThr=this.value;render()">${thrs.map(t=>`<option value="${E(t)}"${t===curThr?' selected':''}>${E(uname(t))}</option>`).join('')}</select>${chatBox(curThr)}`:'<div class="mut">لا توجد رسائل.</div>'}</div>`;
+  }
+  else if(tab==='my_rents'){
+    const pays=db.payments.filter(py=>py.uid===u.id),vs=db.views.filter(v=>v.uid===u.id);
+    D.innerHTML=`<div class="panel"><h3>📅 طلبات المعاينة</h3>${vs.map(v=>{const p=find(v.pid);return `<div class="row"><div><b>${E(p?p.title:v.pid)}</b><div class="mut">${E(v.slot)}</div></div><span class="pill">${v.st==='pending'?'قيد الانتظار':'مؤكد'}</span></div>`}).join('')||'<div class="mut">لا توجد طلبات معاينة.</div>'}</div>
+    <div class="panel"><h3>💳 مدفوعاتي</h3>${pays.map(py=>payRow(py,false)).join('')||'<div class="mut">لا توجد مدفوعات.</div>'}</div>`;
+  }
+  else if(tab==='dispute'){
+    D.innerHTML=`<div class="panel"><h3>💬 الدعم الفوري</h3>${chatBox(u.id)}<button class="btn sm wa" style="margin-top:10px" onclick="waB('مرحباً، نحتاج مساعدة في منصة داره')">تواصل عبر واتساب</button></div>`;
   }
   else{
-    D.innerHTML=`<div class="panel"><h3>🛠️ خدمات الصيانة وحرفاء داره</h3>${PROS.map(([n,ph,z,s])=>`<div class="row"><div><b>${n}</b><div class="mut">${z} ·${s}</div></div><a class="btn sm wa" href="https://wa.me/216${ph}" target="_blank">واتساب</a></div>`).join('')}</div>`;
+    D.innerHTML=`<div class="panel"><h3>🛠️ خدمات الصيانة وحرفاء داره</h3>${PROS.map(([n,ph,z,s])=>`<div class="row"><div><b>${n}</b><div class="mut">${z} ·${s}</div></div><a class="btn sm wa" href="https://wa.me/216${ph}" target="_blank" rel="noopener">واتساب</a></div>`).join('')}</div>`;
   }
 }
 
 function uploadCanvaPhoto(){
   const f=$('canvaFile').files[0], pid=$('canvaPid').value;
-  if(!f||!pid)return alert('اختر العقار والصورة');
+  if(!f||!pid)return say('اختر العقار والصورة');
   shrink(f,img=>{
     db.ov[pid]={...(db.ov[pid]||{}),photo:img};
-    save(); alert('تم ربط تصميم Canva بنجاح وتحديث عرض العقار!'); render();
+    save(); say('تم ربط تصميم Canva بنجاح وتحديث عرض العقار!'); render();
   },900,.8);
 }
 
 const safe=u=>/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(u||'')?u:'';
-function toggleMenu(f){const o=typeof f==='boolean'?f:!$('menu').classList.contains('open');$('menu').classList.toggle('open',o);$('scrim').
+const _render=render;render=()=>{const a=document.activeElement,qf=a&&a.id==='q',pos=qf?a.selectionStart:0;_render();
+  const c=$('chBox');if(c)c.scrollTop=c.scrollHeight;
+  if(qf&&$('q')){$('q').focus();$('q').setSelectionRange(pos,pos)}};
+function toggleMenu(f){const o=typeof f==='boolean'?f:!$('menu').classList.contains('open');$('menu').classList.toggle('open',o);$('scrim').classList.toggle('on',o);$('hb').setAttribute('aria-expanded',String(o))}
+if(db.me)login(db.me);
+</script>
+</body>
+</html>

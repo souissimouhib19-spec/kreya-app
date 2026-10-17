@@ -44,7 +44,6 @@ button.pri:hover{background:var(--red-dark)}
 button.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--red);outline-offset:1px}
 
-/* خلفية الـ Hero مصورة بـ hero.jpg */
 .hero{
   padding:65px 20px;text-align:center;
   background:linear-gradient(rgba(0,0,0,0.55),rgba(200,16,46,0.75)),url('hero.jpg') center/cover no-repeat;
@@ -123,9 +122,8 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}td{padding:8px 4px;bo
 </head>
 <body>
 
-<!-- الشعار الجديد logo.png في النافبار -->
 <div class="nav">
-  <div class="brand"><img src="logo.png" alt="مهيب وأصدقاؤه"></div>
+  <div class="brand">🏠 مهيب وأصدقاؤه · تونس</div>
   <div class="nb" id="navb"></div>
 </div>
 
@@ -294,7 +292,7 @@ ${addForm()}<div class="panel"><h3>عقاراتي</h3>${propRows(mine)}</div><di
 /* ---- broker / admin ---- */
 function setRole(id,v){db.users.find(x=>x.id===id).role=v;save();render()}
 function delUser(id){if(!confirm('تحذف هذا المستخدم؟'))return;db.users=db.users.filter(x=>x.id!==id);save();render()}
-function waU(id){const x=db.users.find(y=>y.id===id);wa(x.phone,'مرحباً '+x.name+'، معك إدارة مهيب وأصدقاؤه.')}
+function waU(id){const x=db.users.find(y=>y.id===id);wa(x.phone,'مرحباً '+x.name+'، معك إدارة مهيب ه.')}
 function resetDemo(){db.props=[...db.props.filter(p=>p.owner!=='seed'),...JSON.parse(JSON.stringify(seed))];save();render();toast('تمت إعادة العقارات التجريبية')}
 function wipe(){if(!confirm('تمسح كل الحسابات والعقارات والطلبات؟'))return;try{localStorage.removeItem(KEY)}catch(e){}location.reload()}
 function verify(id,ok){const x=db.users.find(u=>u.id===id);x.verified=ok;x.rejected=!ok;save();render()}
@@ -310,7 +308,7 @@ function brokerDash(u){const paid=db.reqs.filter(r=>r.type==='deposit'&&r.st==='
  if(tab==='comp')b=`<div class="panel"><h3>⚠️ كل الشكاوى</h3>${compRows(db.complaints.slice().reverse(),true)}</div>`;
  if(tab==='tools')b=billPanel();
  if(tab==='users'&&u.role==='admin')b=`<div class="panel"><h3>👥 كل المستخدمين (${db.users.length})</h3>${db.users.map(x=>`<div class="row"><div><b>${esc(x.name)}</b> —${esc(x.phone)} <span class="pill">${ROLE[x.role]}</span> ${x.verified?'<span class="pill">موثّق ✓</span>':''}${x.cin?`<br><img class="cin" src="${x.cin}" alt="CIN">`:''}</div><div><select onchange="setRole('${x.id}',this.value)">${opts(ROLE,x.role)}</select> <button onclick="verify('${x.id}',${!x.verified})">${x.verified?'إلغاء التوثيق':'توثيق'}</button> <button onclick="waU('${x.id}')">واتساب</button>${x.id!==u.id?` <button onclick="delUser('${x.id}')" aria-label="حذف">🗑️</button>`:''}</div></div>`).join('')||'<div class="empty">لا يوجد مستخدمون</div>'}</div>`;
- if(tab==='data'&&u.role==='admin')b=`<div class="panel"><h3>🗄️ البيانات</h3><p class="mut">نسخة احتياطية (بدون الصور وكلمات المرور):</p><textarea rows="7" readonly onclick="this.select()">${esc(JSON.stringify({users:db.users.map(x=>({...x,pw:'***',cin:x.cin?'[صورة]':''})),props:db.props.map(p=>({...p,imgs:p.imgs.length})),reqs:db.reqs,msgs:db.msgs,complaints:db.complaints},null,1))}</textarea><div class="acts"><button class="pri" onclick="resetDemo()">♻️ إعادة العقارات التجريبية</button><button onclick="wipe()">🗑️ مسح كل البيانات</button></div></div>`;
+ if(tab==='data'&&u.role==='admin')b=`<div class="panel">### 🗄️ البيانات</h3><p class="mut">نسخة احتياطية (بدون الصور وكلمات المرور):</p><textarea rows="7" readonly onclick="this.select()">${esc(JSON.stringify({users:db.users.map(x=>({...x,pw:'***',cin:x.cin?'[صورة]':''})),props:db.props.map(p=>({...p,imgs:p.imgs.length})),reqs:db.reqs,msgs:db.msgs,complaints:db.complaints},null,1))}</textarea><div class="acts"><button class="pri" onclick="resetDemo()">♻️ إعادة العقارات التجريبية</button><button onclick="wipe()">🗑️ مسح كل البيانات</button></div></div>`;
  const adm=u.role==='admin';return `<h2>⚡ ${adm?'لوحة المدير · صلاحيات كاملة':'لوحة السمسار'} – ${esc(u.name)}</h2>`+tabs([['over','📊 نظرة عامة'],['req',`📋 الطلبات${nr?' ('+nr+')':''}`],['msg',`✉️ الرسائل${nm?' ('+nm+')':''}`],['ver','🪪 التوثيق'],['props','🏘️ العقارات'],['comp','⚠️ الشكاوى'],['tools','🧰 أدوات'],...(adm?[['users','👥 المستخدمون'],['data','🗄️ البيانات']]:[])])+b}
 function dashView(){const u=me();if(!u){authMode='login';return authView()}return u.role==='tenant'?tenantDash(u):u.role==='landlord'?landlordDash(u):brokerDash(u)}
 function render(){nav();$('main').innerHTML=view==='auth'?authView():view==='dash'?dashView():homeView();window.scrollTo(0,0)}

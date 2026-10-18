@@ -1,90 +1,125 @@
 <!DOCTYPE html>
 <!--
 ══════════════════════════════════════════════════════════════════════════════
-  داره (Darek) — منصة العقارات والمبيتات في تونس · ملف واحد (Single-File HTML)
+  داره (Darek) — منصة العقارات والمبيتات في تونس · ملف واحد (Single-File HTML) · v4
 ══════════════════════════════════════════════════════════════════════════════
 
   📌 كيفاش تلقى روحك في الملف؟
      كل قسم عندو علامة بين [ ] (مثلاً [S09]). اعمل Ctrl+F واكتب العلامة توصل للقسم طول.
 
   🎨 التنسيق (CSS) — داخل وسم style
-     [C1] الألوان والأساسيات          [C6] بطاقات العقارات
-     [C2] صفحة اختيار الصفة            [C7] اللوحات، الأسطر والإحصائيات
-     [C3] الأزرار والنماذج             [C8] الدردشة والصور المصغّرة
-     [C4] النوافذ (dialogs)            [C9] الإشعارات، واتساب والحركة
+     [C1] الألوان والأساسيات           [C7] اللوحات، الأسطر والإحصائيات
+     [C2] الواجهة العامة (Hero، أقسام) [C8] الدردشة والصور المصغّرة
+     [C3] الأزرار والنماذج              [C9] الإشعارات، واتساب والحركة
+     [C4] النوافذ (dialogs)             [C10] الخريطة، تفاصيل العقار، الجولة التعريفية
      [C5] الهيكل: الشريط، القائمة والتبويبات
+     [C6] بطاقات العقارات والفلاتر
 
   🧱 الهيكل (HTML) — داخل وسم body
-     [H1] صفحة الترحيب          [H3] نوافذ الدفع، المعاينة والصورة
-     [H2] نوافذ الدخول           [H4] التطبيق (الشريط + المحتوى)
+     [H1] الشريط العلوي والإشعارات   [H3] نوافذ الدفع، المعاينة، الصورة، التفاصيل، الجولة
+     [H2] نوافذ الدخول                [H4] التذييل
 
   ⚙️ البرمجة (JavaScript) — داخل وسم script
-     [S01] الإعدادات (أرقام، RIB، الإعلان، رمز الإدارة)   ← أول بلاصة تبدّل فيها
-     [S02] المعطيات الثابتة (المدن، الفئات، العقارات النموذجية)
-     [S03] أدوات صغيرة (تنسيق، أرقام، تواريخ)
-     [S04] التخزين: قاعدة المعطيات في localStorage + الترحيل
-     [S05] الصور: IndexedDB (مساحة كبيرة، ما تعبّيش localStorage)
-     [S06] العقارات (ذاكرة مؤقتة + الرسوم الافتراضية)
-     [S07] التشفير وكلمات السر + الحماية من التخمين
-     [S08] واجهة عامة: إشعارات، نوافذ، ضغط الصور، معاينة
-     [S09] الجلسة: الدخول، التسجيل والخروج
-     [S10] التنقل: التبويبات + الرابط (#) باش التحديث ما يرجعكش للبداية
-     [S11] السكن «داري» بعد تأكيد العربون
-     [S12] العرض: render + الصفحات (VIEWS)
-     [S13] مكوّنات صغيرة: أسطر الدفع/الفواتير/التشكيات والدردشة
-     [S14] العمليات: المكتري · المالك · الإدارة
-     [S15] النسخ الاحتياطي: تصدير واسترجاع
-     [S16] الأحداث: النقرات، النماذج، التزامن بين النوافذ
-     [S17] التشغيل (boot)
+     [S01] الإعدادات (أرقام، RIB، الإعلان، فيديو الترحيب، رمز الإدارة) ← أول بلاصة تبدّل فيها
+     [S02] المعطيات الثابتة (المدن، الفئات، العقارات النموذجية، إحداثيات الخريطة)
+     [S03] أدوات صغيرة                 [S11] السكن «داري»
+     [S04] التخزين + الترحيل           [S12] العرض: render + الصفحات (VIEWS)
+     [S05] الصور: IndexedDB            [S13] مكوّنات: بطاقات، خريطة، تفاصيل، دردشة
+     [S06] العقارات + الذاكرة المؤقتة  [S14] العمليات: المكتري · المالك · الإدارة
+     [S07] التشفير والحماية            [S15] النسخ الاحتياطي
+     [S08] واجهة عامة + الصور          [S16] الإشعارات + الجولة التعريفية
+     [S09] الجلسة: دخول عند الحاجة     [S17] الأحداث والتزامن
+     [S10] التنقل والرابط (#)          [S18] التشغيل
 
   ⚠️ CSP: الصفحة ما تشغّلش كان السكربت والتنسيق اللي بصمتهم (sha256) موجودة في سطر
      Content-Security-Policy لتحت. كل ما تبدّل حرف في وسم script ولا وسم style:
        node tools/csp-hash.mjs            ← يحسب البصمتين ويحدّث السطر وحدو
        node tools/csp-hash.mjs --check    ← يثبّت برك
-     (ولا انسخ البصمة اللي يطبعها المتصفح في Console وحطّها مكان القديمة.)
      التعليقات هذي (برّا وسمَي script وstyle) ما تبدّلش البصمة.
 ══════════════════════════════════════════════════════════════════════════════
 -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-GQZ4/P9Kc25UC8VPdYbkzaoynCVdBG08cV2bbzYo3tI='; style-src 'sha256-ggqzfy+4uLuMYwRsgjgpvYb56lug/J9Kt+spF70dapE=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-eaUPRbaq2xLgOsNG3wRc5CT0ttRxwi75ddeCalNq8gw='; style-src 'sha256-eE6VgCBYXeKSPbTbKGfLIUIGapAixz3CEyBZOerWKeU=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: https:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="داره: ابحث عن مبيت أو شقة في تونس، اطلب معاينة، وادفع العربون بإثبات تحويل تؤكده الإدارة.">
-<meta name="theme-color" content="#c8102e">
+<meta name="theme-color" content="#7a0a1d">
 <meta name="color-scheme" content="light">
+<meta property="og:title" content="داره (Darek) – منصة الكراء في تونس">
+<meta property="og:description" content="مبيتات، استوديوهات وشقق للطلبة والعائلات. معاينة، عربون موثّق، وفضاء خاص بعد الحجز.">
 <title>داره (Darek) – منصة العقارات والمبيتات في تونس</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23c8102e'/%3E%3Cpath d='M14 32 32 16l18 16v16a2 2 0 0 1-2 2H38V38H26v12H16a2 2 0 0 1-2-2z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ════════════════════════════════════════════════════════════════
    [C1] 🎨 الألوان والأساسيات — حب تبدّل لون المنصة؟ بدّل --red هنا
    ════════════════════════════════════════════════════════════════ */
-:root{--bg:#f8f9fa;--card:#fff;--ink:#1e293b;--mut:#5b6b80;--line:#e2e8f0;--red:#c8102e;--redd:#7a0a1d;--ok:#047857;--okb:#d1fae5;--warn:#b45309;--soft:#fff1f2;--wa:#25d366;--wad:#15803d;--no:#475569;
---sh:0 4px 6px -1px rgba(0,0,0,.05),0 2px 4px -2px rgba(0,0,0,.05);--shl:0 12px 24px -4px rgba(0,0,0,.12);--sb:env(safe-area-inset-bottom,0px)}
+:root{--bg:#f6f6f8;--card:#fff;--ink:#16121a;--mut:#5f5a66;--line:#e7e3ea;--red:#c8102e;--redd:#7a0a1d;--night:#1a0b10;--rose:#ff9aa9;--ok:#047857;--okb:#d1fae5;--warn:#b45309;--soft:#fff1f3;--wa:#25d366;--wad:#15803d;--no:#475569;
+--sh:0 1px 2px rgba(22,18,26,.05),0 4px 14px -6px rgba(22,18,26,.12);--shl:0 18px 40px -14px rgba(22,18,26,.28);--r:18px;--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo','Segoe UI',Tahoma,sans-serif;line-height:1.6}
-h1,h2,h3{line-height:1.3}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo','Segoe UI',Tahoma,sans-serif;line-height:1.65}
+h1,h2,h3{line-height:1.25;text-wrap:balance}
 img{max-width:100%}
 [hidden]{display:none!important}
 .sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .jsfail{position:fixed;inset:0 0 auto;z-index:99;background:var(--red);color:#fff;text-align:center;padding:12px;font-weight:700}
 :focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
 
 /* ════════════════════════════════════════════════════════════════
-   [C2] 🚪 صفحة اختيار الصفة (مكتري / مالك / إدارة)
+   [C2] 🏙️ الواجهة العامة: Hero، الأرقام، الأقسام، الخطوات، التذييل
    ════════════════════════════════════════════════════════════════ */
-.welcome{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;background:linear-gradient(135deg,#fff1f2,#f8f9fa)}
-.welcome h1{font-size:clamp(24px,5vw,32px);font-weight:800;margin:0 0 8px;text-align:center;color:var(--red)}
-.welcome>p{color:var(--mut);margin:0 0 28px;text-align:center;font-size:16px}
-.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;width:100%;max-width:850px}
-.role{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:24px;text-align:center;cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;gap:10px}
-.role:hover{border-color:var(--red);transform:translateY(-5px);box-shadow:var(--shl)}
-.role .ic{font-size:48px;line-height:1}.role h2{margin:0;font-size:19px}.role p{margin:0;font-size:13px;color:var(--mut);flex:1}
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(120% 90% at 85% 0%,#9b0f2a 0%,transparent 55%),linear-gradient(165deg,var(--night) 0%,#3b0712 60%,var(--redd) 100%);padding:56px 16px 120px}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:150px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' fill-opacity='.06' d='M0 150V90h40V60h30v30h25V40h45v50h20V70h35v20h30V30h50v60h25V55h40v35h30V20h55v70h20V65h35v25h30V45h45v45h25V75h30v15h35V35h50v55h25V60h40v30h30V25h55v65h20V70h35v20h30V50h45v40h25V80h40v-5h30v75z'/%3E%3Cpath fill='%23f6f6f8' d='M0 150V128c160-22 320-22 480-6s320 16 480-4 180-20 240-10V150z'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}
+.hero-in{position:relative;z-index:1;max-width:1100px;margin:0 auto;display:grid;gap:18px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;width:fit-content;padding:5px 14px;border-radius:99px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);font-size:13px;font-weight:700;color:var(--rose)}
+.hero h1{margin:0;font-size:clamp(30px,6vw,54px);font-weight:800;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;color:var(--rose)}
+.hero p.lead{margin:0;max-width:56ch;font-size:clamp(15px,2.2vw,18px);opacity:.88}
+.search{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;background:rgba(255,255,255,.97);color:var(--ink);padding:8px;border-radius:20px;box-shadow:0 20px 50px -20px rgba(0,0,0,.55);max-width:860px}
+.search input,.search select{margin:0;border:0;background:#f5f3f6;border-radius:14px;height:50px}
+.search .btn{height:50px;border-radius:14px;padding:0 26px;width:auto}
+@media (max-width:720px){.search{grid-template-columns:1fr 1fr}.search .q{grid-column:1/-1}.search .btn{grid-column:1/-1;width:100%}}
+.quick{display:flex;gap:8px;flex-wrap:wrap}
+.quick button{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;border-radius:99px;padding:5px 14px;font-size:13px;font-weight:600}
+.quick button:hover{background:rgba(255,255,255,.18)}
+.statbar{position:relative;z-index:2;max-width:1100px;margin:-70px auto 0;padding:0 16px}
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border-radius:var(--r);box-shadow:var(--shl);overflow:hidden}
+.statgrid div{padding:18px 12px;text-align:center;border-inline-start:1px solid var(--line)}
+.statgrid div:first-child{border:0}
+.statgrid b{display:block;font-size:clamp(22px,3.6vw,32px);font-weight:800;color:var(--red)}
+.statgrid span{font-size:13px;color:var(--mut)}
+@media (max-width:640px){.statgrid{grid-template-columns:1fr 1fr}.statgrid div:nth-child(3){border:0}.statgrid div:nth-child(n+3){border-top:1px solid var(--line)}}
+.sec{max-width:1200px;margin:0 auto;padding:44px 16px 0}
+.sech{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sech h2{margin:0;font-size:clamp(22px,3.4vw,30px);font-weight:800}
+.sech p{margin:4px 0 0;color:var(--mut)}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.feat article{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.feat .ico{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--soft);font-size:24px;margin-bottom:10px}
+.feat h3{margin:0 0 4px;font-size:17px}.feat p{margin:0;color:var(--mut);font-size:14px}
+.steps2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.track{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.track h3{margin:0 0 12px;font-size:18px}
+.track ol{margin:0;padding:0;list-style:none;display:grid;gap:12px;counter-reset:s}
+.track li{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;counter-increment:s}
+.track li::before{content:counter(s);width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;font-weight:800;display:grid;place-items:center}
+.track li b{display:block}.track li span{color:var(--mut);font-size:14px}
+.cta{margin-top:44px;background:linear-gradient(135deg,var(--redd),var(--red));color:#fff;border-radius:24px;padding:28px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.cta h2{margin:0;font-size:clamp(20px,3vw,26px)}.cta p{margin:4px 0 0;opacity:.9}
+.cta .btn{background:#fff;color:var(--red);width:auto}
+.foot{margin-top:56px;background:var(--night);color:#d9cfd3;padding:34px 16px calc(100px + var(--sb))}
+.foot-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px}
+.foot b{color:#fff}.foot p{margin:6px 0;font-size:14px}
+.foot button{background:none;border:0;color:#d9cfd3;padding:3px 0;font-size:14px;text-align:right;display:block}
+.foot button:hover{color:#fff;text-decoration:underline}
+.foot small{display:block;max-width:1200px;margin:20px auto 0;border-top:1px solid rgba(255,255,255,.1);padding-top:14px;opacity:.7}
+@media (max-width:640px){.foot-in{grid-template-columns:1fr}}
 
 /* ════════════════════════════════════════════════════════════════
    [C3] 🔘 الأزرار والنماذج
@@ -92,37 +127,42 @@ img{max-width:100%}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.6;cursor:not-allowed}
-.btn{background:var(--red);color:#fff;border:0;padding:10px 20px;border-radius:99px;font-weight:700;width:100%;text-decoration:none;display:inline-block;text-align:center;cursor:pointer}
+.btn{background:var(--red);color:#fff;border:0;padding:10px 20px;border-radius:12px;font-weight:700;width:100%;text-decoration:none;display:inline-block;text-align:center;cursor:pointer;transition:filter .15s,transform .15s}
+.btn:hover{filter:brightness(1.08)}.btn:active{transform:translateY(1px)}
 .btn.ok{background:var(--ok)}.btn.no{background:var(--no)}.btn.wa{background:var(--wad)}
-.btn.sm{width:auto;padding:6px 14px;font-size:12.5px}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.sm{width:auto;padding:7px 14px;font-size:13px;border-radius:10px}
 .link{background:none;border:0;color:var(--mut);margin-top:10px;padding:6px 10px}
-.out{border:1px solid var(--line);padding:4px 12px;border-radius:8px;background:#fff;color:var(--ink);font-weight:600;font-size:13px}
-.chipb{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 12px;font-size:12.5px;font-weight:600}
-.fld{display:block;text-align:right;font-size:12.5px;color:var(--mut);font-weight:600;margin-bottom:10px}
+.chipb{border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 13px;font-size:13px;font-weight:600}
+.chipb[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.fld{display:block;text-align:right;font-size:13px;color:var(--mut);font-weight:600;margin-bottom:10px}
 .fld .opt{font-weight:400}
-input,select,textarea{width:100%;padding:10px 14px;margin-top:4px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:var(--ink);font-size:15px}
+input,select,textarea{width:100%;padding:10px 14px;margin-top:4px;border:1px solid #d6d1db;border-radius:12px;background:#fff;color:var(--ink);font-size:15px}
+input:focus,select:focus,textarea:focus{border-color:var(--red);outline:0;box-shadow:0 0 0 3px rgba(200,16,46,.15)}
 input[type=file]{padding:8px;font-size:13px}
+input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--red)}
 textarea{min-height:96px;resize:vertical}
 input[dir=ltr]{text-align:left}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:10px}
 .pw{position:relative;display:block}.pw input{padding-left:46px}
 .peek{position:absolute;left:6px;top:calc(50% + 2px);transform:translateY(-50%);border:0;background:none;font-size:18px;line-height:1;padding:6px}
 .err{color:var(--red);font-size:13px;min-height:1.4em;margin:4px 0 8px;font-weight:600}
-.seg{display:flex;background:#f1f5f9;border-radius:99px;padding:4px;margin-bottom:14px}
-.seg button{flex:1;border:0;background:none;border-radius:99px;padding:7px;font-weight:700;color:var(--mut)}
-.seg button[aria-selected=true]{background:#fff;color:var(--red);box-shadow:var(--sh)}
+.seg{display:flex;background:#f1eef3;border-radius:12px;padding:4px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:8px;font-weight:700;color:var(--mut)}
+.seg button[aria-pressed=true],.seg button[aria-selected=true]{background:#fff;color:var(--red);box-shadow:var(--sh)}
 .fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 12px}
 .prev{max-height:160px;border-radius:10px;margin:0 auto 8px;display:block;border:1px solid var(--line)}
-.filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
-.filters input,.filters select{width:auto;margin:0}
-.filters .q{flex:1;min-width:160px}.filters .mx{width:130px}
 
 /* ════════════════════════════════════════════════════════════════
-   [C4] 🪟 النوافذ (الدخول، الدفع، المعاينة، الصورة)
+   [C4] 🪟 النوافذ
    ════════════════════════════════════════════════════════════════ */
-dialog{border:0;padding:0;background:transparent;width:100%;max-width:min(480px,calc(100vw - 32px))}
-dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
-.box{background:var(--card);border-radius:20px;padding:24px;box-shadow:var(--shl);text-align:center;max-height:calc(100dvh - 32px);overflow:auto}
+dialog{border:0;padding:0;background:transparent;width:100%;max-width:min(480px,calc(100vw - 24px))}
+dialog.wide{max-width:min(880px,calc(100vw - 24px))}
+dialog::backdrop{background:rgba(22,10,16,.62);backdrop-filter:blur(5px)}
+.box{background:var(--card);border-radius:22px;padding:24px;box-shadow:var(--shl);text-align:center;max-height:calc(100dvh - 24px);overflow:auto;position:relative}
 .box h2{margin:0 0 12px;font-size:20px}
+.why{background:var(--soft);color:var(--redd);border-radius:12px;padding:8px 12px;font-size:13.5px;font-weight:600;margin:0 0 12px}
+.xbtn{position:absolute;top:10px;left:10px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);font-size:18px;z-index:2;box-shadow:var(--sh)}
 .paybox{background:var(--soft);padding:12px;border-radius:12px;font-size:13.5px;text-align:right;margin-bottom:10px;display:grid;gap:8px}
 .pr{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pr>span{min-width:96px;font-weight:700}
 .pr code{background:#fff;border-radius:6px;padding:2px 8px;font-size:14px;letter-spacing:.5px}
@@ -135,58 +175,76 @@ dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
 .full{max-height:72vh;width:auto;border-radius:12px;display:block;margin:0 auto 8px}
 
 /* ════════════════════════════════════════════════════════════════
-   [C5] 🧭 الهيكل: الشريط العلوي، الإعلان، التبويبات والقائمة الجانبية
+   [C5] 🧭 الشريط العلوي، التبويبات والقائمة الجانبية
    ════════════════════════════════════════════════════════════════ */
-#app{min-height:100vh}
-.nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 16px}
-.navl,.navr{display:flex;align-items:center;gap:10px;min-width:0}
-.brand{font-weight:800;font-size:21px;color:var(--red);white-space:nowrap}
-.who{max-width:42vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hb{background:none;border:1px solid var(--line);border-radius:8px;font-size:22px;line-height:1;padding:4px 11px;color:var(--ink)}
-.tick{background:var(--redd);color:#fff;overflow:hidden;white-space:nowrap;font-size:13px;height:32px;position:relative}
-.tick span{position:absolute;top:5px;left:0;animation:tk 28s linear infinite;will-change:transform}
+.nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px max(16px,env(safe-area-inset-right,0px)) 9px max(16px,env(safe-area-inset-left,0px))}
+.navl,.navr{display:flex;align-items:center;gap:8px;min-width:0}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:21px;color:var(--ink);white-space:nowrap;background:none;border:0;padding:0}
+.brand i{width:36px;height:36px;border-radius:11px;background:var(--red);display:grid;place-items:center;font-style:normal;font-size:18px}
+.who{max-width:34vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb,.bell{position:relative;background:#fff;border:1px solid var(--line);border-radius:10px;font-size:19px;line-height:1;padding:6px 10px;color:var(--ink)}
+.bell .cnt{position:absolute;top:-6px;left:-6px;margin:0}
+.tick{background:var(--redd);color:#fff;overflow:hidden;white-space:nowrap;font-size:13px;height:30px;position:relative}
+.tick span{position:absolute;top:4px;left:0;animation:tk 28s linear infinite;will-change:transform}
 @keyframes tk{from{transform:translateX(-100%)}to{transform:translateX(100vw)}}
-.hero{padding:28px 20px;text-align:center;background:linear-gradient(135deg,var(--redd),var(--red));color:#fff}
-.hero h1{margin:0 0 4px;font-size:clamp(20px,4vw,26px);font-weight:800}.hero p{margin:0;opacity:.92}
-.tabs{display:none;gap:6px;justify-content:center;flex-wrap:wrap;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.band{padding:22px 16px;text-align:center;background:linear-gradient(135deg,var(--night),var(--redd));color:#fff}
+.band h1{margin:0 0 2px;font-size:clamp(19px,3.6vw,24px);font-weight:800}.band p{margin:0;opacity:.9}
+.tabs{display:none;gap:4px;justify-content:center;flex-wrap:wrap;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--line)}
 .tabs button,.menu button{border:0;background:none;border-radius:10px;padding:8px 14px;font-weight:700;color:var(--ink)}
 .tabs button:hover,.tabs button.on,.menu button:hover,.menu button.on{background:var(--soft);color:var(--red)}
 .cnt{display:inline-block;min-width:20px;padding:0 6px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;line-height:20px;text-align:center;margin-inline-start:4px}
-.wrap{max-width:1200px;margin:0 auto;padding:20px 16px calc(96px + var(--sb))}
-.menu{position:fixed;top:0;bottom:0;right:0;width:280px;max-width:86vw;z-index:40;background:var(--card);border-radius:18px 0 0 18px;padding:14px;box-shadow:var(--shl);overflow:auto;transform:translateX(110%);transition:transform .25s,visibility .25s;visibility:hidden}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 24px}
+.wrap.flush{max-width:none;padding:0}
+.menu{position:fixed;top:0;bottom:0;right:0;width:290px;max-width:86vw;z-index:40;background:var(--card);border-radius:18px 0 0 18px;padding:14px;box-shadow:var(--shl);overflow:auto;transform:translateX(110%);transition:transform .25s,visibility .25s;visibility:hidden}
 .menu.open{transform:none;visibility:visible}
 .menu button{display:block;width:100%;text-align:right;margin-bottom:4px;padding:10px 14px}
 .menuh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.scrim{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:30}
+.scrim{position:fixed;inset:0;background:rgba(22,10,16,.45);z-index:30}
 @media (min-width:960px){.tabs{display:flex}.hb{display:none}}
+@media (max-width:520px){.navr .hide-sm{display:none}.brand{font-size:18px}}
 
 /* ════════════════════════════════════════════════════════════════
-   [C6] 🏘️ بطاقات العقارات (شبكة التصفح)
+   [C6] 🏘️ بطاقات العقارات، الفلاتر والترتيب
    ════════════════════════════════════════════════════════════════ */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
-.card:hover{transform:translateY(-3px);box-shadow:var(--shl)}
-.cover{aspect-ratio:2/1;position:relative;background:var(--soft)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shl)}
+.cover{aspect-ratio:16/10;position:relative;background:var(--soft)}
+.cv{display:block;width:100%;height:100%;border:0;padding:0;background:none;cursor:pointer}
 .cover img{width:100%;height:100%;object-fit:cover;display:block}
-.badge{position:absolute;top:10px;right:10px;font-size:11.5px;font-weight:700;color:#fff;padding:4px 10px;border-radius:99px}
-.b-a{background:var(--ok)}.b-r{background:var(--no)}
-.body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
-.body h3{margin:0;font-size:15px}
-.price{color:var(--red);font-weight:800;font-size:18px}
-.dist{background:var(--soft);color:var(--red);font-weight:700;font-size:12px;padding:3px 10px;border-radius:6px;width:fit-content}
+.badges{position:absolute;top:10px;right:10px;display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-size:11.5px;font-weight:700;color:#fff;padding:4px 10px;border-radius:99px;background:rgba(22,18,26,.72)}
+.b-a{background:var(--ok)}.b-r{background:var(--no)}.b-n{background:var(--red)}
+.fav{position:absolute;top:8px;left:8px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.94);font-size:18px;line-height:1;box-shadow:var(--sh);color:#9c8f98}
+.fav[aria-pressed=true]{color:var(--red)}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.body h3{margin:0;font-size:16px}
+.body h3 button{all:unset;cursor:pointer}.body h3 button:hover{color:var(--red)}.body h3 button:focus-visible{outline:3px solid #f59e0b}
+.price{color:var(--ink);font-weight:800;font-size:20px}.price small{color:var(--mut);font-weight:600;font-size:13px}
+.facts{display:flex;gap:6px;flex-wrap:wrap}
+.fact{font-size:12px;font-weight:700;background:#f3f1f5;color:#463f4c;padding:3px 9px;border-radius:7px}
+.dist{background:var(--soft);color:var(--red)}
 .acts{display:flex;gap:6px;margin-top:auto;padding-top:10px;flex-wrap:wrap}
-.acts button{flex:1;padding:7px 6px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:12px;white-space:nowrap}
-.acts .dep{background:var(--warn);color:#fff;border-color:var(--warn)}.acts .vw{background:var(--red);color:#fff;border-color:var(--red)}.acts .wa{background:var(--wad);color:#fff;border-color:var(--wad)}
+.acts button{flex:1;padding:8px 6px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:12.5px;white-space:nowrap}
+.acts .dep{background:var(--red);color:#fff;border-color:var(--red)}.acts .vw{background:var(--ink);color:#fff;border-color:var(--ink)}
+.filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.filters input,.filters select{width:auto;margin:0}
+.filters .q{flex:1;min-width:180px}
+.adv{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 14px;margin-bottom:12px}
+.adv summary{cursor:pointer;font-weight:700;padding:8px 0}
+.advg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:4px 12px;padding-bottom:12px;align-items:end}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.more{display:flex;justify-content:center;margin-top:18px}
 
 /* ════════════════════════════════════════════════════════════════
    [C7] 📋 اللوحات، الأسطر، الشارات والإحصائيات
    ════════════════════════════════════════════════════════════════ */
-.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--sh);margin-bottom:16px}
-.panel h2{margin:0 0 10px;color:var(--red);font-size:16px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh);margin-bottom:16px}
+.panel h2{margin:0 0 10px;color:var(--red);font-size:17px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px 12px;padding:10px 0;border-top:1px solid var(--line);flex-wrap:wrap}
 .grow{flex:1;min-width:0}
 .rowact{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.mut{color:var(--mut);font-size:12.5px}
+.mut{color:var(--mut);font-size:13px}
 .pill{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--red);white-space:nowrap}
 .pill.g{background:var(--okb);color:var(--ok)}.pill.x{background:#f1f5f9;color:var(--no)}.pill.w{background:#fef3c7;color:var(--warn)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
@@ -199,8 +257,8 @@ dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
 /* ════════════════════════════════════════════════════════════════
    [C8] 💬 الدردشة والصور المصغّرة
    ════════════════════════════════════════════════════════════════ */
-.chat{background:#f1f5f9;border-radius:12px;padding:12px;height:300px;overflow-y:auto;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
-.msg{background:#fff;padding:8px 12px;border-radius:10px;max-width:80%;box-shadow:0 1px 2px rgba(0,0,0,.05);align-self:flex-end}
+.chat{background:#f3f1f5;border-radius:12px;padding:12px;height:300px;overflow-y:auto;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+.msg{background:#fff;padding:8px 12px;border-radius:12px;max-width:80%;box-shadow:0 1px 2px rgba(0,0,0,.05);align-self:flex-end}
 .msg.me{background:var(--soft);align-self:flex-start}
 .txt{white-space:pre-wrap;overflow-wrap:anywhere}
 .chatf{display:flex;gap:8px}.chatf input{margin:0}
@@ -208,37 +266,105 @@ dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
 .thumb{width:120px;height:80px;object-fit:cover;border-radius:8px;display:block;border:1px solid var(--line)}
 
 /* ════════════════════════════════════════════════════════════════
-   [C9] 🔔 الإشعارات، زر واتساب والحركة
+   [C9] 🔔 الإشعارات، الرسائل المنبثقة، واتساب والحركة
    ════════════════════════════════════════════════════════════════ */
+.np{position:fixed;top:60px;left:max(12px,env(safe-area-inset-left,0px));z-index:45;width:min(380px,calc(100vw - 24px));max-height:70vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shl);padding:10px}
+.np h2{font-size:15px;margin:4px 6px 8px}
+.ni{display:block;width:100%;text-align:right;border:0;background:none;border-radius:10px;padding:9px 10px}
+.ni:hover{background:var(--soft)}.ni.new{background:#fff7f8}.ni.new b::before{content:"● ";color:var(--red)}
+.ni span{display:block;font-size:12px;color:var(--mut)}
 .toast{position:fixed;left:50%;bottom:calc(92px + var(--sb));transform:translateX(-50%);z-index:60;background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-size:14px;max-width:90vw;text-align:center;box-shadow:var(--shl)}
 .toast.bad{background:var(--red)}
-.fwa{position:fixed;left:16px;bottom:calc(16px + var(--sb));z-index:35;width:58px;height:58px;border-radius:50%;border:0;background:var(--wa);display:flex;align-items:center;justify-content:center;animation:pu 2.2s infinite}
+.fwa{position:fixed;left:16px;bottom:calc(16px + var(--sb));z-index:35;width:56px;height:56px;border-radius:50%;border:0;background:var(--wa);display:flex;align-items:center;justify-content:center;animation:pu 2.2s infinite}
 @keyframes pu{0%{box-shadow:0 0 0 0 rgba(37,211,102,.55)}70%{box-shadow:0 0 0 16px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
-@media (prefers-reduced-motion:reduce){*,::before,::after{transition:none!important;animation:none!important}.tick span{position:static;display:block;text-align:center;padding-top:5px}}
+@keyframes up{from{opacity:.4;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card,.feat article,.track{animation:up .35s ease-out both}
+@media (prefers-reduced-motion:reduce){*,::before,::after{transition:none!important;animation:none!important}.tick span{position:static;display:block;text-align:center;padding-top:4px}html{scroll-behavior:auto}}
+
+/* ════════════════════════════════════════════════════════════════
+   [C10] 🗺️ الخريطة، تفاصيل العقار، الجولة التعريفية
+   ════════════════════════════════════════════════════════════════ */
+.mapwrap{display:grid;grid-template-columns:minmax(0,320px) 1fr;gap:16px;align-items:start}
+@media (max-width:720px){.mapwrap{grid-template-columns:1fr}}
+.tnmap{width:100%;max-width:260px;height:auto;display:block;margin:0 auto}
+.tnmap .land{fill:#f4e3e6;stroke:#c99aa3;stroke-width:1.5}
+.tnmap .pin{cursor:pointer}.tnmap .pin circle{fill:var(--red);stroke:#fff;stroke-width:2}
+.tnmap .pin.off circle{fill:#bdb4ba}.tnmap .pin.on circle{fill:var(--ink)}
+.tnmap .pin:hover circle,.tnmap .pin:focus circle{fill:var(--redd)}
+.tnmap text{font-size:13px;font-weight:700;fill:#fff;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.tnmap text.lbl{fill:var(--mut);font-size:10.5px}
+.citylist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.citylist button{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font-weight:700}
+.citylist button[aria-pressed=true]{border-color:var(--red);background:var(--soft);color:var(--red)}
+.pd{text-align:right;padding:0;overflow:auto}
+.pd .ph{aspect-ratio:16/8;background:var(--soft);position:relative}.pd .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.pd-h{padding:18px 20px 0}.pd-in{padding:12px 20px 20px;display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+@media (max-width:720px){.pd-in{grid-template-columns:1fr}.side{order:-1}.pd .ph{aspect-ratio:16/9}}
+.pd h2{font-size:22px;margin:0 0 4px;text-align:right}
+.pd dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:12px 0;font-size:14px}
+.pd dt{color:var(--mut)}.pd dd{margin:0;font-weight:700}
+.pd .tnmap{max-width:150px;margin:8px 0 0}
+.side{background:#faf8fa;border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:10px;align-content:start}
+.side .price{font-size:26px}
+.intro{text-align:right}
+.intro video{width:100%;border-radius:14px;background:#000;display:block;margin-bottom:12px}
+.intro ol{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:12px}
+.intro li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;background:#faf8fa;border-radius:14px;padding:10px}
+.intro li i{font-style:normal;font-size:26px;width:44px;height:44px;border-radius:12px;background:var(--soft);display:grid;place-items:center}
+.intro li b{display:block}.intro li span{color:var(--mut);font-size:13.5px}
 </style>
 </head>
 <body>
 <div class="jsfail" id="jsfail" role="alert">تعذّر تشغيل المنصة: JavaScript لا يعمل هنا. افتح الملف في متصفح (Safari أو Chrome) عبر رابط http(s)، لا في معاينة الملفات. إن استمر المشكل، حدّث بصمة CSP في أعلى الملف.</div>
 
 <!-- ════════════════════════════════════════════════════════════════
-     [H1] 🚪 صفحة الترحيب: اختيار الصفة
+     [H1] 🧭 الشريط العلوي (يتبدّل حسب: زائر / مكتري / مالك / إدارة) + لوحة الإشعارات
+     المحتوى (#dash) يتعبّى من الجافاسكريبت — شوف [S12]
      ════════════════════════════════════════════════════════════════ -->
-<main class="welcome" id="w">
-  <h1>منصة داره (Darek) للعقارات والمبيتات</h1>
-  <p>اختر صفتك للدخول: تصفح، حجز، معاينة، وتواصل مباشر</p>
-  <div class="roles">
-    <div class="role" data-act="role" data-id="tenant"><div class="ic" aria-hidden="true">🧑‍🎓</div><h2>مكتري / طالب</h2><p>بحث، طلب معاينة، دفع العربون بإثبات تحويل، ثم فضاء «داري» بعد تأكيد الحجز.</p><button type="button" class="btn">دخول كمكتري</button></div>
-    <div class="role" data-act="role" data-id="landlord"><div class="ic" aria-hidden="true">🏠</div><h2>مالك عقار</h2><p>أضف عقاراتك، تابع المداخيل، وراسل مكتريك وتابع فواتيرهم وتشكياتهم.</p><button type="button" class="btn">دخول كمالك</button></div>
-    <div class="role" data-act="role" data-id="broker"><div class="ic" aria-hidden="true">⚡</div><h2>سمسار / إدارة</h2><p>مراجعة العقارات، المعاينات، إثباتات الدفع والرسائل.</p><button type="button" class="btn">دخول الإدارة</button></div>
-  </div>
-</main>
+<div id="app" hidden>
+  <header class="nav">
+    <div class="navl"><button type="button" class="hb" id="hb" data-act="menu" aria-label="القائمة" aria-controls="menu" aria-expanded="false">☰</button><button type="button" class="brand" data-act="home" aria-label="داره، الصفحة الرئيسية"><i aria-hidden="true">🏠</i>داره</button></div>
+    <div class="navr">
+      <button type="button" class="btn sm ghost hide-sm" id="listBtn" data-act="list-prop">➕ أضف عقارك</button>
+      <button type="button" class="btn sm" id="inBtn" data-act="login">تسجيل الدخول</button>
+      <span id="who" class="pill who" hidden></span>
+      <button type="button" class="bell" id="bell" data-act="notifs" aria-label="الإشعارات" aria-expanded="false" aria-controls="np" hidden>🔔<span class="cnt" id="bellN" hidden></span></button>
+      <button type="button" class="btn sm ghost" id="outBtn" data-act="logout" hidden>خروج</button>
+    </div>
+  </header>
+  <div class="np" id="np" role="region" aria-label="الإشعارات" hidden></div>
+  <div class="tick" aria-label="إعلان"><span id="tk"></span></div>
+  <div class="band" id="band" hidden><h1 id="bandT">لوحة داره</h1><p id="heroP"></p></div>
+  <nav class="tabs" id="tabs" aria-label="الأقسام"></nav>
+  <main class="wrap" id="dash" tabindex="-1"></main>
 
 <!-- ════════════════════════════════════════════════════════════════
-     [H2] 🔐 نوافذ الدخول: حساب المكتري/المالك + رمز الإدارة
+     [H4] 🦶 التذييل
+     ════════════════════════════════════════════════════════════════ -->
+  <footer class="foot">
+    <div class="foot-in">
+      <div><b>🏠 داره (Darek)</b><p>منصة تونسية للكراء: مبيتات طلبة، استوديوهات وشقق عائلية. معاينة منظّمة، عربون موثّق، وفضاء خاص بعد الحجز.</p></div>
+      <div><b>المنصة</b><button type="button" data-act="tab" data-id="props">تصفح العقارات</button><button type="button" data-act="list-prop">أضف عقارك</button><button type="button" data-act="intro">جولة تعريفية</button></div>
+      <div><b>تواصل</b><button type="button" data-act="wa">واتساب</button><button type="button" data-act="admin-login">دخول الإدارة 🔒</button></div>
+    </div>
+    <small id="copy"></small>
+  </footer>
+  <button type="button" class="fwa" data-act="wa" aria-label="تواصل عبر واتساب"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z" fill="none" stroke="#fff" stroke-width="2"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.4-2-1.4-2.4-2.4l.8-1-1-2z" fill="#fff"/></svg></button>
+  <div class="scrim" id="scrim" data-act="menu-close" hidden></div>
+  <nav class="menu" id="menu" aria-label="القائمة"></nav>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     [H2] 🔐 نوافذ الدخول: حساب (مكتري/مالك) + رمز الإدارة
      ════════════════════════════════════════════════════════════════ -->
 <dialog id="dlgAuth" aria-labelledby="authT">
   <form id="fAuth" class="box" novalidate>
-    <h2 id="authT">الدخول</h2>
+    <h2 id="authT">مرحباً بك في داره</h2>
+    <p class="why" id="authWhy" hidden></p>
+    <div class="seg" role="group" aria-label="الصفة">
+      <button type="button" data-act="as" data-id="tenant" aria-pressed="true">🧑‍🎓 مكتري / طالب</button>
+      <button type="button" data-act="as" data-id="landlord" aria-pressed="false">🏠 مالك عقار</button>
+    </div>
     <div class="seg" role="tablist" aria-label="نوع العملية">
       <button type="button" role="tab" data-act="mode" data-id="login" aria-selected="true">تسجيل الدخول</button>
       <button type="button" role="tab" data-act="mode" data-id="register" aria-selected="false">حساب جديد</button>
@@ -251,7 +377,7 @@ dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
     <label class="fld">كلمة السر <span class="opt">(8 أحرف على الأقل)</span><span class="pw"><input name="pass" type="password" autocomplete="current-password" maxlength="128" dir="ltr"><button type="button" class="peek" data-act="peek" aria-label="إظهار كلمة السر" aria-pressed="false">👁</button></span></label>
     <p class="err" role="alert"></p>
     <button type="submit" class="btn" id="authBtn">دخول</button>
-    <button type="button" class="link" data-act="close" data-id="dlgAuth">إلغاء</button>
+    <button type="button" class="link" data-act="close" data-id="dlgAuth">مواصلة التصفح كزائر</button>
   </form>
 </dialog>
 
@@ -266,7 +392,7 @@ dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
 </dialog>
 
 <!-- ════════════════════════════════════════════════════════════════
-     [H3] 💳 نوافذ الدفع، طلب المعاينة، وعرض الصورة بالحجم الكامل
+     [H3] 💳 نوافذ الدفع، المعاينة، الصورة، تفاصيل العقار، والجولة التعريفية
      ════════════════════════════════════════════════════════════════ -->
 <dialog id="dlgPay" aria-labelledby="payT">
   <form id="fPay" class="box" novalidate>
@@ -306,25 +432,15 @@ dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
   </div>
 </dialog>
 
-<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<dialog id="dlgProp" class="wide" aria-labelledby="pdT">
+  <div class="box pd"><button type="button" class="xbtn" data-act="close" data-id="dlgProp" aria-label="إغلاق">✕</button><div id="pdBody"></div></div>
+</dialog>
 
-<!-- ════════════════════════════════════════════════════════════════
-     [H4] 🧭 التطبيق بعد الدخول: الشريط، الإعلان، التبويبات والمحتوى
-     المحتوى (#dash) يتعبّى من الجافاسكريبت — شوف [S12]
-     ════════════════════════════════════════════════════════════════ -->
-<div id="app" hidden>
-  <header class="nav">
-    <div class="navl"><button type="button" class="hb" id="hb" data-act="menu" aria-label="القائمة" aria-controls="menu" aria-expanded="false">☰</button><div class="brand">🏠 داره</div></div>
-    <div class="navr"><span id="who" class="pill who"></span><button type="button" class="out" data-act="logout">خروج</button></div>
-  </header>
-  <div class="tick" aria-label="إعلان"><span id="tk"></span></div>
-  <div class="hero"><h1>منصة داره لتسيير العقارات والمبيتات</h1><p id="heroP">تنظيم عالي، دفع موثّق، وتصاميم عصرية</p></div>
-  <nav class="tabs" id="tabs" aria-label="الأقسام"></nav>
-  <main class="wrap" id="dash" tabindex="-1"></main>
-  <button type="button" class="fwa" data-act="wa" aria-label="تواصل عبر واتساب"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z" fill="none" stroke="#fff" stroke-width="2"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.4-2-1.4-2.4-2.4l.8-1-1-2z" fill="#fff"/></svg></button>
-  <div class="scrim" id="scrim" data-act="menu-close" hidden></div>
-  <nav class="menu" id="menu" aria-label="القائمة"></nav>
-</div>
+<dialog id="dlgIntro" aria-labelledby="introT">
+  <div class="box intro"><h2 id="introT">👋 مرحباً بك في داره</h2><div id="introBody"></div><button type="button" class="btn" data-act="close" data-id="dlgIntro">يلّا نبداو 🚀</button></div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
 'use strict';
@@ -334,15 +450,18 @@ document.getElementById('jsfail').remove();
 /* ══════════════════════════════════════════════════════════════════════
    [S01] ⚙️ الإعدادات — أوّل بلاصة تبدّل فيها
    ──────────────────────────────────────────────────────────────────────
-   هنا: نص الإعلان، رقم واتساب، D17، الـRIB، نسبة العربون، واسم السمسار.
-   رمز الإدارة: ولّدو من «🔐 الأمان والبيانات» في لوحة الإدارة والصق السطر مكان admin:
-   (ما دام hash فارغ، يتقبّل الرمز القديم SHA-256 مؤقتاً.)
+   introVideo: رابط فيديو الترحيب (mp4، https). يتعرض مرة وحدة أول ما المستعمل يحلّ حسابو.
+               فارغ = تتعرض جولة بالخطوات في بلاصتو.
+   رمز الإدارة: ولّدو من «🔐 الأمان والبيانات» والصق السطر مكان admin:
+   adminIdleMin: الإدارة تخرج وحدها بعد هالعدد من الدقائق بلا حركة.
    ══════════════════════════════════════════════════════════════════════ */
-const APP_VER = '3.0';
+const APP_VER = '4.0';
 const CFG = Object.freeze({
   ann: '🔥 عروض مميزة: حجز سريع للعقارات والمبيتات في تونس والساحل عبر منصة داره!',
   wa: '21629461304', d17: '29461304', rib: '14 000 00029384812', depPct: 20,
   brokerName: 'السمسار مهيب',
+  introVideo: '',
+  adminIdleMin: 30,
   admin: Object.freeze({ salt: '', iter: 310000, hash: '' }),
   adminLegacySha256: '8bfa6ec511c7840857b9bb932cadbbcea45d49b6f9fba4a808f6e0a255a9bd78'
 });
@@ -350,29 +469,31 @@ const CFG = Object.freeze({
 /* ══════════════════════════════════════════════════════════════════════
    [S02] 🗂️ المعطيات الثابتة
    ──────────────────────────────────────────────────────────────────────
-   حب تزيد ولاية؟ زيدها في CITIES. حرفي صيانة؟ في PROS.
-   SEED = العقارات النموذجية متاع الإدارة (ما تتفسخش).
+   CITIES + GEO: الولايات وإحداثياتها التقريبية (للخريطة). ولاية جديدة؟ زيدها في الزوز.
+   SEED = العقارات النموذجية متاع الإدارة.
    ══════════════════════════════════════════════════════════════════════ */
-const USER_ITER = 150000;
+const USER_ITER = 150000, PAGE = 12;
 const CITIES = ['تونس','أريانة','بن عروس','منوبة','نابل','سوسة','المنستير','صفاقس'];
+/* [خط الطول، خط العرض، إزاحة العرض على الخريطة dx,dy] — الإزاحة باش ولايات تونس الكبرى ما يتغطّاوش */
+const GEO = { 'تونس':[10.18,36.81,10,3], 'أريانة':[10.19,36.86,0,-14], 'بن عروس':[10.22,36.75,4,14], 'منوبة':[10.1,36.81,-13,0], 'نابل':[10.73,36.45,0,0], 'سوسة':[10.64,35.83,-7,0], 'المنستير':[10.82,35.77,7,5], 'صفاقس':[10.76,34.74,0,0] };
 const CATS = { girls:'بنات فقط', students:'طلبة', family:'عائلات', all:'الكل' };
 const TERMS = { day:'يوم', month:'شهر', year:'سنة' };
+const ROOMS = { 0:'غرفة / استوديو', 1:'S+1', 2:'S+2', 3:'S+3', 4:'S+4 فأكثر' };
 const RL = { tenant:'مكتري', landlord:'مالك', broker:'الإدارة' };
 const BILL = { steg:'⚡ STEG (كهرباء)', sonede:'💧 SONEDE (ماء)' };
 const PROS = [['عمي صالح (سباك محترف)','98123456','تونس الكبرى','إصلاح قنوات المياه والتسربات'],['سامي (كهربائي معتمد)','22456789','أريانة ومرناق','تركيب الأضواء وإصلاح الأعطال']];
 const SEED = [
-  ['p1','غرفة لشخصين في مبيت فتيات','أريانة','حي الغزالة، نهج 7050','ISETCom / INSAT',3,280,'available','—','girls','month'],
-  ['p2','استوديو S+1 مفروش للطلبة','تونس','المنار 2','جامعة المنار',5,450,'rented','30 جوان 2027','students','month'],
-  ['p3','شقة S+2 مجهزة للعائلات','المنستير','السقانس، شارع بورقيبة','كلية الطب بالمنستير',4,650,'available','—','family','month'],
-  ['p4','غرفة كولوك بحي الرياض','سوسة','حي الرياض، قرب إيسيت','ISITcom سوسة',6,220,'available','—','students','month']
-].map(([id,title,city,addr,fac,min,price,st,end,cat,term]) => Object.freeze({ id,title,city,addr,fac,min,price,st,end,cat,term,owner:'broker',ok:true,seed:true }));
+  ['p1','غرفة لشخصين في مبيت فتيات','أريانة','حي الغزالة، نهج 7050','ISETCom / INSAT',3,280,'available','—','girls','month',0,18,true,'غرفة مشتركة لطالبتين في مبيت آمن، قريبة من المترو. الماء والكهرباء والإنترنت مشمولة في السعر.','2026-09-01'],
+  ['p2','استوديو S+1 مفروش للطلبة','تونس','المنار 2','جامعة المنار',5,450,'rented','30 جوان 2027','students','month',1,40,true,'استوديو مفروش بالكامل مع مطبخ مجهّز، في عمارة هادئة على بعد دقائق من الكليات.','2026-08-20'],
+  ['p3','شقة S+2 مجهزة للعائلات','المنستير','السقانس، شارع بورقيبة','كلية الطب بالمنستير',4,650,'available','—','family','month',2,85,true,'شقة مشمسة بشرفة، غرفتين نوم، مكيّف، وقريبة من الشاطئ والخدمات.','2026-09-10'],
+  ['p4','غرفة كولوك بحي الرياض','سوسة','حي الرياض، قرب إيسيت','ISITcom سوسة',6,220,'available','—','students','month',0,14,false,'غرفة فردية في كولوك مع ثلاثة طلبة، مطبخ وصالة مشتركة.','2026-09-05']
+].map(([id,title,city,addr,fac,min,price,st,end,cat,term,rooms,area,furn,desc,at]) => Object.freeze({ id,title,city,addr,fac,min,price,st,end,cat,term,rooms,area,furn,desc,at,owner:'broker',ok:true,seed:true }));
 const BROKER = Object.freeze({ id:'broker', name:CFG.brokerName, role:'broker' });
 
 /* ══════════════════════════════════════════════════════════════════════
    [S03] 🧰 أدوات صغيرة: تنسيق، أرقام، تواريخ، تنظيف المدخلات
    ──────────────────────────────────────────────────────────────────────
-   E() = تهريب HTML (لازم على كل نص جاي من المستعمل قبل ما يدخل للصفحة).
-   digits() = يحوّل الأرقام العربية ٠١٢ إلى 012 (لوحات المفاتيح في التليفون).
+   E() = تهريب HTML: لازم على كل نص جاي من المستعمل قبل ما يدخل للصفحة (حماية XSS).
    ══════════════════════════════════════════════════════════════════════ */
 const $ = id => document.getElementById(id);
 const E = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
@@ -403,17 +524,17 @@ const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/;
 const byAtDesc = (a, b) => String(b.at).localeCompare(String(a.at));
 const byOpenThenNew = (a, b) => ((b.st === 'open') - (a.st === 'open')) || byAtDesc(a, b);
 const isBroker = () => !!me && me.role === 'broker';
+const R = () => me ? me.role : 'guest';
+const isNew = p => !!p.at && Date.now() - new Date(p.at) < 10 * 864e5;
 
 /* ══════════════════════════════════════════════════════════════════════
    [S04] 💾 التخزين: قاعدة المعطيات (localStorage) + الترحيل
    ──────────────────────────────────────────────────────────────────────
-   db = كل المعطيات (مستعملين، عقارات، مدفوعات، رسائل، فواتير، تشكيات).
    القاعدة الذهبية: بدّل في db ثم commit(undo). كان فشل الحفظ، undo يرجّع كل شي.
-   normalize() تنظّف أي معطيات داخلة (من التخزين ولا من نسخة احتياطية).
-   حب تزيد نوع معطيات جديد؟ زيدو في normalize()، وكان فيه صورة زيدو في imgRefs() [S05].
+   normalize() تنظّف أي معطيات داخلة (من التخزين ولا من نسخة احتياطية): ملف مغشوش ما يكسّرش المنصة.
    ⚠️ كل شي محفوظ في هذا المتصفح برك (ما فماش سيرفر).
    ══════════════════════════════════════════════════════════════════════ */
-const KEY = 'darek_db_v2', OLD = 'darek_db_v1', IMG_LS = 'darek_img_', SESS = 'darek_sess', LOCK = 'darek_lock_', FKEY = 'darek_filters';
+const KEY = 'darek_db_v2', OLD = 'darek_db_v1', IMG_LS = 'darek_img_', SESS = 'darek_sess', LOCK = 'darek_lock_', FKEY = 'darek_filters', FAV = 'darek_favs', SEEN = 'darek_seen_', ONB = 'darek_onb_';
 const IMG_ID = /^i\w{1,40}$/;
 const probe = s => { try { const st = window[s], k = '__d'; st.setItem(k,'1'); st.removeItem(k); return st; } catch { return null; } };
 const ls = probe('localStorage'), ss = probe('sessionStorage');
@@ -434,12 +555,11 @@ function normalize(r) {
   return {
     v: 2,
     users: arr(r.users).filter(u => u && u.id && u.email).map(u => ({ id:str(u.id,40), name:str(u.name,60), email:str(u.email,80).toLowerCase(), phone:/^\d{8}$/.test(u.phone) ? u.phone : '', role:oneOf(u.role,['tenant','landlord'],'tenant'), salt:str(u.salt,64), hash:str(u.hash,64), iter:num(u.iter,2e6) || USER_ITER, at:str(u.at,40) })),
-    props: arr(r.props).filter(p => p && p.id).map(p => ({ id:str(p.id,40), title:str(p.title,80), city:oneOf(p.city,CITIES,CITIES[0]), addr:str(p.addr,80), fac:str(p.fac,60) || '—', min:num(p.min,240), price:num(p.price,1e6), st:oneOf(p.st,['available','rented'],'available'), end:str(p.end,40) || '—', cat:oneOf(p.cat,Object.keys(CATS),'all'), term:oneOf(p.term,Object.keys(TERMS),'month'), owner:str(p.owner,40), ok:p.ok === true, at:str(p.at,40) })),
+    props: arr(r.props).filter(p => p && p.id).map(p => ({ id:str(p.id,40), title:str(p.title,80), city:oneOf(p.city,CITIES,CITIES[0]), addr:str(p.addr,80), fac:str(p.fac,60) || '—', min:num(p.min,240), price:num(p.price,1e6), st:oneOf(p.st,['available','rented'],'available'), end:str(p.end,40) || '—', cat:oneOf(p.cat,Object.keys(CATS),'all'), term:oneOf(p.term,Object.keys(TERMS),'month'), rooms:Math.round(num(p.rooms,4)), area:Math.round(num(p.area,2000)), furn:p.furn === true, desc:str(p.desc,600), owner:str(p.owner,40), ok:p.ok === true, at:str(p.at,40), pat:str(p.pat,40) })),
     ov,
-    views: arr(r.views).filter(v => v && v.id).map(v => ({ id:str(v.id,40), pid:str(v.pid,40), uid:str(v.uid,40), name:str(v.name,60), slot:str(v.slot,80), at:str(v.at,40), st:oneOf(v.st,['pending','confirmed','cancelled'],'pending') })),
-    payments: arr(r.payments).filter(p => p && p.id).map(p => ({ id:str(p.id,40), pid:str(p.pid,40), uid:str(p.uid,40), name:str(p.name,60), type:oneOf(p.type,['dep','rent'],'dep'), amt:num(p.amt,1e6), img:imgRef(p.img), at:str(p.at,40), st:oneOf(p.st,['pending','confirmed','rejected'],'pending') })),
+    views: arr(r.views).filter(v => v && v.id).map(v => ({ id:str(v.id,40), pid:str(v.pid,40), uid:str(v.uid,40), name:str(v.name,60), slot:str(v.slot,80), at:str(v.at,40), dat:str(v.dat,40), st:oneOf(v.st,['pending','confirmed','cancelled'],'pending') })),
+    payments: arr(r.payments).filter(p => p && p.id).map(p => ({ id:str(p.id,40), pid:str(p.pid,40), uid:str(p.uid,40), name:str(p.name,60), type:oneOf(p.type,['dep','rent'],'dep'), amt:num(p.amt,1e6), img:imgRef(p.img), at:str(p.at,40), dat:str(p.dat,40), st:oneOf(p.st,['pending','confirmed','rejected'],'pending') })),
     chats: arr(r.chats).filter(c => c && c.id && c.thr).map(c => ({ id:str(c.id,40), thr:str(c.thr,40), from:c.from === 'broker' ? 'broker' : 'user', name:str(c.name,60), txt:str(c.txt,1000), at:str(c.at,40) })),
-    /* محادثات المكتري ↔ المالك: خيط لكل (عقار، مكتري) */
     dms: arr(r.dms).filter(c => c && c.id && c.pid && c.uid).map(c => ({ id:str(c.id,40), pid:str(c.pid,40), uid:str(c.uid,40), from:c.from === 'owner' ? 'owner' : 'tenant', name:str(c.name,60), txt:str(c.txt,1000), at:str(c.at,40) })),
     bills: arr(r.bills).filter(b => b && b.id).map(b => ({ id:str(b.id,40), pid:str(b.pid,40), uid:str(b.uid,40), name:str(b.name,60), kind:oneOf(b.kind,Object.keys(BILL),'steg'), amt:num(b.amt,1e5), month:MONTH_RE.test(b.month) ? b.month : '', img:imgRef(b.img), at:str(b.at,40) })),
     issues: arr(r.issues).filter(x => x && x.id).map(x => ({ id:str(x.id,40), pid:str(x.pid,40), uid:str(x.uid,40), name:str(x.name,60), txt:str(x.txt,1000), img:imgRef(x.img), at:str(x.at,40), st:oneOf(x.st,['open','resolved'],'open'), by:str(x.by,60), rat:str(x.rat,40) }))
@@ -456,7 +576,6 @@ function commit(undo) {
   toast('تعذّر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية ثم احذف معطيات قديمة.', true);
   return false;
 }
-/* ترحيل النسخة الأولى (v1): الصور كانت داخل قاعدة المعطيات نفسها */
 async function migrateV1() {
   const o = lget(ls, OLD); if (!o || lget(ls, KEY)) return;
   const out = { ...obj(o), props:arr(o.extra), payments:[], ov:{} };
@@ -464,16 +583,12 @@ async function migrateV1() {
   for (const [k, v] of Object.entries(obj(o.ov))) { const b = dataToBlob(v && v.photo); out.ov[k] = { ...obj(v), photo:b ? (await imgPut(b)) || undefined : undefined }; }
   if (lset(ls, KEY, normalize(out))) ldel(ls, OLD);
 }
+/* المفضلة: محفوظة في المتصفح، حتى للزوار */
+let favs = new Set(arr(lget(ls, FAV)).filter(x => typeof x === 'string').slice(0, 500));
+const saveFavs = () => lset(ls, FAV, [...favs]);
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S05] 🖼️ الصور: IndexedDB
-   ──────────────────────────────────────────────────────────────────────
-   علاش؟ localStorage فيه 5 ميغا برك وكل صورة base64 تاكل منو برشا → «مساحة ممتلئة».
-   توّا الصور تتخزّن كـBlob في IndexedDB (مئات الميغات) وتتعرض بروابط blob:.
-   - imgPut(blob) → يرجّع id (ولا null كان فشل)      - imgGet(id) → رابط للعرض (فوري)
-   - imgDel(id)                                      - imgSync() → يحمّل الصور الناقصة
-   كان IndexedDB موش متوفّر (متصفح قديم/خاص)، نرجعو أوتوماتيك لـlocalStorage.
-   الصور القديمة (darek_img_* في localStorage) تتنقل وحدها لـIndexedDB عند التشغيل.
+   [S05] 🖼️ الصور: IndexedDB (Blob) مع رجوع أوتوماتيكي لـlocalStorage
    ══════════════════════════════════════════════════════════════════════ */
 let idb = null, askedPersist = false;
 const urls = new Map();
@@ -546,7 +661,6 @@ async function imgMigrate() {
     try { await idbDo('readwrite', st => st.put({ blob:b, at:Date.now() }, id)); ldel(ls, k); } catch { break; }
   }
 }
-/* تنظيف: صور يتيمة (ما عادش حتى سطر يستعملها) عمرها أكثر من يوم */
 async function imgGc() {
   if (!idb) return;
   const refs = imgRefs(), old = Date.now() - 864e5;
@@ -560,33 +674,33 @@ async function imgGc() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S06] 🏘️ العقارات: العقارات النموذجية + اللي زادهم الملاّكة
+   [S06] 🏘️ العقارات + الذاكرة المؤقتة (cache)
    ──────────────────────────────────────────────────────────────────────
-   props() = القائمة الكاملة (مع التعديلات db.ov: الحالة والصورة).
-   art() = رسم افتراضي ملوّن لكل عقار ما عندوش صورة.
+   props() = القائمة الكاملة (محسوبة مرة وحدة حتى تتبدّل المعطيات).
+   filtered() [S12] تحفظ آخر نتيجة بحث (memo) وما تعاودش الحساب كان كي تتبدّل المعطيات ولا الفلاتر.
    ══════════════════════════════════════════════════════════════════════ */
-let _props = null, _byId = null;
-const invalidate = () => { _props = null; _byId = null; };
+let _props = null, _byId = null, dbVer = 0, fMemo = { k:'', v:[] };
+const invalidate = () => { _props = null; _byId = null; dbVer++; };
 function props() {
   if (!_props) { _props = [...SEED, ...db.props].map(p => ({ ...p, ...db.ov[p.id] })); _byId = new Map(_props.map(p => [p.id, p])); }
   return _props;
 }
 const prop = id => (props(), _byId.get(id));
+const published = () => props().filter(p => p.ok);
 const artCache = new Map();
 function art(id) {
   if (artCache.has(id)) return artCache.get(id);
   const h = [...id].reduce((a, c) => a + c.charCodeAt(0) * 7, 0) % 360;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150"><rect width="300" height="150" fill="hsl(${h},70%,82%)"/><rect y="110" width="300" height="40" fill="hsl(${(h+120)%360},35%,55%)"/><rect x="95" y="60" width="110" height="55" fill="hsl(${(h+25)%360},40%,92%)"/><polygon points="85,64 150,22 215,64" fill="hsl(${(h+190)%360},45%,38%)"/><rect x="140" y="85" width="20" height="30" fill="hsl(${(h+190)%360},45%,38%)"/><rect x="105" y="75" width="22" height="18" fill="#bfe3f5"/><rect x="173" y="75" width="22" height="18" fill="#bfe3f5"/><circle cx="255" cy="30" r="14" fill="#ffd54a"/></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150"><rect width="300" height="150" fill="hsl(${h},55%,84%)"/><rect y="110" width="300" height="40" fill="hsl(${(h+120)%360},30%,58%)"/><rect x="95" y="60" width="110" height="55" fill="hsl(${(h+25)%360},40%,94%)"/><polygon points="85,64 150,22 215,64" fill="hsl(${(h+190)%360},40%,36%)"/><rect x="140" y="85" width="20" height="30" fill="hsl(${(h+190)%360},40%,36%)"/><rect x="105" y="75" width="22" height="18" fill="#bfe3f5"/><rect x="173" y="75" width="22" height="18" fill="#bfe3f5"/><circle cx="255" cy="30" r="14" fill="#ffd54a"/></svg>`;
   const u = 'data:image/svg+xml,' + encodeURIComponent(svg);
   artCache.set(id, u); return u;
 }
+const photo = p => imgGet(p.photo) || art(p.id);
 
 /* ══════════════════════════════════════════════════════════════════════
    [S07] 🔐 التشفير وكلمات السر + الحماية من التخمين
    ──────────────────────────────────────────────────────────────────────
-   كلمات السر تتخزّن PBKDF2-SHA256 (ملح + 150000 دورة)، عمرها ما تتخزّن واضحة.
-   Sha = بديل JavaScript كي crypto.subtle موش موجود (صفحة موش HTTPS) — أبطأ برشا.
-   القفل (lock) منفصل: «auth» للحسابات و«pin» للإدارة، باش غلط الواحد ما يقفلش الآخر.
+   كلمات السر: PBKDF2-SHA256 (ملح + 150000 دورة). القفل منفصل: «auth» و«pin».
    ══════════════════════════════════════════════════════════════════════ */
 const enc = new TextEncoder();
 const hex = b => Array.from(new Uint8Array(b), x => x.toString(16).padStart(2,'0')).join('');
@@ -657,10 +771,7 @@ const lockOk = scope => ldel(ls, LOCK + scope);
 const lockMsg = ms => `محاولات كثيرة. أعد المحاولة بعد ${Math.ceil(ms / 1000)} ثانية.`;
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S08] 🪟 واجهة عامة: إشعارات، نوافذ، أزرار مشغولة، واتساب، ضغط الصور ومعاينتها
-   ──────────────────────────────────────────────────────────────────────
-   shrink(file) يصغّر أي صورة (حتى من كاميرا التليفون) لـJPEG خفيف ويصلّح اتجاهها.
-   أي <input type=file> في نموذج فيه <img class="prev"> تتعرض معاينتو وحدها.
+   [S08] 🪟 واجهة عامة: رسائل منبثقة، نوافذ، أزرار مشغولة، واتساب، الصور
    ══════════════════════════════════════════════════════════════════════ */
 let tT;
 function toast(m, bad) {
@@ -670,16 +781,15 @@ function toast(m, bad) {
 function openDlg(id) {
   const d = $(id); d.querySelectorAll('.err').forEach(e => { e.textContent = ''; });
   if (typeof d.showModal === 'function') { if (!d.open) d.showModal(); } else d.setAttribute('open', '');
-  const f = [...d.querySelectorAll('input:not([type=radio]):not([type=file])')].find(x => !x.closest('[hidden]')) || d.querySelector('button[type=submit],button');
+  const f = [...d.querySelectorAll('input:not([type=radio]):not([type=file]):not([type=checkbox])')].find(x => !x.closest('[hidden]')) || d.querySelector('button[type=submit],button');
   if (f) setTimeout(() => f.focus(), 30);
 }
-function closeDlg(id) { const d = $(id); if (d.open) { if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); } }
+function closeDlg(id) { const d = $(id); if (d && d.open) { if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); } }
 document.querySelectorAll('dialog').forEach(d => {
   d.addEventListener('click', e => { if (e.target === d) closeDlg(d.id); });
   d.addEventListener('close', () => d.querySelectorAll('img.prev').forEach(clearPrev));
 });
 const setErr = (f, m) => { f.querySelector('.err').textContent = m; return false; };
-/* يعطّل أزرار النموذج ويكتب «لحظة…» على زر الإرسال باش المستعمل يفهم إلّي الخدمة ماشية */
 function busy(f, on, label = '⏳ لحظة…') {
   f.querySelectorAll('button').forEach(b => { b.disabled = on; });
   const s = f.querySelector('button[type=submit]'); if (!s) return;
@@ -693,8 +803,8 @@ function goWA(n, txt) {
   document.body.appendChild(a); a.click(); a.remove();
 }
 const waB = t => goWA(CFG.wa, t);
-async function copy(text) {
-  try { await navigator.clipboard.writeText(text); toast('تم النسخ: ' + text); }
+async function copy(text, label) {
+  try { await navigator.clipboard.writeText(text); toast(label || 'تم النسخ: ' + text); }
   catch { toast('انسخ يدوياً: ' + text); }
 }
 const isImgFile = f => !!f && (/^image\//.test(f.type) || (!f.type && /\.(jpe?g|png|webp|gif|bmp|heic|heif)$/i.test(f.name || '')));
@@ -716,7 +826,6 @@ async function shrink(file, max = 1400, q = 0.72) {
   return out;
 }
 const imgErr = e => ({ type:'الملف ليس صورة.', size:'الصورة أكبر من 20 ميغابايت.', decode:'تعذّرت قراءة الصورة. استعمل JPG أو PNG (صور HEIC: غيّر إعداد الكاميرا إلى «الأكثر توافقاً»).' }[e && e.message] || 'تعذّرت معالجة الصورة.');
-/* حفظ صورة من نموذج: يرجّع { img } ولا { err } */
 async function saveImg(file, max) {
   try { const id = await imgPut(await shrink(file, max)); return id ? { img:id } : { err:'مساحة التخزين ممتلئة. لا يمكن حفظ الصورة.' }; }
   catch (e) { return { err:imgErr(e) }; }
@@ -730,15 +839,14 @@ function showPrev(input) {
 }
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S09] 👤 الجلسة: الدخول، التسجيل والخروج
+   [S09] 👤 الجلسة: التصفح حرّ، والدخول يتطلب كان عند الحاجة
    ──────────────────────────────────────────────────────────────────────
-   - جلسة المكتري/المالك: localStorage (30 يوم) → تبقى حتى بعد غلق المتصفح.
-   - جلسة الإدارة: sessionStorage (8 ساعات) → تتمسح كي تسكّر النافذة.
-   - الحساب مربوط بالبريد + الصفة: نفس البريد ينجم يكون مكتري ومالك بحسابين.
-   - حساب استرجعناه من نسخة احتياطية (بلا كلمة سر): صاحبو يعاود «حساب جديد» بنفس البريد.
+   need(صفة، عملية، سبب): كان الزائر موش داخل، تتحلّ نافذة الدخول، وبعد الدخول العملية
+   تكمل وحدها (pending). مثال: زائر يضغط «حجز» ← يدخل ← تتحلّ نافذة الدفع طول.
+   - جلسة المكتري/المالك: localStorage (30 يوم). جلسة الإدارة: sessionStorage (8 ساعات) + خروج بعد مدة بلا حركة.
    ══════════════════════════════════════════════════════════════════════ */
-let me = null, role = 'tenant', authMode = 'login', tab = 'props', curThr = null, curHome = null, curDm = null, payCtx = null, viewCtx = null;
-const F0 = Object.freeze({ q:'', city:'', cat:'', term:'', max:0 });
+let me = null, role = 'tenant', authMode = 'login', tab = 'landing', curThr = null, curHome = null, curDm = null, payCtx = null, viewCtx = null, pending = null, editId = null, shown = PAGE, lastAct = Date.now();
+const F0 = Object.freeze({ q:'', city:'', cat:'', term:'', min:0, max:0, rooms:'', furn:false, avail:false, fav:false, sort:'new', map:false });
 const F = { ...F0 };
 function restore() {
   const b = lget(ss, SESS);
@@ -747,20 +855,29 @@ function restore() {
   if (s && s.exp > Date.now()) { const u = db.users.find(x => x.id === s.uid); if (u && u.hash) return u; }
   return null;
 }
-function openRole(r) {
-  role = oneOf(r, ['tenant','landlord','broker'], 'tenant');
-  if (role === 'broker') return openDlg('dlgPin');
-  $('authT').textContent = 'الدخول كـ' + RL[role];
-  setAuthMode('login'); openDlg('dlgAuth');
+function openAuth(r = 'tenant', mode = 'login', why = '') {
+  setRole(r); setAuthMode(mode);
+  $('authWhy').textContent = why; $('authWhy').hidden = !why;
+  openDlg('dlgAuth');
+}
+function setRole(r) {
+  role = oneOf(r, ['tenant','landlord'], 'tenant');
+  $('fAuth').querySelectorAll('[data-act=as]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === role)));
 }
 function setAuthMode(m) {
   authMode = m === 'register' ? 'register' : 'login';
   const f = $('fAuth');
-  f.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === authMode)));
+  f.querySelectorAll('[data-act=mode]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === authMode)));
   $('regOnly').hidden = authMode !== 'register';
   f.elements.pass.autocomplete = authMode === 'register' ? 'new-password' : 'current-password';
   $('authBtn').textContent = authMode === 'register' ? 'إنشاء الحساب والدخول' : 'دخول';
   f.querySelector('.err').textContent = '';
+}
+function need(r, fn, why) {
+  if (me && me.role === r) return fn();
+  if (me) return toast(r === 'tenant' ? 'هذه العملية خاصة بحسابات المكترين.' : 'هذه العملية خاصة بحسابات الملاّكة.', true);
+  pending = { r, fn };
+  openAuth(r, 'login', why);
 }
 function peek(id, el) {
   const i = el.previousElementSibling, show = i.type === 'password';
@@ -790,7 +907,7 @@ async function onAuth(f) {
   } else {
     if (!u) {
       const other = db.users.find(x => x.email === email && x.hash);
-      if (other) return setErr(f, `هذا البريد مسجّل كـ${RL[other.role]}. ارجع واختر صفة «${RL[other.role]}».`);
+      if (other) { setRole(other.role); return setErr(f, `هذا البريد مسجّل كـ${RL[other.role]}. اخترنالك صفة «${RL[other.role]}»، اضغط «دخول» من جديد.`); }
       lockFail('auth'); return setErr(f, 'البريد أو كلمة السر غير صحيحة. ليس لديك حساب؟ اختر «حساب جديد».');
     }
     if (!u.hash) { setAuthMode('register'); return setErr(f, 'هذا الحساب يحتاج كلمة سر جديدة: أكمل «حساب جديد» بنفس البريد.'); }
@@ -811,43 +928,38 @@ async function onPin(f) {
   lockOk('pin'); f.reset(); closeDlg('dlgPin'); startSession(BROKER);
 }
 function startSession(u) {
-  me = u;
+  me = u; lastAct = Date.now();
   if (u.role === 'broker') lset(ss, SESS, { role:'broker', exp:Date.now() + 8 * 36e5 });
   else lset(ls, SESS, { uid:u.id, exp:Date.now() + 30 * 864e5 });
-  enterApp();
-}
-function enterApp() {
-  const h = location.hash.slice(1), items = tabsFor(me.role);
-  tab = items.some(i => i[0] === h) ? h : items[0][0];
-  $('w').hidden = true; $('app').hidden = false;
+  const p = pending; pending = null;
+  if (!p) tab = defaultTab();
   render(); window.scrollTo(0, 0);
+  if (p && p.r === u.role) setTimeout(p.fn, 60);
+  else maybeIntro();
 }
-/* leave() = ترجع لصفحة الترحيب بلا ما تمسّ الجلسة المخزّنة؛ logout() = تمسحها زادة */
+const defaultTab = () => tabsFor(R())[0][0];
 function leave() {
-  me = null; curThr = null; curHome = null; curDm = null; Object.assign(F, F0); ldel(ss, FKEY);
-  toggleMenu(false); $('dash').innerHTML = '';
+  me = null; curThr = null; curHome = null; curDm = null; pending = null; editId = null;
+  toggleMenu(false); toggleNotifs(false);
   document.querySelectorAll('dialog').forEach(d => closeDlg(d.id));
-  history.replaceState(null, '', location.pathname + location.search);
-  $('app').hidden = true; $('w').hidden = false; window.scrollTo(0, 0);
+  tab = 'landing'; render(); window.scrollTo(0, 0);
 }
 function logout() {
   if (isBroker()) ldel(ss, SESS); else ldel(ls, SESS);
   leave();
 }
-/* نافذة أخرى دخلت ولا خرجت → نتبعوها */
 function syncSession() {
   const next = restore();
   if (next && me && next.id === me.id) return;
   if (me && !isBroker()) { leave(); toast('تغيّرت الجلسة من نافذة أخرى.'); }
-  if (!me && next) { me = next; enterApp(); }
+  if (!me && next) { me = next; tab = defaultTab(); render(); }
 }
 
 /* ══════════════════════════════════════════════════════════════════════
    [S10] 🧭 التنقل: التبويبات حسب الصفة + الرابط (#)
    ──────────────────────────────────────────────────────────────────────
    حب تزيد تبويب؟ 1) زيدو في tabsFor()  2) زيد الصفحة متاعو في VIEWS [S12].
-   التبويب الحالي يتكتب في الرابط (#pays مثلاً) → التحديث (F5) يرجّعك لنفس البلاصة،
-   وزر «رجوع» في المتصفح/التليفون يرجّعك للتبويب اللي قبلو.
+   الرابط: #props يرجّعك للتبويب بعد F5. #p-<id> يفتح تفاصيل عقار (رابط قابل للمشاركة).
    ══════════════════════════════════════════════════════════════════════ */
 function counts() {
   return {
@@ -859,21 +971,22 @@ function counts() {
   };
 }
 function tabsFor(r) {
+  if (r === 'guest') return [['landing','🏠 الرئيسية'],['props','🏘️ العقارات']];
   if (r === 'tenant') {
-    /* بعد تأكيد العربون: لا قائمة عقارات، بل فضاء «داري» */
     if (housed()) return [['home','🏠 داري',dmThreads().filter(t => t.unread).length],['bills','🧾 الفواتير'],['issues','⚠️ التشكيات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة']];
-    return [['props','🏘️ تصفح العقارات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة']];
+    return [['props','🏘️ العقارات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة']];
   }
   const dmN = dmThreads().filter(t => t.unread).length, issN = ownIssues().filter(x => x.st === 'open').length;
-  if (r === 'landlord') return [['my_props','🏠 عقاراتي وتصاميم Canva'],['tenants','💬 مكترِيّ',dmN],['ll_bills','🧾 الفواتير'],['ll_issues','⚠️ التشكيات',issN],['pays','💰 متابعة المداخيل'],['props','🏘️ تصفح العقارات'],['support','💬 الدعم']];
+  if (r === 'landlord') return [['my_props','🏠 عقاراتي'],['tenants','💬 مكترِيّ',dmN],['ll_bills','🧾 الفواتير'],['ll_issues','⚠️ التشكيات',issN],['pays','💰 المداخيل'],['props','🏘️ العقارات'],['support','💬 الدعم']];
   const c = counts();
-  return [['broker_all','⚡ لوحة التحكم',c.props + c.views],['pays','💳 المدفوعات',c.pays],['inbox','💬 رسائل الدعم',c.inbox],['tenants','🏠 مكترو الإدارة',dmN],['ll_issues','⚠️ التشكيات',issN],['ll_bills','🧾 الفواتير'],['props','🏘️ العقارات المنشورة'],['settings','🔐 الأمان والبيانات']];
+  return [['broker_all','⚡ لوحة التحكم',c.props + c.views],['pays','💳 المدفوعات',c.pays],['inbox','💬 رسائل الدعم',c.inbox],['tenants','🏠 مكترو الإدارة',dmN],['ll_issues','⚠️ التشكيات',issN],['ll_bills','🧾 الفواتير'],['props','🏘️ العقارات'],['settings','🔐 الأمان والبيانات']];
 }
 const heroText = () => isBroker() ? 'راجع الطلبات والمدفوعات من مكان واحد' : me.role === 'landlord' ? 'أضف عقاراتك وتابع حجوزاتها ومداخيلها' : housed() ? 'دارك: محادثة المالك، الفواتير والتشكيات في مكان واحد' : 'ابحث، عاين، واحجز مبيتك بثقة';
 function paintNav(items) {
   const h = items.map(([k, l, n]) => `<button type="button" data-act="tab" data-id="${k}"${tab === k ? ' class="on" aria-current="page"' : ''}>${E(l)}${n ? `<span class="cnt">${n}</span>` : ''}</button>`).join('');
   $('tabs').innerHTML = h;
-  $('menu').innerHTML = `<div class="menuh"><b>القائمة</b><button type="button" class="link" data-act="menu-close" aria-label="إغلاق القائمة">✕</button></div>` + h;
+  $('menu').innerHTML = `<div class="menuh"><b>القائمة</b><button type="button" class="link" data-act="menu-close" aria-label="إغلاق القائمة">✕</button></div>` + h
+    + (me ? '' : '<hr><button type="button" data-act="login">🔑 تسجيل الدخول</button><button type="button" data-act="list-prop">➕ أضف عقارك</button>');
 }
 function toggleMenu(f) {
   const m = $('menu'), o = typeof f === 'boolean' ? f : !m.classList.contains('open');
@@ -881,17 +994,14 @@ function toggleMenu(f) {
   if (o) { const b = m.querySelector('button.on') || m.querySelector('button'); if (b) b.focus(); }
 }
 function go(id) {
-  toggleMenu(false);
+  toggleMenu(false); toggleNotifs(false);
+  if (!tabsFor(R()).some(i => i[0] === id)) return;
   if (tab !== id) { tab = id; history.pushState(null, '', '#' + id); }
   render(); window.scrollTo(0, 0); $('dash').focus({ preventScroll:true });
 }
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S11] 🏠 السكن «داري»: بعد ما الإدارة تأكّد العربون
-   ──────────────────────────────────────────────────────────────────────
-   homesOf(مكتري) = العقارات اللي عربونو فيها مؤكد.
-   tenantsOf(مالك) = المكترين المؤكدين في عقاراتو.
-   الإدارة = «مالك» العقارات النموذجية (owner:'broker')، وتشوف الفواتير والتشكيات الكل.
+   [S11] 🏠 السكن «داري» (بعد تأكيد العربون) + ما يخصّ المالك
    ══════════════════════════════════════════════════════════════════════ */
 const homesOf = tu => [...new Set(db.payments.filter(p => p.uid === tu && p.type === 'dep' && p.st === 'confirmed').map(p => p.pid))].map(prop).filter(Boolean);
 const housed = () => !!me && me.role === 'tenant' && homesOf(me.id).length > 0;
@@ -912,7 +1022,6 @@ function tenantsOf(owner) {
   }
   return [...m.values()];
 }
-/* خيوط المحادثة مع المالك، مرتبة بآخر رسالة؛ «غير مقروءة» إن كانت آخر رسالة من الطرف الآخر */
 function dmThreads() {
   if (!me) return [];
   const T = me.role === 'tenant' ? homesOf(me.id).map(p => ({ key:p.id + '|' + me.id, pid:p.id, uid:me.id })) : tenantsOf(me.id);
@@ -924,44 +1033,46 @@ function dmThreads() {
 /* ══════════════════════════════════════════════════════════════════════
    [S12] 🖥️ العرض: render() + الصفحات (VIEWS)
    ──────────────────────────────────────────────────────────────────────
-   كل تبويب = دالة في VIEWS ترجّع HTML. render() ترسم التبويب الحالي.
-   softRender() = نفس الشي أما تحافظ على اللي المستعمل بدا يكتب فيه
-   (تستعمل كي توصل تحديثات من نافذة أخرى، باش ما يضيعلوش النص).
+   كل تبويب = دالة في VIEWS ترجّع HTML. softRender() تحافظ على اللي المستعمل يكتب فيه.
    ══════════════════════════════════════════════════════════════════════ */
 const empty = t => `<div class="empty">${t}</div>`;
 const PILL = { pending:['قيد المراجعة',''], confirmed:['مؤكد ✓','g'], rejected:['مرفوض','x'], cancelled:['ملغى','x'], available:['متاح','g'], rented:['مكرى','x'], open:['مفتوحة','w'], resolved:['تمّ الإصلاح ✓','g'] };
 const pill = s => { const [l, c] = PILL[s] || [s, '']; return `<span class="pill ${c}">${E(l)}</span>`; };
 const btn = (act, id, label, cls = '') => `<button type="button" class="btn sm ${cls}" data-act="${act}" data-id="${E(id)}">${label}</button>`;
-const opt = (v, l, cur) => `<option value="${E(v)}"${cur === v ? ' selected' : ''}>${E(l)}</option>`;
+const opt = (v, l, cur) => `<option value="${E(v)}"${String(cur) === String(v) ? ' selected' : ''}>${E(l)}</option>`;
 const uname = id => (db.users.find(x => x.id === id) || {}).name || (id === 'broker' ? 'الإدارة' : 'مستخدم');
 const thumb = (act, id, img, label) => img ? `<button type="button" class="thumbbtn" data-act="${act}" data-id="${E(id)}" aria-label="${label}"><img class="thumb" src="${img}" alt="" loading="lazy" decoding="async"></button>` : '';
 const prevImg = '<img class="prev" alt="معاينة الصورة" hidden>';
 const homePick = H => H.length > 1 ? `<section class="panel"><label class="fld">المسكن<select id="home">${H.map(p => opt(p.id, p.title, curHome)).join('')}</select></label></section>` : '';
 
 function render() {
-  if (!me) return;
-  const items = tabsFor(me.role);
+  const r = R(), items = tabsFor(r);
   if (!items.some(i => i[0] === tab)) tab = items[0][0];
-  if (location.hash.slice(1) !== tab) history.replaceState(null, '', '#' + tab);
-  $('who').textContent = RL[me.role] + ' · ' + me.name;
-  $('heroP').textContent = heroText();
-  paintNav(items);
-  $('dash').innerHTML = VIEWS[tab]();
+  if (!/^#p-/.test(location.hash) && location.hash.slice(1) !== tab) history.replaceState(null, '', '#' + tab);
+  $('inBtn').hidden = !!me; $('listBtn').hidden = !!me && me.role !== 'landlord';
+  $('outBtn').hidden = $('who').hidden = $('bell').hidden = !me;
+  if (me) $('who').textContent = RL[me.role] + ' · ' + me.name;
+  $('band').hidden = !me;
+  if (me) { $('bandT').textContent = 'أهلاً ' + me.name.split(' ')[0] + ' 👋'; $('heroP').textContent = heroText(); }
+  paintNav(items); paintBell();
+  const d = $('dash');
+  d.classList.toggle('flush', tab === 'landing');
+  d.innerHTML = VIEWS[tab]();
   if (tab === 'props') paintGrid();
   if (tab === 'settings') fillQuota();
   const c = $('chBox'); if (c) c.scrollTop = c.scrollHeight;
 }
 function softRender() {
-  if (!me) return;
   const d = $('dash');
-  /* صورة مختارة في نموذج؟ ما نعاودوش الرسم (المتصفح ما يخلّيناش نرجّعوها) — نحدّثو الشريط برك */
-  if ([...d.querySelectorAll('input[type=file]')].some(i => i.files && i.files.length)) return paintNav(tabsFor(me.role));
+  if ([...d.querySelectorAll('input[type=file]')].some(i => i.files && i.files.length)) return paintNav(tabsFor(R()));
   const key = el => el.form && el.form.id && el.name ? el.form.id + '.' + el.name : '';
-  const fields = () => d.querySelectorAll('form input:not([type=file]):not([type=radio]),form textarea,form select');
+  const fields = () => d.querySelectorAll('form input:not([type=file]):not([type=radio]):not([type=checkbox]),form textarea,form select');
   const vals = new Map(), a = document.activeElement, aKey = a && d.contains(a) ? key(a) : '';
   const sel = aKey && typeof a.selectionStart === 'number' ? [a.selectionStart, a.selectionEnd] : null;
   fields().forEach(el => { const k = key(el); if (k) vals.set(k, el.value); });
+  const y = window.scrollY;
   render();
+  window.scrollTo(0, y);
   fields().forEach(el => { const k = key(el); if (vals.has(k)) el.value = vals.get(k); });
   if (aKey) {
     const [fid, name] = aKey.split('.'), el = $(fid) && $(fid).elements[name];
@@ -969,28 +1080,34 @@ function softRender() {
   }
 }
 
+/* ── البحث والترتيب (مع ذاكرة مؤقتة) ── */
 function filtered() {
-  const q = norm(F.q);
-  return props().filter(p => p.ok && (!F.city || p.city === F.city) && (!F.cat || p.cat === F.cat) && (!F.term || p.term === F.term) && (!F.max || p.price <= F.max) && (!q || norm(p.title + ' ' + p.addr + ' ' + p.city + ' ' + p.fac).includes(q)));
+  const k = dbVer + '|' + JSON.stringify(F) + '|' + (F.fav ? [...favs].join() : '');
+  if (fMemo.k === k) return fMemo.v;
+  const q = norm(F.q), rm = F.rooms === '' ? null : +F.rooms;
+  const L = published().filter(p => (!F.city || p.city === F.city) && (!F.cat || p.cat === F.cat) && (!F.term || p.term === F.term)
+    && (!F.min || p.price >= F.min) && (!F.max || p.price <= F.max) && (rm === null || (rm >= 4 ? p.rooms >= 4 : p.rooms === rm))
+    && (!F.furn || p.furn) && (!F.avail || p.st === 'available') && (!F.fav || favs.has(p.id))
+    && (!q || norm([p.title, p.addr, p.city, p.fac, p.desc].join(' ')).includes(q)));
+  const by = { new:(a, b) => String(b.at || '').localeCompare(String(a.at || '')), cheap:(a, b) => a.price - b.price, dear:(a, b) => b.price - a.price, near:(a, b) => (a.min || 999) - (b.min || 999) }[F.sort] || (() => 0);
+  L.sort((a, b) => ((b.st === 'available') - (a.st === 'available')) || by(a, b));
+  fMemo = { k, v:L }; return L;
 }
-function card(p, mine) {
-  const av = p.st === 'available', photo = imgGet(p.photo) || art(p.id), t = me.role === 'tenant';
-  let acts = `<button type="button" class="wa" data-act="ask" data-id="${E(p.id)}">استفسار</button>`;
-  if (t && av && !mine) acts = `<button type="button" class="vw" data-act="view" data-id="${E(p.id)}">معاينة</button><button type="button" class="dep" data-act="dep" data-id="${E(p.id)}">دفع العربون</button>` + acts;
-  return `<article class="card"><div class="cover"><img src="${photo}" alt="" width="300" height="150" loading="lazy" decoding="async"><span class="badge ${av ? 'b-a' : 'b-r'}">${av ? '✅ متاح' : '❌ مكرى'}</span></div>
-  <div class="body"><h3>${E(p.title)}</h3><div class="mut">📍 ${E(p.city)} - ${E(p.addr)} · ${E(CATS[p.cat])}</div>
-  ${p.fac && p.fac !== '—' && p.min > 0 ? `<div class="dist">🎓 ${E(p.min)} دقائق من ${E(p.fac)}</div>` : ''}
-  <div class="price">${money(p.price)} / ${E(TERMS[p.term])}</div>
-  ${!av && p.end && p.end !== '—' ? `<div class="mut">يتحرر في: ${E(p.end)}</div>` : ''}
-  ${mine ? `<div>${pill(mine)} <span class="mut">طلب العربون</span></div>` : ''}
-  <div class="acts">${acts}</div></div></article>`;
+function myDeps() {
+  const mine = {};
+  if (me && me.role === 'tenant') db.payments.forEach(py => { if (py.uid === me.id && py.type === 'dep' && py.st !== 'rejected') mine[py.pid] = py.st; });
+  return mine;
 }
-function paintGrid() {
+function paintGrid(reset) {
   const g = $('grid'); if (!g) return;
-  const L = filtered(), mine = {};
-  if (me.role === 'tenant') db.payments.forEach(py => { if (py.uid === me.id && py.type === 'dep' && py.st !== 'rejected') mine[py.pid] = py.st; });
-  g.innerHTML = L.map(p => card(p, mine[p.id])).join('') || empty('لا توجد عقارات مطابقة. جرّب تغيير معايير البحث.');
+  if (reset) shown = PAGE;
+  const L = filtered(), mine = myDeps();
+  g.innerHTML = L.slice(0, shown).map(p => card(p, mine[p.id])).join('') || empty('لا توجد عقارات مطابقة. جرّب تغيير معايير البحث أو <button type="button" class="chipb" data-act="reset-filters">مسح الفلاتر</button>');
   $('cnt').textContent = `${L.length} عقار`;
+  const active = ['q','city','cat','term','min','max','rooms','furn','avail','fav'].some(k => F[k] !== F0[k]);
+  $('clr').innerHTML = active ? '<button type="button" class="chipb" data-act="reset-filters">✕ مسح الفلاتر</button>' : '';
+  $('more').innerHTML = L.length > shown ? `<button type="button" class="btn sm ghost" data-act="more">عرض المزيد (${L.length - shown})</button>` : '';
+  const m = $('mapBox'); if (m) { m.hidden = !F.map; if (F.map) m.innerHTML = mapPanel(); }
 }
 async function fillQuota() {
   if (!$('quota') || !navigator.storage || !navigator.storage.estimate) return;
@@ -1001,23 +1118,73 @@ async function fillQuota() {
 }
 
 const VIEWS = {
-  /* ─────────────── 🏘️ مشترك: تصفح العقارات ─────────────── */
+  /* ─────────────── 🌍 الزوار: الصفحة الرئيسية ─────────────── */
+  landing: () => {
+    const P = published(), av = P.filter(p => p.st === 'available'), cities = new Set(P.map(p => p.city));
+    const rented = P.filter(p => p.st === 'rented').length;
+    const latest = av.slice().sort((a, b) => String(b.at || '').localeCompare(String(a.at || ''))).slice(0, 6), mine = myDeps();
+    return `<section class="hero"><div class="hero-in">
+      <span class="eyebrow">📍 منصة الكراء للطلبة والعائلات في تونس</span>
+      <h1>لقى دارك بسهولة،<br><em>واحجز بثقة.</em></h1>
+      <p class="lead">مبيتات، استوديوهات وشقق قريبة من كليتك. اطلب معاينة، ادفع العربون بإيصال تراجعو الإدارة، وبعد الحجز عندك فضاء «داري» للتواصل مع المالك والفواتير والتشكيات.</p>
+      <form id="fSearch" class="search" role="search" novalidate>
+        <label class="sr" for="sq">بحث</label><input id="sq" class="q" name="q" type="search" maxlength="60" placeholder="🔍 حي، كلية، مدينة…" value="${E(F.q)}">
+        <label class="sr" for="scity">الولاية</label><select id="scity" name="city">${opt('', 'كل الولايات', F.city)}${CITIES.map(c => opt(c, c, F.city)).join('')}</select>
+        <label class="sr" for="smax">أقصى سعر</label><select id="smax" name="max">${opt(0, 'أي سعر', F.max)}${[250,350,450,600,800].map(v => opt(v, 'حتى ' + v + ' د.ت', F.max)).join('')}</select>
+        <button type="submit" class="btn">ابحث</button>
+      </form>
+      <div class="quick" aria-label="بحث سريع"><button type="button" data-act="quick" data-id="students">🎓 للطلبة</button><button type="button" data-act="quick" data-id="girls">👩 بنات فقط</button><button type="button" data-act="quick" data-id="family">👨‍👩‍👧 عائلات</button><button type="button" data-act="quick" data-id="furn">🛋️ مفروش</button></div>
+    </div></section>
+    <div class="statbar"><div class="statgrid num">
+      <div><b>${av.length}</b><span>عقار متاح توّا</span></div><div><b>${cities.size}</b><span>ولاية</span></div>
+      <div><b>${rented}</b><span>عقار مكرى</span></div><div><b>${CFG.depPct}%</b><span>عربون فقط للحجز</span></div></div></div>
+    <section class="sec"><div class="sech"><div><h2>آخر العقارات المتاحة</h2><p>عروض راجعتها الإدارة قبل النشر.</p></div>${btn('tab', 'props', 'كل العقارات ←', 'ghost')}</div>
+      <div class="grid">${latest.map(p => card(p, mine[p.id])).join('') || empty('لا توجد عقارات متاحة حالياً.')}</div></section>
+    <section class="sec"><div class="sech"><div><h2>العقارات حسب الولاية</h2><p>اضغط على ولاية باش تشوف العروض متاعها.</p></div></div><div class="panel">${mapPanel()}</div></section>
+    <section class="sec"><div class="sech"><div><h2>كيفاش تخدم داره؟</h2></div></div><div class="steps2">
+      <div class="track"><h3>🧑‍🎓 للمكتري</h3><ol><li><div><b>ابحث وقارن</b><span>فلاتر حسب السعر، الولاية، الغرف والقرب من الكلية.</span></div></li><li><div><b>اطلب معاينة</b><span>اختار موعد، وتأكّدو الإدارة.</span></div></li><li><div><b>ادفع العربون (${CFG.depPct}%)</b><span>عبر D17 ولا تحويل بنكي، وارفع صورة الإيصال.</span></div></li><li><div><b>ادخل لـ«داري»</b><span>محادثة مع المالك، فواتير STEG/SONEDE، وتشكيات.</span></div></li></ol></div>
+      <div class="track"><h3>🏠 للمالك</h3><ol><li><div><b>أضف عقارك</b><span>الصورة، السعر، الغرف والوصف في دقيقتين.</span></div></li><li><div><b>مراجعة ونشر</b><span>الإدارة تراجع العرض قبل ما يظهر للعموم.</span></div></li><li><div><b>استقبل المكترين</b><span>عرابين موثّقة ومكترون مؤكدون.</span></div></li><li><div><b>تابع كل شي</b><span>المداخيل، الفواتير، والتشكيات من لوحة وحدة.</span></div></li></ol></div>
+    </div></section>
+    <section class="sec"><div class="sech"><div><h2>علاش داره؟</h2></div></div><div class="feat">
+      <article><div class="ico">🧾</div><h3>دفع موثّق</h3><p>كل عربون مربوط بإيصال تراجعو الإدارة قبل ما يتأكّد الحجز.</p></article>
+      <article><div class="ico">📅</div><h3>معاينة منظّمة</h3><p>مواعيد واضحة بلا برشا مكالمات.</p></article>
+      <article><div class="ico">💬</div><h3>تواصل مباشر</h3><p>بعد الحجز، دردشة خاصة مع المالك وتشكيات تتابعها الإدارة.</p></article>
+      <article><div class="ico">🔒</div><h3>معطياتك محمية</h3><p>رقمك وبريدك ما يظهروش للمالك كان بعد تأكيد الحجز.</p></article>
+    </div>
+    <div class="cta"><div><h2>عندك دار ولا ستوديو للكراء؟</h2><p>انشر عرضك مجاناً، والإدارة تراجعو قبل النشر.</p></div><button type="button" class="btn" data-act="list-prop">➕ أضف عقارك</button></div></section>`;
+  },
+
+  /* ─────────────── 🏘️ تصفح العقارات (للجميع) ─────────────── */
   props: () => `<div class="filters" role="search">
-    <label class="sr" for="q">بحث</label><input id="q" class="q" type="search" data-filter="q" placeholder="🔍 حي، مدينة، كلية..." value="${E(F.q)}" maxlength="60">
-    <select data-filter="city" aria-label="الولاية">${opt('', 'كل الولايات', F.city)}${CITIES.map(c => opt(c, c, F.city)).join('')}</select>
-    <select data-filter="cat" aria-label="الفئة">${opt('', 'كل الفئات', F.cat)}${Object.entries(CATS).map(([v, l]) => opt(v, l, F.cat)).join('')}</select>
-    <select data-filter="term" aria-label="مدة الكراء">${opt('', 'كل المدد', F.term)}${Object.entries(TERMS).map(([v, l]) => opt(v, 'بال' + l, F.term)).join('')}</select>
-    <input class="mx" type="number" data-filter="max" min="0" step="10" inputmode="numeric" placeholder="أقصى سعر" aria-label="أقصى سعر بالدينار" value="${F.max || ''}">
-    <button type="button" class="chipb" data-act="reset-filters">مسح</button></div>
-    <p class="mut" id="cnt" aria-live="polite"></p><div class="grid" id="grid"></div>`,
+      <label class="sr" for="q">بحث</label><input id="q" class="q" type="search" data-filter="q" placeholder="🔍 حي، مدينة، كلية، وصف..." value="${E(F.q)}" maxlength="60">
+      <select data-filter="city" aria-label="الولاية">${opt('', 'كل الولايات', F.city)}${CITIES.map(c => opt(c, c, F.city)).join('')}</select>
+      <select data-filter="sort" aria-label="الترتيب">${opt('new', 'الأحدث', F.sort)}${opt('cheap', 'الأرخص', F.sort)}${opt('dear', 'الأغلى', F.sort)}${opt('near', 'الأقرب للكلية', F.sort)}</select>
+      <button type="button" class="chipb" data-act="fav-only" aria-pressed="${F.fav}">♥ المفضلة</button>
+      <button type="button" class="chipb" data-act="map-toggle" aria-pressed="${F.map}">🗺️ الخريطة</button>
+    </div>
+    <details class="adv"${F.cat || F.term || F.min || F.max || F.rooms !== '' || F.furn || F.avail ? ' open' : ''}><summary>⚙️ فلاتر متقدمة</summary><div class="advg">
+      <label class="fld">الفئة<select data-filter="cat">${opt('', 'الكل', F.cat)}${Object.entries(CATS).map(([v, l]) => opt(v, l, F.cat)).join('')}</select></label>
+      <label class="fld">المدة<select data-filter="term">${opt('', 'الكل', F.term)}${Object.entries(TERMS).map(([v, l]) => opt(v, 'بال' + l, F.term)).join('')}</select></label>
+      <label class="fld">الغرف<select data-filter="rooms">${opt('', 'الكل', F.rooms)}${Object.entries(ROOMS).map(([v, l]) => opt(v, l, F.rooms)).join('')}</select></label>
+      <label class="fld">من (د.ت)<input data-filter="min" inputmode="numeric" maxlength="6" dir="ltr" value="${F.min || ''}"></label>
+      <label class="fld">إلى (د.ت)<input data-filter="max" inputmode="numeric" maxlength="6" dir="ltr" value="${F.max || ''}"></label>
+      <label class="chk"><input type="checkbox" data-filter="furn"${F.furn ? ' checked' : ''}> مفروش</label>
+      <label class="chk"><input type="checkbox" data-filter="avail"${F.avail ? ' checked' : ''}> المتاح فقط</label>
+      <button type="button" class="chipb" data-act="reset-filters">مسح الكل</button>
+    </div></details>
+    <div class="panel" id="mapBox" hidden></div>
+    <div class="toolbar"><p class="mut num" id="cnt" aria-live="polite"></p><span id="clr"></span></div>
+    <div class="grid" id="grid"></div><div class="more" id="more"></div>`,
 
   /* ─────────────── 🧑‍🎓 المكتري ─────────────── */
   my_rents: () => {
     const pays = db.payments.filter(p => p.uid === me.id).sort(byAtDesc), vs = db.views.filter(v => v.uid === me.id).sort(byAtDesc);
     const booked = [...new Set(pays.filter(p => p.type === 'dep' && p.st === 'confirmed').map(p => p.pid))].map(prop).filter(Boolean);
+    const fl = published().filter(p => favs.has(p.id));
     return `${booked.length ? `<section class="panel"><h2>🏠 عقاراتي المحجوزة</h2>${booked.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${money(p.price)} / ${E(TERMS[p.term])}</div></div><div class="rowact">${btn('rent', p.id, 'خلاص الكراء', 'ok')}</div></div>`).join('')}</section>` : ''}
     <section class="panel"><h2>📅 طلبات المعاينة</h2>${vs.map(v => { const p = prop(v.pid); return `<div class="row"><div class="grow"><b>${E(p ? p.title : 'عقار محذوف')}</b><div class="mut">${E(v.slot)}</div></div><div class="rowact">${pill(v.st)}${v.st === 'pending' ? btn('view-cancel', v.id, 'إلغاء', 'no') : ''}</div></div>`; }).join('') || empty('لا توجد طلبات معاينة بعد.')}</section>
-    <section class="panel"><h2>💳 مدفوعاتي</h2>${pays.map(py => payRow(py, false)).join('') || empty('لا توجد مدفوعات بعد.')}</section>`;
+    <section class="panel"><h2>💳 مدفوعاتي</h2>${pays.map(py => payRow(py, false)).join('') || empty('لا توجد مدفوعات بعد.')}</section>
+    <section class="panel"><h2>♥ مفضلتي</h2>${fl.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)}</div></div><div class="rowact">${btn('details', p.id, 'التفاصيل', 'ghost')}</div></div>`).join('') || empty('اضغط ♥ على أي عقار باش تحفظو هنا.')}</section>`;
   },
 
   home: () => {
@@ -1057,22 +1224,27 @@ const VIEWS = {
 
   /* ─────────────── 🏠 المالك ─────────────── */
   my_props: () => {
-    const mine = props().filter(p => p.owner === me.id);
-    return `<section class="panel"><h2>➕ إضافة عقار جديد</h2><form id="fProp" novalidate><div class="fr">
-      <label class="fld">العنوان<input name="title" maxlength="80" placeholder="مثال: استوديو S+1 مفروش"></label>
-      <label class="fld">الولاية<select name="city">${CITIES.map(c => opt(c, c, '')).join('')}</select></label>
-      <label class="fld">الحي / النهج<input name="addr" maxlength="80"></label>
-      <label class="fld">السعر (د.ت)<input name="price" inputmode="numeric" maxlength="7" dir="ltr" autocomplete="off"></label>
-      <label class="fld">الفئة<select name="cat">${Object.entries(CATS).map(([v, l]) => opt(v, l, '')).join('')}</select></label>
-      <label class="fld">المدة<select name="term">${Object.entries(TERMS).map(([v, l]) => opt(v, 'بال' + l, 'month')).join('')}</select></label>
-      <label class="fld">الكلية القريبة <span class="opt">(اختياري)</span><input name="fac" maxlength="60"></label>
-      <label class="fld">دقائق مشياً <span class="opt">(اختياري)</span><input name="min" inputmode="numeric" maxlength="3" dir="ltr" autocomplete="off"></label>
-      </div><p class="err" role="alert"></p><button type="submit" class="btn sm">إرسال للإدارة</button></form></section>
-    ${mine.length ? `<section class="panel"><h2>📷 ربط تصميم Canva (صورة العقار)</h2><form id="fPhoto" novalidate>
+    const mine = props().filter(p => p.owner === me.id), e = editId ? prop(editId) : null, v = e || { city:CITIES[0], cat:'students', term:'month', rooms:0 };
+    return `<section class="panel" id="propForm"><h2>${e ? '✏️ تعديل: ' + E(e.title) : '➕ إضافة عقار جديد'}</h2><form id="fProp" novalidate><div class="fr">
+      <label class="fld">العنوان<input name="title" maxlength="80" placeholder="مثال: استوديو S+1 مفروش قرب الكلية" value="${E(v.title || '')}"></label>
+      <label class="fld">الولاية<select name="city">${CITIES.map(c => opt(c, c, v.city)).join('')}</select></label>
+      <label class="fld">الحي / النهج<input name="addr" maxlength="80" value="${E(v.addr || '')}"></label>
+      <label class="fld">السعر (د.ت)<input name="price" inputmode="numeric" maxlength="7" dir="ltr" autocomplete="off" value="${v.price || ''}"></label>
+      <label class="fld">الفئة<select name="cat">${Object.entries(CATS).map(([k, l]) => opt(k, l, v.cat)).join('')}</select></label>
+      <label class="fld">المدة<select name="term">${Object.entries(TERMS).map(([k, l]) => opt(k, 'بال' + l, v.term)).join('')}</select></label>
+      <label class="fld">الغرف<select name="rooms">${Object.entries(ROOMS).map(([k, l]) => opt(k, l, v.rooms)).join('')}</select></label>
+      <label class="fld">المساحة (م²) <span class="opt">(اختياري)</span><input name="area" inputmode="numeric" maxlength="4" dir="ltr" value="${v.area || ''}"></label>
+      <label class="fld">الكلية القريبة <span class="opt">(اختياري)</span><input name="fac" maxlength="60" value="${E(v.fac && v.fac !== '—' ? v.fac : '')}"></label>
+      <label class="fld">دقائق مشياً <span class="opt">(اختياري)</span><input name="min" inputmode="numeric" maxlength="3" dir="ltr" autocomplete="off" value="${v.min || ''}"></label>
+      </div>
+      <label class="fld">الوصف <span class="opt">(اختياري، 600 حرف)</span><textarea name="desc" maxlength="600" placeholder="شنوّة فيه؟ مكيّف، إنترنت، قريب من المترو…">${E(v.desc || '')}</textarea></label>
+      <label class="chk"><input type="checkbox" name="furn"${v.furn ? ' checked' : ''}> مفروش</label>
+      <p class="err" role="alert"></p><div class="btnrow"><button type="submit" class="btn sm">${e ? 'حفظ التعديلات' : 'إرسال للإدارة'}</button>${e ? btn('edit-cancel', '', 'إلغاء', 'ghost') : ''}</div></form></section>
+    ${mine.length ? `<section class="panel"><h2>📷 صورة العقار (تصميم Canva ولا صورة حقيقية)</h2><form id="fPhoto" novalidate>
       <label class="fld">العقار<select name="pid">${mine.map(p => opt(p.id, p.title, '')).join('')}</select></label>
       <label class="fld">الصورة (PNG / JPG / WEBP)<input name="file" type="file" accept="image/*"></label>
       ${prevImg}<p class="err" role="alert"></p><button type="submit" class="btn sm">حفظ الصورة للعقار</button></form></section>` : ''}
-    <section class="panel"><h2>عقاراتي</h2>${mine.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])}</div>${thumb('prop-img', p.id, imgGet(p.photo), 'عرض صورة العقار')}</div><div class="rowact"><span class="pill ${p.ok ? 'g' : ''}">${p.ok ? 'منشور' : 'قيد المراجعة'}</span>${p.ok ? pill(p.st) : btn('prop-del', p.id, 'حذف', 'no')}</div></div>`).join('') || empty('لم تضف أي عقار بعد.')}</section>`;
+    <section class="panel"><h2>عقاراتي</h2>${mine.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])}</div>${thumb('prop-img', p.id, imgGet(p.photo), 'عرض صورة العقار')}</div><div class="rowact"><span class="pill ${p.ok ? 'g' : ''}">${p.ok ? 'منشور' : 'قيد المراجعة'}</span>${p.ok ? pill(p.st) : ''}${btn('prop-edit', p.id, 'تعديل', 'ghost')}${p.ok ? btn('details', p.id, 'معاينة العرض', 'ghost') : btn('prop-del', p.id, 'حذف', 'no')}</div></div>`).join('') || empty('لم تضف أي عقار بعد.')}</section>`;
   },
 
   tenants: () => {
@@ -1111,9 +1283,9 @@ const VIEWS = {
     return `<section class="panel"><h2>⚡ ملخص</h2><div class="stats">
       <div class="stat"><b>${db.users.length}</b><span class="mut">مستخدم</span></div><div class="stat"><b>${props().length}</b><span class="mut">عقار</span></div>
       <div class="stat"><b>${c.pays}</b><span class="mut">دفع قيد المراجعة</span></div><div class="stat"><b>${c.views}</b><span class="mut">معاينة قيد الانتظار</span></div><div class="stat"><b>${c.props}</b><span class="mut">عقار ينتظر النشر</span></div><div class="stat"><b>${c.issues}</b><span class="mut">تشكية مفتوحة</span></div></div></section>
-    <section class="panel"><h2>🏠 عقارات في انتظار الموافقة</h2>${pend.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} - ${E(p.addr)} · ${money(p.price)} / ${E(TERMS[p.term])} · ${E(uname(p.owner))}</div></div><div class="rowact">${btn('pub', p.id, 'نشر', 'ok')}${btn('prop-del', p.id, 'رفض وحذف', 'no')}</div></div>`).join('') || empty('لا توجد عقارات في الانتظار.')}</section>
+    <section class="panel"><h2>🏠 عقارات في انتظار الموافقة</h2>${pend.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} - ${E(p.addr)} · ${money(p.price)} / ${E(TERMS[p.term])} · ${E(uname(p.owner))}</div>${p.desc ? `<div class="mut txt">${E(p.desc)}</div>` : ''}</div><div class="rowact">${btn('details', p.id, 'معاينة', 'ghost')}${btn('pub', p.id, 'نشر', 'ok')}${btn('prop-del', p.id, 'رفض وحذف', 'no')}</div></div>`).join('') || empty('لا توجد عقارات في الانتظار.')}</section>
     <section class="panel"><h2>📅 طلبات المعاينة</h2>${vs.map(v => { const p = prop(v.pid); return `<div class="row"><div class="grow"><b>${E(v.name)}</b><div class="mut">${E(p ? p.title : 'عقار محذوف')} · ${E(v.slot)}</div></div><div class="rowact">${pill(v.st)}${v.st === 'pending' ? btn('view-ok', v.id, 'تأكيد', 'ok') + btn('view-no', v.id, 'إلغاء', 'no') : ''}</div></div>`; }).join('') || empty('لا توجد طلبات.')}</section>
-    <section class="panel"><h2>🗂️ إدارة العقارات المنشورة</h2>${props().filter(p => p.ok).map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])}</div></div><div class="rowact">${pill(p.st)}${btn('prop-st', p.id, p.st === 'available' ? 'تعليم كمكرى' : 'تعليم كمتاح')}${p.seed ? '' : btn('unpub', p.id, 'إخفاء', 'no')}</div></div>`).join('')}</section>`;
+    <section class="panel"><h2>🗂️ إدارة العقارات المنشورة</h2>${published().map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])}</div></div><div class="rowact">${pill(p.st)}${btn('prop-st', p.id, p.st === 'available' ? 'تعليم كمكرى' : 'تعليم كمتاح')}${p.seed ? '' : btn('unpub', p.id, 'إخفاء', 'no')}</div></div>`).join('')}</section>`;
   },
 
   inbox: () => {
@@ -1128,7 +1300,7 @@ const VIEWS = {
       <div class="note">⚠️ كل البيانات محفوظة في متصفح هذا الجهاز فقط. صدّر نسخة احتياطية بانتظام، وتنجم تسترجعها على أي جهاز آخر.</div>
       <div class="btnrow"><button type="button" class="btn sm" data-act="export">⬇️ تصدير نسخة احتياطية (JSON)</button>
       <label class="btn sm no">⬆️ استرجاع نسخة<input type="file" id="impFile" class="sr" accept=".json,application/json"></label></div>
-      <p class="mut">نسخة المنصة: ${APP_VER}</p></section>
+      <p class="mut">نسخة المنصة: ${APP_VER} · خروج تلقائي للإدارة بعد ${CFG.adminIdleMin} دقيقة بلا حركة.</p></section>
     <section class="panel"><h2>🔐 رمز الإدارة</h2>
       ${CFG.admin.hash ? '<p class="mut">رمز الإدارة محمي بـ PBKDF2-SHA256.</p>' : '<div class="note">الرمز الحالي محفوظ بتجزئة SHA-256 سريعة، يمكن تخمينها. ولّد رمزاً قوياً (12 حرفاً فأكثر) والصق السطر الناتج في إعدادات الملف مكان <code>admin:</code> (القسم [S01]).</div>'}
       <form id="fAdmin" novalidate><div class="fr"><label class="fld">الرمز الجديد<input name="p1" type="password" autocomplete="new-password" maxlength="128" dir="ltr"></label><label class="fld">تأكيد الرمز<input name="p2" type="password" autocomplete="new-password" maxlength="128" dir="ltr"></label></div>
@@ -1136,8 +1308,59 @@ const VIEWS = {
 };
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S13] 🧩 مكوّنات صغيرة: أسطر الدفع، الفواتير، التشكيات، والدردشة
+   [S13] 🧩 مكوّنات: بطاقة العقار، الخريطة، التفاصيل، الأسطر، الدردشة
    ══════════════════════════════════════════════════════════════════════ */
+function card(p, mine) {
+  const av = p.st === 'available', fav = favs.has(p.id), tenantish = !me || me.role === 'tenant';
+  let acts = `<button type="button" data-act="details" data-id="${E(p.id)}">التفاصيل</button>`;
+  if (tenantish && av && !mine) acts = `<button type="button" class="vw" data-act="view" data-id="${E(p.id)}">معاينة</button><button type="button" class="dep" data-act="dep" data-id="${E(p.id)}">حجز</button>` + acts;
+  return `<article class="card"><div class="cover"><button type="button" class="cv" data-act="details" data-id="${E(p.id)}" aria-label="تفاصيل ${E(p.title)}"><img src="${photo(p)}" alt="" width="320" height="200" loading="lazy" decoding="async"></button>
+    <div class="badges"><span class="badge ${av ? 'b-a' : 'b-r'}">${av ? 'متاح' : 'مكرى'}</span>${isNew(p) ? '<span class="badge b-n">جديد</span>' : ''}</div>
+    <button type="button" class="fav" data-act="fav" data-id="${E(p.id)}" aria-pressed="${fav}" aria-label="${fav ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}">♥</button></div>
+  <div class="body"><h3><button type="button" data-act="details" data-id="${E(p.id)}">${E(p.title)}</button></h3><div class="mut">📍 ${E(p.city)} · ${E(p.addr)}</div>
+  <div class="facts">${factChips(p)}</div>
+  <div class="price num">${money(p.price)} <small>/ ${E(TERMS[p.term])}</small></div>
+  ${!av && p.end && p.end !== '—' ? `<div class="mut">يتحرر في: ${E(p.end)}</div>` : ''}
+  ${mine ? `<div>${pill(mine)} <span class="mut">طلب الحجز متاعك</span></div>` : ''}
+  <div class="acts">${acts}</div></div></article>`;
+}
+const factChips = p => [ROOMS[Math.min(4, p.rooms || 0)], p.area ? p.area + ' م²' : '', p.furn ? 'مفروش' : '', CATS[p.cat]].filter(Boolean).map(t => `<span class="fact">${E(t)}</span>`).join('')
+  + (p.fac && p.fac !== '—' && p.min > 0 ? `<span class="fact dist">🎓 ${E(p.min)} د من ${E(p.fac)}</span>` : '');
+
+/* خريطة تونس (SVG خفيفة، بلا مكتبات ولا اتصال خارجي). الموقع على مستوى الولاية برك، باش ما نكشفوش عنوان الدار */
+const TN = [[8.6,36.95],[9.2,37.2],[9.85,37.33],[10.2,37.2],[10.33,36.88],[10.55,36.77],[11.05,37.08],[11.12,36.85],[10.6,36.4],[10.64,35.83],[11.07,35.5],[11.13,35.23],[10.75,34.73],[10.33,34.3],[10.1,33.88],[10.75,33.6],[11.2,33.15],[11.57,33.17],[11.5,32.4],[10.35,32.0],[9.55,30.23],[9.05,31.6],[8.25,32.5],[7.6,33.2],[7.5,34.1],[8.25,34.6],[8.4,35.25],[8.3,35.8],[8.45,36.5]];
+const XY = (lon, lat) => [(lon - 7.3) * 66, (37.5 - lat) * 66];
+function tnMap(cnt, sel) {
+  const d = 'M' + TN.map(([a, b]) => XY(a, b).map(n => n.toFixed(1)).join(',')).join('L') + 'Z';
+  const pins = CITIES.map(c => {
+    const [lon, lat, dx, dy] = GEO[c], [x, y] = XY(lon, lat), n = cnt[c] || 0, r = 12 + Math.min(6, n * 2), cx = (x + dx).toFixed(1), cy = (y + dy).toFixed(1);
+    return `<g class="pin${n ? '' : ' off'}${sel === c ? ' on' : ''}" role="button" tabindex="0" data-act="map-city" data-id="${E(c)}" aria-label="${E(c)}: ${n} عقار"><circle cx="${cx}" cy="${cy}" r="${r}"></circle><text x="${cx}" y="${cy}">${n}</text></g>`;
+  }).join('');
+  return `<svg class="tnmap" viewBox="0 0 300 500" role="img" aria-label="خريطة تونس وعدد العقارات في كل ولاية"><path class="land" d="${d}"></path>${pins}<text class="lbl" x="250" y="485">خريطة تقريبية</text></svg>`;
+}
+function mapPanel() {
+  const cnt = {}; published().filter(p => p.st === 'available').forEach(p => { cnt[p.city] = (cnt[p.city] || 0) + 1; });
+  return `<div class="mapwrap">${tnMap(cnt, F.city)}<div><p class="mut">العدد = العقارات المتاحة. الموقع على مستوى الولاية فقط لحماية خصوصية الملاّكة.</p><div class="citylist">${CITIES.map(c => `<button type="button" data-act="map-city" data-id="${E(c)}" aria-pressed="${F.city === c}"><span>${E(c)}</span><span class="pill">${cnt[c] || 0}</span></button>`).join('')}</div></div></div>`;
+}
+function openDetail(id) {
+  const p = prop(id); if (!p || !(p.ok || isBroker() || ownsProp(id))) return toast('هذا العقار غير متوفر.', true);
+  const av = p.st === 'available', mine = myDeps()[p.id], tenantish = !me || me.role === 'tenant', fav = favs.has(p.id), cnt = { [p.city]:1 };
+  $('pdBody').innerHTML = `<div class="ph"><img src="${photo(p)}" alt="${E(p.title)}"><div class="badges"><span class="badge ${av ? 'b-a' : 'b-r'}">${av ? 'متاح' : 'مكرى'}</span>${p.ok ? '' : '<span class="badge">قيد المراجعة</span>'}</div></div><div class="pd-h"><h2 id="pdT">${E(p.title)}</h2><div class="mut">📍 ${E(p.city)} · ${E(p.addr)}</div></div><div class="pd-in"><div>
+      <dl><dt>الغرف</dt><dd>${E(ROOMS[Math.min(4, p.rooms || 0)])}</dd>${p.area ? `<dt>المساحة</dt><dd class="num">${p.area} م²</dd>` : ''}<dt>مفروش</dt><dd>${p.furn ? 'نعم' : 'لا'}</dd><dt>الفئة</dt><dd>${E(CATS[p.cat])}</dd><dt>مدة الكراء</dt><dd>بال${E(TERMS[p.term])}</dd>${p.fac && p.fac !== '—' ? `<dt>الكلية</dt><dd>${E(p.fac)}${p.min ? ` · ${E(p.min)} دقائق مشياً` : ''}</dd>` : ''}${!av && p.end !== '—' ? `<dt>يتحرر</dt><dd>${E(p.end)}</dd>` : ''}</dl>
+      ${p.desc ? `<p class="txt">${E(p.desc)}</p>` : ''}
+      ${tnMap(cnt, p.city)}
+    </div><aside class="side">
+      <div class="price num">${money(p.price)} <small>/ ${E(TERMS[p.term])}</small></div>
+      <div class="mut">العربون للحجز: <b class="num">${money(Math.round(p.price * CFG.depPct / 100))}</b> (${CFG.depPct}%)</div>
+      ${mine ? `<div>${pill(mine)} <span class="mut">طلب الحجز متاعك</span></div>` : ''}
+      ${tenantish && av && !mine && p.ok ? btn('view', p.id, '📅 اطلب معاينة') + btn('dep', p.id, '💳 احجز بدفع العربون', 'ok') : ''}
+      ${btn('ask', p.id, '💬 استفسار عبر واتساب', 'wa')}
+      <div class="btnrow">${p.ok ? btn('share', p.id, '🔗 مشاركة', 'ghost') : ''}<button type="button" class="btn sm ghost fav-d" data-act="fav" data-id="${E(p.id)}" aria-pressed="${fav}">${fav ? '♥ في المفضلة' : '♡ حفظ'}</button></div>
+      <p class="mut">🔒 الحجز يتأكّد كان بعد ما الإدارة تراجع إيصال الدفع.</p>
+    </aside></div>`;
+  openDlg('dlgProp');
+  if (p.ok && location.hash !== '#p-' + id) history.replaceState(null, '', '#p-' + id);
+}
 function payRow(py, admin) {
   const p = prop(py.pid);
   return `<div class="row"><div class="grow"><b>${E(py.name)}</b> <span class="mut">· ${E(p ? p.title : 'عقار محذوف')}</span>
@@ -1163,7 +1386,6 @@ function issueRow(x, staff) {
 }
 const msgHtml = (c, mine) => `<div class="msg${mine ? ' me' : ''}"><b>${E(c.name)}</b><div class="txt">${E(c.txt)}</div><div class="mut">${fDT(c.at)}</div></div>`;
 const chatForm = id => `<form id="${id}" class="chatf"><label class="sr" for="chIn">رسالتك</label><input id="chIn" name="txt" maxlength="1000" autocomplete="off" enterkeyhint="send" placeholder="اكتب رسالتك..."><button type="submit" class="btn sm">إرسال</button></form>`;
-/* رسائل الدعم (مستعمل ↔ الإدارة) */
 function threads() {
   const m = new Map();
   for (const c of db.chats) m.set(c.thr, c);
@@ -1173,19 +1395,16 @@ function chatBox(thr) {
   const msgs = db.chats.filter(c => c.thr === thr);
   return `<div class="chat" id="chBox" role="log" aria-live="polite">${msgs.map(c => msgHtml(c, (c.from === 'broker') === isBroker())).join('') || '<div class="mut">لا توجد رسائل بعد.</div>'}</div>${chatForm('fChat')}`;
 }
-/* محادثة المكتري ↔ المالك */
 function dmBox(pid, tu) {
   const asOwner = me.role !== 'tenant', msgs = db.dms.filter(c => c.pid === pid && c.uid === tu);
   return `<div class="chat" id="chBox" role="log" aria-live="polite">${msgs.map(c => msgHtml(c, (c.from === 'owner') === asOwner)).join('') || '<div class="mut">لا توجد رسائل بعد. ابدأ المحادثة.</div>'}</div>${chatForm('fDm')}`;
 }
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S14] 🛠️ العمليات (كل زر/نموذج يوصل لهنا)
-   ──────────────────────────────────────────────────────────────────────
-   كل عملية: 1) تثبّت الصلاحية  2) تثبّت المدخلات  3) تبدّل db  4) commit(undo)  5) render()
+   [S14] 🛠️ العمليات: 1) الصلاحية  2) المدخلات  3) تبديل db  4) commit(undo)  5) render()
    ══════════════════════════════════════════════════════════════════════ */
 
-/* ─────────────── 🧑‍🎓 المكتري: دفع، معاينة، فواتير، تشكيات ─────────────── */
+/* ─────────────── 🧑‍🎓 المكتري ─────────────── */
 function openPay(id, type) {
   if (!me || me.role !== 'tenant') return;
   const p = prop(id); if (!p || !p.ok) return toast('العقار غير متوفر.', true);
@@ -1201,7 +1420,7 @@ function openPay(id, type) {
   payCtx = { pid:id, type, amt };
   $('payFor').textContent = (type === 'dep' ? `عربون حجز (${CFG.depPct}%)` : 'خلاص كراء ' + TERMS[p.term]) + ': ' + p.title;
   $('payAmt').textContent = nf.format(amt);
-  $('fPay').reset(); openDlg('dlgPay');
+  closeDlg('dlgProp'); $('fPay').reset(); openDlg('dlgPay');
 }
 async function onPay(f) {
   if (!payCtx || !me) return;
@@ -1210,7 +1429,7 @@ async function onPay(f) {
   busy(f, true, '⏳ جاري رفع الإيصال…');
   try {
     const { img, err } = await saveImg(file, 1400); if (err) return setErr(f, err);
-    db.payments.push({ id:'y' + uid(), pid:payCtx.pid, uid:me.id, name:me.name, type:payCtx.type, amt:payCtx.amt, img, at:now(), st:'pending' });
+    db.payments.push({ id:'y' + uid(), pid:payCtx.pid, uid:me.id, name:me.name, type:payCtx.type, amt:payCtx.amt, img, at:now(), dat:'', st:'pending' });
     if (!commit(() => { db.payments.pop(); imgDel(img); })) return;
     f.reset(); closeDlg('dlgPay'); payCtx = null;
     toast('تم إرسال إثبات الدفع. ستراجعه الإدارة قريباً.'); render();
@@ -1225,14 +1444,14 @@ function openView(id) {
   viewCtx = { pid:id, slots:s };
   $('viewFor').textContent = p.title;
   $('slots').innerHTML = '<legend class="sr">اختر موعداً</legend>' + s.map((x, i) => `<label class="slot"><input type="radio" name="slot" value="${i}"> ${E(x)}</label>`).join('');
-  openDlg('dlgView');
+  closeDlg('dlgProp'); openDlg('dlgView');
 }
 function onView(f) {
   if (!viewCtx || !me) return;
   const sel = f.querySelector('input[name=slot]:checked'); if (!sel) return setErr(f, 'اختر موعداً.');
   const p = prop(viewCtx.pid), slot = viewCtx.slots[+sel.value];
   if (!p) return setErr(f, 'العقار لم يعد متوفراً.');
-  db.views.push({ id:'v' + uid(), pid:p.id, uid:me.id, name:me.name, slot, at:now(), st:'pending' });
+  db.views.push({ id:'v' + uid(), pid:p.id, uid:me.id, name:me.name, slot, at:now(), dat:'', st:'pending' });
   if (!commit(() => db.views.pop())) return;
   closeDlg('dlgView'); viewCtx = null; render();
   toast('تم تسجيل طلب المعاينة.');
@@ -1276,8 +1495,27 @@ function delBill(id) {
   if (!commit(() => db.bills.splice(i, 0, b))) return;
   imgDel(b.img); toast('تم حذف الفاتورة.'); render();
 }
+function toggleFav(id) {
+  if (!prop(id)) return;
+  if (favs.has(id)) favs.delete(id); else favs.add(id);
+  saveFavs();
+  const on = favs.has(id);
+  document.querySelectorAll('[data-act=fav]').forEach(b => {
+    if (b.dataset.id !== id) return;
+    b.setAttribute('aria-pressed', String(on));
+    if (b.classList.contains('fav-d')) b.textContent = on ? '♥ في المفضلة' : '♡ حفظ'; else b.setAttribute('aria-label', on ? 'إزالة من المفضلة' : 'إضافة للمفضلة');
+  });
+  toast(on ? 'تمت الإضافة للمفضلة ♥' : 'تمت الإزالة من المفضلة.');
+  if (F.fav && tab === 'props') paintGrid(true);
+}
+async function share(id) {
+  const p = prop(id); if (!p) return;
+  const url = location.href.split('#')[0] + '#p-' + id, text = `${p.title} — ${money(p.price)} / ${TERMS[p.term]} (${p.city})`;
+  if (navigator.share) { try { await navigator.share({ title:'داره', text, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+  copy(url, 'تم نسخ رابط العقار. ابعثو في واتساب ولا ميسنجر.');
+}
 
-/* ─────────────── 💬 الرسائل (الدعم + المالك) ─────────────── */
+/* ─────────────── 💬 الرسائل ─────────────── */
 function onChat(f) {
   if (!me) return;
   const t = f.elements.txt.value.trim(); if (!t) return;
@@ -1297,17 +1535,31 @@ function onDm(f) {
   render(); const n = $('chIn'); if (n) n.focus();
 }
 
-/* ─────────────── 🏠 المالك: إضافة عقار، صورة، حلّ التشكيات ─────────────── */
+/* ─────────────── 🏠 المالك ─────────────── */
 function onProp(f) {
   if (!me || me.role !== 'landlord') return;
-  const el = f.elements, title = el.title.value.trim(), addr = el.addr.value.trim(), price = parseAmt(el.price.value), fac = el.fac.value.trim(), min = el.min.value.trim() ? parseAmt(el.min.value) : 0;
+  const el = f.elements, title = el.title.value.trim(), addr = el.addr.value.trim(), price = parseAmt(el.price.value), fac = el.fac.value.trim();
+  const min = el.min.value.trim() ? parseAmt(el.min.value) : 0, area = el.area.value.trim() ? parseAmt(el.area.value) : 0, desc = el.desc.value.trim();
   if (title.length < 5) return setErr(f, 'العنوان قصير جداً (5 أحرف على الأقل).');
   if (addr.length < 3) return setErr(f, 'أدخل الحي أو النهج.');
   if (!Number.isInteger(price) || price < 1 || price > 100000) return setErr(f, 'أدخل سعراً صحيحاً بين 1 و 100000 د.ت.');
   if (!Number.isInteger(min) || min < 0 || min > 240) return setErr(f, 'عدد الدقائق بين 0 و 240.');
-  db.props.push({ id:'n' + uid(), title, city:oneOf(el.city.value, CITIES, CITIES[0]), addr, price, fac:fac || '—', min, st:'available', end:'—', cat:oneOf(el.cat.value, Object.keys(CATS), 'all'), term:oneOf(el.term.value, Object.keys(TERMS), 'month'), owner:me.id, ok:false, at:now() });
+  if (!Number.isInteger(area) || area < 0 || area > 2000) return setErr(f, 'المساحة بين 0 و 2000 م².');
+  const data = { title, city:oneOf(el.city.value, CITIES, CITIES[0]), addr, price, fac:fac || '—', min, area, desc:desc.slice(0, 600), furn:el.furn.checked, rooms:Math.min(4, Math.max(0, +el.rooms.value || 0)), cat:oneOf(el.cat.value, Object.keys(CATS), 'all'), term:oneOf(el.term.value, Object.keys(TERMS), 'month') };
+  if (editId) {
+    const p = db.props.find(x => x.id === editId && x.owner === me.id); if (!p) { editId = null; return render(); }
+    const old = { ...p }; Object.assign(p, data);
+    if (!commit(() => Object.assign(p, old))) return;
+    editId = null; toast('تم حفظ التعديلات.'); return render();
+  }
+  db.props.push({ id:'n' + uid(), ...data, st:'available', end:'—', owner:me.id, ok:false, at:now(), pat:'' });
   if (!commit(() => db.props.pop())) return;
   toast('تمت إضافة العقار. في انتظار موافقة الإدارة.'); render();
+}
+function editProp(id) {
+  const p = db.props.find(x => x.id === id && me && x.owner === me.id); if (!p) return;
+  editId = id; render();
+  $('propForm').scrollIntoView({ behavior:'smooth', block:'start' });
 }
 async function onPhoto(f) {
   if (!me || me.role !== 'landlord') return;
@@ -1316,7 +1568,7 @@ async function onPhoto(f) {
   if (!file) return setErr(f, 'اختر الصورة.');
   busy(f, true, '⏳ جاري الحفظ…');
   try {
-    const { img, err } = await saveImg(file, 1200); if (err) return setErr(f, err);
+    const { img, err } = await saveImg(file, 1400); if (err) return setErr(f, err);
     const prev = db.ov[pid] ? { ...db.ov[pid] } : null, old = prev && prev.photo;
     db.ov[pid] = { ...(prev || {}), photo:img };
     if (!commit(() => { if (prev) db.ov[pid] = prev; else delete db.ov[pid]; imgDel(img); })) return;
@@ -1332,7 +1584,7 @@ function resolveIssue(id) {
   toast('تم تعليم التشكية كمحلولة.'); render();
 }
 
-/* ─────────────── ⚡ الإدارة: المدفوعات، المعاينات، النشر، رمز الإدارة ─────────────── */
+/* ─────────────── ⚡ الإدارة ─────────────── */
 function setPay(id, st) {
   if (!isBroker()) return;
   const py = db.payments.find(p => p.id === id); if (!py || py.st !== 'pending') return;
@@ -1340,15 +1592,15 @@ function setPay(id, st) {
   if (st === 'confirmed' && py.type === 'dep' && p && p.st === 'rented' && !confirm('هذا العقار مكرى/محجوز مسبقاً. تأكيد هذا العربون رغم ذلك؟')) return;
   if (st === 'rejected' && !confirm('رفض عملية الدفع هذه؟')) return;
   const prevOv = db.ov[py.pid] ? { ...db.ov[py.pid] } : null;
-  py.st = st;
+  py.st = st; py.dat = now();
   if (st === 'confirmed' && py.type === 'dep') db.ov[py.pid] = { ...(prevOv || {}), st:'rented' };
-  if (!commit(() => { py.st = 'pending'; if (prevOv) db.ov[py.pid] = prevOv; else delete db.ov[py.pid]; })) return;
+  if (!commit(() => { py.st = 'pending'; py.dat = ''; if (prevOv) db.ov[py.pid] = prevOv; else delete db.ov[py.pid]; })) return;
   toast(st === 'confirmed' ? 'تم تأكيد الدفع.' : 'تم رفض الدفع.'); render();
 }
 function setView(id, st) {
   const v = db.views.find(x => x.id === id); if (!v || v.st !== 'pending') return;
   if (!(isBroker() || (st === 'cancelled' && me && v.uid === me.id))) return;
-  v.st = st; if (!commit(() => { v.st = 'pending'; })) return; render();
+  v.st = st; v.dat = now(); if (!commit(() => { v.st = 'pending'; v.dat = ''; })) return; render();
 }
 function setPropSt(id) {
   if (!isBroker()) return;
@@ -1360,7 +1612,8 @@ function setPropSt(id) {
 function setPub(id, ok) {
   if (!isBroker()) return;
   const p = db.props.find(x => x.id === id); if (!p) return;
-  p.ok = ok; if (!commit(() => { p.ok = !ok; })) return;
+  const old = p.pat; p.ok = ok; if (ok) p.pat = now();
+  if (!commit(() => { p.ok = !ok; p.pat = old; })) return;
   toast(ok ? 'تم نشر العقار.' : 'تم إخفاء العقار.'); render();
 }
 function delProp(id) {
@@ -1371,6 +1624,7 @@ function delProp(id) {
   const ov = db.ov[id];
   db.props.splice(i, 1); delete db.ov[id];
   if (!commit(() => { db.props.splice(i, 0, p); if (ov) db.ov[id] = ov; })) return;
+  if (favs.delete(id)) saveFavs();
   if (ov) imgDel(ov.photo);
   toast('تم حذف العقار.'); render();
 }
@@ -1388,34 +1642,20 @@ async function onAdmin(f) {
   } finally { busy(f, false); }
 }
 
-/* ─────────────── 🖼️ عرض الصور بالحجم الكامل (مع التثبت من الصلاحية) ─────────────── */
+/* ─────────────── 🖼️ عرض الصور بالحجم الكامل ─────────────── */
 function showImg(title, src, cap) {
   if (!src) return toast('الصورة غير متوفرة على هذا الجهاز.', true);
   $('imgT').textContent = title; $('imgFull').alt = title; $('imgFull').src = src; $('imgCap').textContent = cap;
   openDlg('dlgImg');
 }
-/* الصورة يراها صاحبها، مالك العقار، والإدارة */
 const canSee = r => !!r && (isBroker() || (!!me && r.uid === me.id) || ownsProp(r.pid));
-function showReceipt(id) {
-  const py = db.payments.find(p => p.id === id); if (!canSee(py)) return;
-  showImg('إيصال الدفع', imgGet(py.img), `${py.name} · ${money(py.amt)} · ${fDate(py.at)}`);
-}
-function showBill(id) {
-  const b = db.bills.find(x => x.id === id); if (!canSee(b)) return;
-  showImg('🧾 ' + BILL[b.kind], imgGet(b.img), `${b.name} · ${fMonth(b.month)} · ${dinar(b.amt)}`);
-}
-function showIssue(id) {
-  const x = db.issues.find(k => k.id === id); if (!canSee(x)) return;
-  showImg('⚠️ صورة العطب', imgGet(x.img), `${x.name} · ${fDT(x.at)}`);
-}
+function showReceipt(id) { const py = db.payments.find(p => p.id === id); if (canSee(py)) showImg('إيصال الدفع', imgGet(py.img), `${py.name} · ${money(py.amt)} · ${fDate(py.at)}`); }
+function showBill(id) { const b = db.bills.find(x => x.id === id); if (canSee(b)) showImg('🧾 ' + BILL[b.kind], imgGet(b.img), `${b.name} · ${fMonth(b.month)} · ${dinar(b.amt)}`); }
+function showIssue(id) { const x = db.issues.find(k => k.id === id); if (canSee(x)) showImg('⚠️ صورة العطب', imgGet(x.img), `${x.name} · ${fDT(x.at)}`); }
 function showPropImg(id) { const p = prop(id); if (p) showImg('📷 ' + p.title, imgGet(p.photo), p.city + ' · ' + p.addr); }
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S15] 📦 النسخ الاحتياطي: تصدير واسترجاع
-   ──────────────────────────────────────────────────────────────────────
-   التصدير = ملف JSON فيه كل المعطيات + الصور (بلا كلمات السر، للأمان).
-   الاسترجاع = يعوّض المعطيات الكل. الحسابات اللي موجودة على الجهاز تحافظ على كلمة السر؛
-   الحسابات الجديدة يعاود صاحبها «حساب جديد» بنفس البريد باش يحط كلمة سر.
+   [S15] 📦 النسخ الاحتياطي: تصدير واسترجاع (بلا كلمات السر)
    ══════════════════════════════════════════════════════════════════════ */
 async function exportData(id, el) {
   if (!isBroker()) return;
@@ -1452,29 +1692,112 @@ async function importData(input) {
 }
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S16] 🖱️ الأحداث: النقرات، النماذج، الفلاتر، والتزامن بين النوافذ
+   [S16] 🔔 الإشعارات + 🎬 الجولة التعريفية
    ──────────────────────────────────────────────────────────────────────
-   A = خريطة الأزرار: data-act="اسم" → الدالة. زر جديد؟ زيدو هنا.
-   FORMS = خريطة النماذج: id النموذج → الدالة.
-   storage = كي نافذة أخرى (ولا تبويب آخر) تبدّل المعطيات، هذي تتحدّث وحدها.
+   notifs() تحسب الأحداث اللي تهمّ المستعمل (دفع تأكّد، ميساج جديد، تشكية…) من المعطيات نفسها.
+   «جديد» = بعد آخر مرة حلّ فيها الجرس (محفوظ في darek_seen_<id>).
+   إشعارات المتصفح (اختيارية): تخرج كي توصل حاجة جديدة والصفحة في الخلفية.
+   ══════════════════════════════════════════════════════════════════════ */
+function notifs() {
+  if (!me) return [];
+  const N = [], add = (at, txt, t) => { if (at) N.push({ at, txt, tab:t }); };
+  const pt = id => (prop(id) || {}).title || 'عقار';
+  if (me.role === 'tenant') {
+    db.payments.filter(p => p.uid === me.id && p.st !== 'pending').forEach(p => add(p.dat, `${p.st === 'confirmed' ? '✅ تمّ تأكيد' : '❌ تمّ رفض'} ${p.type === 'dep' ? 'العربون' : 'خلاص الكراء'} · ${pt(p.pid)}`, p.st === 'confirmed' && p.type === 'dep' ? 'home' : 'my_rents'));
+    db.views.filter(v => v.uid === me.id && v.st !== 'pending').forEach(v => add(v.dat, `📅 معاينة ${v.st === 'confirmed' ? 'مؤكدة' : 'ملغاة'} · ${pt(v.pid)}`, 'my_rents'));
+    db.dms.filter(c => c.uid === me.id && c.from === 'owner').forEach(c => add(c.at, `💬 ${c.name}: ${c.txt.slice(0, 60)}`, 'home'));
+    db.issues.filter(x => x.uid === me.id && x.st === 'resolved').forEach(x => add(x.rat, '🛠️ تشكيتك تمّ حلّها', 'issues'));
+    db.chats.filter(c => c.thr === me.id && c.from === 'broker').forEach(c => add(c.at, '💬 ردّ من الإدارة', 'support'));
+  } else if (me.role === 'landlord') {
+    db.props.filter(p => p.owner === me.id && p.ok).forEach(p => add(p.pat, `📢 تمّ نشر «${p.title}»`, 'my_props'));
+    db.payments.filter(p => ownsProp(p.pid) && p.type === 'dep' && p.st === 'confirmed').forEach(p => add(p.dat, `🎉 مكتري جديد: ${p.name} · ${pt(p.pid)}`, 'tenants'));
+    db.dms.filter(c => ownsProp(c.pid) && c.from === 'tenant').forEach(c => add(c.at, `💬 ${c.name}: ${c.txt.slice(0, 60)}`, 'tenants'));
+    db.bills.filter(b => ownsProp(b.pid)).forEach(b => add(b.at, `🧾 فاتورة جديدة من ${b.name}`, 'll_bills'));
+    db.issues.filter(x => ownsProp(x.pid)).forEach(x => add(x.at, `⚠️ تشكية من ${x.name}: ${x.txt.slice(0, 50)}`, 'll_issues'));
+    db.chats.filter(c => c.thr === me.id && c.from === 'broker').forEach(c => add(c.at, '💬 ردّ من الإدارة', 'support'));
+  } else {
+    db.payments.filter(p => p.st === 'pending').forEach(p => add(p.at, `💳 إيصال جديد من ${p.name} (${money(p.amt)})`, 'pays'));
+    db.props.filter(p => !p.ok).forEach(p => add(p.at, `🏠 عقار ينتظر النشر: ${p.title}`, 'broker_all'));
+    db.views.filter(v => v.st === 'pending').forEach(v => add(v.at, `📅 طلب معاينة من ${v.name}`, 'broker_all'));
+    db.chats.filter(c => c.from === 'user').forEach(c => add(c.at, `💬 ${c.name}: ${c.txt.slice(0, 60)}`, 'inbox'));
+    db.issues.filter(x => x.st === 'open').forEach(x => add(x.at, `⚠️ تشكية من ${x.name}`, 'll_issues'));
+  }
+  return N.sort(byAtDesc).slice(0, 30);
+}
+const seenAt = () => me ? String(lget(ls, SEEN + me.id) || '') : '';
+const unseen = () => { const s = seenAt(); return notifs().filter(n => n.at > s); };
+function paintBell() {
+  if (!me) return;
+  const n = unseen().length, b = $('bellN');
+  b.hidden = !n; b.textContent = n > 9 ? '9+' : n;
+  $('bell').setAttribute('aria-label', n ? `الإشعارات (${n} جديدة)` : 'الإشعارات');
+}
+function toggleNotifs(f) {
+  const p = $('np'), o = typeof f === 'boolean' ? f : p.hidden;
+  if (!o || !me) { p.hidden = true; $('bell').setAttribute('aria-expanded', 'false'); return; }
+  const L = notifs(), s = seenAt();
+  const canAsk = 'Notification' in window && Notification.permission === 'default';
+  p.innerHTML = `<h2>🔔 الإشعارات</h2>${L.map(n => `<button type="button" class="ni${n.at > s ? ' new' : ''}" data-act="notif" data-id="${E(n.tab)}"><b>${E(n.txt)}</b><span>${fDT(n.at)}</span></button>`).join('') || empty('ما فماش إشعارات توّا.')}${canAsk ? '<button type="button" class="btn sm ghost" data-act="notif-perm">🔔 فعّل إشعارات المتصفح</button>' : ''}`;
+  p.hidden = false; $('bell').setAttribute('aria-expanded', 'true');
+  lset(ls, SEEN + me.id, now()); paintBell();
+}
+function pushNotify(before) {
+  if (!me || !('Notification' in window) || Notification.permission !== 'granted' || !document.hidden) return;
+  const U = unseen(); if (U.length <= before) return;
+  try { new Notification('داره', { body:U[0].txt, tag:'darek' }); } catch {}
+}
+function maybeIntro() {
+  if (!me || isBroker()) return;
+  const k = ONB + me.id; if (lget(ls, k)) return;
+  lset(ls, k, 1); openIntro();
+}
+function openIntro() {
+  const r = me ? me.role : 'tenant';
+  const S = r === 'landlord'
+    ? [['➕','أضف عقارك','العنوان، السعر، الغرف، الوصف والصورة.'],['✅','الإدارة تراجع وتنشر','تجيك إشارة 🔔 كي يتنشر.'],['🎉','استقبل مكترين مؤكدين','عربون موثّق، ودردشة خاصة مع كل مكتري.'],['📊','تابع كل شي','المداخيل، فواتير STEG/SONEDE والتشكيات.']]
+    : [['🔍','ابحث وقارن','فلاتر، خريطة، ومفضلة ♥ تحفظ فيها العروض.'],['📅','اطلب معاينة','اختار موعد يناسبك.'],['💳','ادفع العربون','D17 ولا تحويل بنكي، وارفع صورة الإيصال.'],['🏠','فضاء «داري»','بعد التأكيد: دردشة مع المالك، فواتير وتشكيات.']];
+  $('introBody').innerHTML = (CFG.introVideo ? `<video src="${E(CFG.introVideo)}" controls playsinline preload="metadata"></video>` : '')
+    + `<ol>${S.map(([i, t, d]) => `<li><i aria-hidden="true">${i}</i><div><b>${E(t)}</b><span>${E(d)}</span></div></li>`).join('')}</ol>`;
+  openDlg('dlgIntro');
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   [S17] 🖱️ الأحداث: النقرات، النماذج، الفلاتر، الرابط والتزامن بين النوافذ
+   ──────────────────────────────────────────────────────────────────────
+   A = خريطة الأزرار: data-act="اسم" → الدالة. FORMS = id النموذج → الدالة.
    ══════════════════════════════════════════════════════════════════════ */
 const A = {
-  role: openRole, mode: setAuthMode, close: closeDlg, peek,
-  logout, menu: () => toggleMenu(), 'menu-close': () => toggleMenu(false), tab: go,
-  view: openView, dep: id => openPay(id, 'dep'), rent: id => openPay(id, 'rent'),
+  as: setRole, mode: setAuthMode, close: closeDlg, peek,
+  login: () => openAuth('tenant'), 'admin-login': () => openDlg('dlgPin'),
+  logout, menu: () => toggleMenu(), 'menu-close': () => toggleMenu(false), tab: go, home: () => go(defaultTab()),
+  notifs: () => toggleNotifs(), notif: id => go(id),
+  'notif-perm': async () => { try { const r = await Notification.requestPermission(); toast(r === 'granted' ? 'تمّ تفعيل إشعارات المتصفح.' : 'ما تفعّلتش الإشعارات.'); } catch {} toggleNotifs(false); },
+  details: openDetail, fav: toggleFav, share, intro: openIntro,
+  view: id => need('tenant', () => openView(id), 'سجّل الدخول (ولا اعمل حساب في دقيقة) باش تطلب معاينة.'),
+  dep: id => need('tenant', () => openPay(id, 'dep'), 'سجّل الدخول باش تحجز وتدفع العربون.'),
+  rent: id => openPay(id, 'rent'),
+  'list-prop': () => need('landlord', () => go('my_props'), 'سجّل الدخول كمالك باش تنشر عقارك مجاناً.'),
   ask: id => { const p = prop(id); if (p) waB(`مرحباً، نحب نستفسر على العقار "${p.title}" (${p.city}).`); },
   wa: () => waB('مرحباً، نحب نستفسر على منصة داره'), 'wa-help': () => waB('مرحباً، نحتاج مساعدة في منصة داره'),
   copy: (id, el) => copy(el.dataset.copy), 'copy-admin': () => copy($('adminOut').dataset.line || ''),
   img: showReceipt, 'bill-img': showBill, 'iss-img': showIssue, 'prop-img': showPropImg,
-  'bill-del': delBill, 'iss-ok': resolveIssue, export: exportData,
+  'bill-del': delBill, 'iss-ok': resolveIssue, export: exportData, 'prop-edit': editProp, 'edit-cancel': () => { editId = null; render(); },
   'pay-ok': id => setPay(id, 'confirmed'), 'pay-no': id => setPay(id, 'rejected'),
   'view-ok': id => setView(id, 'confirmed'), 'view-no': id => setView(id, 'cancelled'), 'view-cancel': id => setView(id, 'cancelled'),
   pub: id => setPub(id, true), unpub: id => setPub(id, false), 'prop-st': setPropSt, 'prop-del': delProp,
+  more: () => { shown += PAGE; paintGrid(); },
+  'fav-only': () => { F.fav = !F.fav; saveF(); render(); },
+  'map-toggle': () => { F.map = !F.map; saveF(); render(); },
+  'map-city': id => { F.city = F.city === id ? '' : oneOf(id, CITIES, ''); saveF(); if (tab !== 'props') go('props'); else render(); },
+  quick: id => { Object.assign(F, F0); if (id === 'furn') F.furn = true; else F.cat = oneOf(id, Object.keys(CATS), ''); saveF(); go('props'); },
   'reset-filters': () => { Object.assign(F, F0); ldel(ss, FKEY); render(); }
 };
-const FORMS = { fAuth:onAuth, fPin:onPin, fPay:onPay, fView:onView, fProp:onProp, fPhoto:onPhoto, fChat:onChat, fDm:onDm, fBill:onBill, fIssue:onIssue, fAdmin:onAdmin };
+const FORMS = { fAuth:onAuth, fPin:onPin, fPay:onPay, fView:onView, fProp:onProp, fPhoto:onPhoto, fChat:onChat, fDm:onDm, fBill:onBill, fIssue:onIssue, fAdmin:onAdmin,
+  fSearch: f => { Object.assign(F, F0, { q:f.elements.q.value.trim().slice(0, 60), city:oneOf(f.elements.city.value, CITIES, ''), max:num(f.elements.max.value, 1e6) }); saveF(); go('props'); } };
 const fail = err => { console.error(err); toast('حدث خطأ غير متوقع. حاول مرة أخرى.', true); };
 document.addEventListener('click', e => {
+  lastAct = Date.now();
+  if (!$('np').hidden && !e.target.closest('#np,#bell')) toggleNotifs(false);
   const t = e.target.closest('[data-act]'); if (!t) return;
   const fn = A[t.dataset.act]; if (!fn) return;
   e.preventDefault();
@@ -1483,7 +1806,7 @@ document.addEventListener('click', e => {
 document.addEventListener('submit', e => {
   const f = e.target, fn = FORMS[f.id]; if (!fn) return;
   e.preventDefault();
-  if (f.dataset.busy) return; /* منع الإرسال مرتين (نقرة مزدوجة) */
+  if (f.dataset.busy) return; /* منع الإرسال مرتين */
   f.dataset.busy = '1';
   Promise.resolve().then(() => fn(f)).catch(fail).finally(() => { delete f.dataset.busy; });
 });
@@ -1491,43 +1814,53 @@ let fT;
 const saveF = () => lset(ss, FKEY, F);
 document.addEventListener('input', e => {
   const k = e.target.dataset.filter;
-  if (k === 'q' || k === 'max') { F[k] = k === 'max' ? num(digits(e.target.value), 1e6) : e.target.value; saveF(); clearTimeout(fT); fT = setTimeout(paintGrid, 150); }
+  if (k === 'q' || k === 'min' || k === 'max') { F[k] = k === 'q' ? e.target.value : num(digits(e.target.value), 1e6); saveF(); clearTimeout(fT); fT = setTimeout(() => paintGrid(true), 160); }
 });
 document.addEventListener('change', e => {
   const t = e.target, k = t.dataset.filter;
-  if (k && k !== 'q' && k !== 'max') { F[k] = t.value; saveF(); paintGrid(); }
+  if (k && t.type === 'checkbox') { F[k] = t.checked; saveF(); paintGrid(true); }
+  else if (k && !['q','min','max'].includes(k)) { F[k] = t.value; saveF(); paintGrid(true); }
   else if (t.id === 'thr') { curThr = t.value; render(); }
   else if (t.id === 'home') { curHome = t.value; render(); }
   else if (t.id === 'dmThr') { curDm = t.value; render(); }
   else if (t.id === 'impFile') importData(t).catch(fail);
   else if (t.type === 'file') showPrev(t);
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('menu').classList.contains('open')) { toggleMenu(false); $('hb').focus(); } });
-window.addEventListener('popstate', () => {
-  if (!me) return;
-  const h = location.hash.slice(1);
-  if (h !== tab && tabsFor(me.role).some(i => i[0] === h)) { tab = h; render(); window.scrollTo(0, 0); }
+document.addEventListener('keydown', e => {
+  lastAct = Date.now();
+  if (e.key === 'Escape') { if ($('menu').classList.contains('open')) { toggleMenu(false); $('hb').focus(); } if (!$('np').hidden) toggleNotifs(false); }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target instanceof SVGElement && e.target.dataset.act) { e.preventDefault(); e.target.dispatchEvent(new MouseEvent('click', { bubbles:true })); }
 });
+$('dlgProp').addEventListener('close', () => { if (/^#p-/.test(location.hash)) history.replaceState(null, '', '#' + tab); });
+function route() {
+  const h = location.hash.slice(1);
+  if (h.startsWith('p-')) { const p = prop(h.slice(2)); if (p) openDetail(p.id); return; }
+  if (h !== tab && tabsFor(R()).some(i => i[0] === h)) { tab = h; render(); window.scrollTo(0, 0); }
+}
+window.addEventListener('popstate', route);
 window.addEventListener('storage', e => {
   if (e.storageArea !== ls) return;
   if (e.key === SESS) return syncSession();
+  if (e.key === FAV) { favs = new Set(arr(lget(ls, FAV)).filter(x => typeof x === 'string')); return; }
   if (e.key !== KEY) return;
+  const before = unseen().length;
   db = load(); invalidate();
   imgSync().catch(() => {}).then(() => {
-    if (!me) return;
-    if (!isBroker()) { me = db.users.find(u => u.id === me.id) || null; if (!me) return leave(); }
-    softRender();
+    if (me && !isBroker()) { me = db.users.find(u => u.id === me.id) || null; if (!me) return leave(); }
+    softRender(); pushNotify(before);
   });
 });
+/* حماية: الإدارة تخرج وحدها بعد مدة بلا حركة */
+setInterval(() => { if (isBroker() && Date.now() - lastAct > CFG.adminIdleMin * 6e4) { logout(); toast('تمّ الخروج تلقائياً بعد مدة بلا نشاط (حماية).'); } }, 60000);
 window.addEventListener('error', () => toast('حدث خطأ غير متوقع. حدّث الصفحة.', true));
 
 /* ══════════════════════════════════════════════════════════════════════
-   [S17] 🚀 التشغيل
+   [S18] 🚀 التشغيل
    ──────────────────────────────────────────────────────────────────────
-   الترتيب مهم: نفتحو IndexedDB → ننقلو الصور القديمة → نحمّلو المعطيات →
-   نحمّلو الصور → نرجّعو الجلسة (والتبويب من الرابط) → ننظّفو الصور اليتيمة.
+   IndexedDB → نقل الصور القديمة → المعطيات → الصور → الجلسة والتبويب من الرابط → تنظيف.
    ══════════════════════════════════════════════════════════════════════ */
 $('tk').textContent = CFG.ann;
+$('copy').textContent = `© ${new Date().getFullYear()} داره · نسخة ${APP_VER} · المعطيات محفوظة في متصفحك.`;
 $('payD17').textContent = CFG.d17; $('cpD17').dataset.copy = CFG.d17;
 $('payRib').textContent = CFG.rib; $('cpRib').dataset.copy = CFG.rib.replace(/\s/g, '');
 { const sf = obj(lget(ss, FKEY)); for (const k of Object.keys(F0)) if (typeof sf[k] === typeof F0[k]) F[k] = sf[k]; }
@@ -1536,10 +1869,14 @@ ldel(ls, 'darek_lock');
   idb = await idbOpen();
   await imgMigrate();
   await migrateV1();
-  db = load();
+  db = load(); invalidate();
   await imgSync();
   me = restore();
-  if (me) enterApp();
+  const h = location.hash.slice(1);
+  tab = tabsFor(R()).some(i => i[0] === h) ? h : defaultTab();
+  $('app').hidden = false;
+  render();
+  if (h.startsWith('p-')) route();
   if (!ls) toast('تنبيه: التخزين المحلي غير متاح في هذا المتصفح (وضع خاص؟)، لن تُحفظ بياناتك.', true);
   setTimeout(() => imgGc(), 5000);
 })().catch(fail);

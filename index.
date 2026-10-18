@@ -24,7 +24,7 @@
      [S02] المعطيات الثابتة (المدن، الفئات، العقارات النموذجية، إحداثيات الخريطة)
      [S03] أدوات صغيرة                 [S11] السكن «داري»
      [S04] التخزين + الترحيل           [S12] العرض: render + الصفحات (VIEWS)
-     [S05] الصور: IndexedDB            [S13] مكوّنات: بطاقات، خريطة، تفاصيل، دردشة
+     [S05] الصور + [S05b] ☁️ السحابة   [S13] مكوّنات: بطاقات، خريطة، تفاصيل، دردشة
      [S06] العقارات + الذاكرة المؤقتة  [S14] العمليات: المكتري · المالك · الإدارة
      [S07] التشفير والحماية            [S15] النسخ الاحتياطي
      [S08] واجهة عامة + الصور          [S16] الإشعارات + الجولة التعريفية
@@ -41,7 +41,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-boR3pD77MEUPp6jBDaxEfJB5DOP9Jgw4fMIuQEaTsZQ='; style-src 'sha256-brWgradalpE5h8UjWgsHvDLOBA6UT8FJTBWyZfcYj5A=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: https:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-zI//H94iG4EM8qPIyjTp9oTMS/UTX8eJtDwekw3I1jo='; style-src 'sha256-brWgradalpE5h8UjWgsHvDLOBA6UT8FJTBWyZfcYj5A=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co; media-src 'self' blob: https:; connect-src https://*.supabase.co wss://*.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="داره: ابحث عن مبيت أو شقة في تونس، اطلب معاينة، وادفع العربون بإثبات تحويل تؤكده الإدارة.">
@@ -485,6 +485,9 @@ document.getElementById('jsfail').remove();
    adminIdleMin: الإدارة تخرج وحدها بعد هالعدد من الدقائق بلا حركة.
    commission: عمولة السمسار (%) على كل دفعة مؤكدة في عقارات الملاّكة. الباقي = مستحقات المالك.
    (عقارات الإدارة نفسها: الدخل الكل للسمسار.)
+   supabase: ☁️ باش المعطيات توصل من أي تليفون لأي تليفون (السحابة):
+             url = Project URL و key = anon public key من Supabase ← Project Settings ← API.
+             فارغين = الوضع المحلي (كل جهاز بمعطياتو). شوف supabase/schema.sql و SUPABASE.md.
    ══════════════════════════════════════════════════════════════════════ */
 const APP_VER = '4.0';
 const CFG = Object.freeze({
@@ -494,6 +497,7 @@ const CFG = Object.freeze({
   introVideo: '',
   adminIdleMin: 30,
   commission: 10,
+  supabase: Object.freeze({ url: 'https://dllttppnsmiicxbbsyzt.supabase.co', key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsbHR0cHBuc21paWN4YmJzeXp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMzc3OTMsImV4cCI6MjEwNzkxMzc5M30.1Sv37wjZU8yWpFjhkkyQ2HuXWeN95WrRdk3oPcpfb7U' }),
   admin: Object.freeze({ salt: '', iter: 310000, hash: '' }),
   adminLegacySha256: '8bfa6ec511c7840857b9bb932cadbbcea45d49b6f9fba4a808f6e0a255a9bd78'
 });
@@ -604,6 +608,7 @@ let db = normalize(null);
 const save = () => !ls || lset(ls, KEY, db);
 function commit(undo) {
   invalidate();
+  if (CLOUD) { cloudQueue(); return true; }
   if (save()) return true;
   if (undo) undo();
   invalidate();
@@ -652,7 +657,11 @@ function dataToBlob(u) {
   return new Blob([a], { type:'image/jpeg' });
 }
 const blobToData = b => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); r.readAsDataURL(b); });
-async function imgPut(blob, id = 'i' + uid()) {
+async function imgPut(blob, id = 'i' + uid(), pub = false) {
+  if (CLOUD) {
+    try { await sbFetch(`/storage/v1/object/${pub ? 'photos' : 'private'}/${id}.jpg`, { method:'POST', body:blob, headers:{ 'Content-Type':'image/jpeg', 'x-upsert':'true' } }); urls.set(id, URL.createObjectURL(blob)); return id; }
+    catch (e) { console.error(e); return null; }
+  }
   try {
     if (!askedPersist && navigator.storage && navigator.storage.persist) { askedPersist = true; navigator.storage.persist().catch(() => {}); }
     if (idb) { await idbDo('readwrite', st => st.put({ blob, at:Date.now() }, id)); urls.set(id, URL.createObjectURL(blob)); return id; }
@@ -662,7 +671,15 @@ async function imgPut(blob, id = 'i' + uid()) {
   } catch { return null; }
 }
 const imgGet = id => (id && urls.get(id)) || '';
+const isPhoto = id => Object.values(db.ov).some(o => o.photo === id);
 async function imgBlob(id) {
+  if (CLOUD) {
+    try {
+      if (isPhoto(id)) return await (await sbFetch(`/storage/v1/object/public/photos/${id}.jpg`, { raw:true, auth:false })).blob();
+      if (cs) return await (await sbFetch(`/storage/v1/object/authenticated/private/${id}.jpg`, { raw:true })).blob();
+    } catch {}
+    return null;
+  }
   if (idb) { try { const r = await idbDo('readonly', st => st.get(id)); if (r && isImgBlob(r.blob)) return r.blob; } catch {} }
   try { return dataToBlob(ls ? ls.getItem(IMG_LS + id) : ''); } catch { return null; }
 }
@@ -681,6 +698,7 @@ function imgRefs() {
 async function imgSync() {
   for (const id of imgRefs()) {
     if (urls.has(id)) continue;
+    if (CLOUD && isPhoto(id)) { urls.set(id, `${SB.url}/storage/v1/object/public/photos/${id}.jpg`); continue; }
     const b = await imgBlob(id);
     if (b) urls.set(id, URL.createObjectURL(b));
   }
@@ -705,6 +723,131 @@ async function imgGc() {
       if (!r || !(r.at > old)) await idbDo('readwrite', st => st.delete(k));
     }
   } catch {}
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   [S05b] ☁️ السحابة (Supabase): نفس المعطيات على كل التليفونات
+   ──────────────────────────────────────────────────────────────────────
+   يخدم كان كي تعمّر CFG.supabase في [S01]. الفكرة:
+   - cloudLoad(): يجيب الجداول من السيرفر (كل واحد يشوف كان اللي عندو الحق فيه: RLS في schema.sql).
+   - commit() [S04] → cloudQueue(): يقارن db بآخر نسخة من السيرفر ويبعث كان اللي تبدّل
+     (POST للجديد، PATCH للمبدّل، DELETE للمفسوخ). كان السيرفر رفض → نرجّعو نسخة السيرفر.
+   - كل 20 ثانية (وكي ترجع للصفحة) نجيبو الجديد → الرسائل والإيصالات توصل من أي جهاز.
+   - الحسابات: Supabase Auth (البريد + كلمة السر). الإدارة = حساب عندو app_metadata.role = 'admin'.
+   ══════════════════════════════════════════════════════════════════════ */
+const SB = CFG.supabase.url && CFG.supabase.key ? { url:CFG.supabase.url.replace(/\/+$/, ''), key:CFG.supabase.key } : null;
+const CLOUD = !!SB, CSESS = 'darek_cloud', POLL_MS = 20000;
+const TABLES = { users:'profiles', props:'props', views:'views', payments:'payments', chats:'chats', dms:'dms', bills:'bills', issues:'issues', payouts:'payouts' };
+let cs = CLOUD ? lget(ls, CSESS) : null, shadow = null, pushQ = Promise.resolve(), syncing = false;
+const claims = () => { try { return JSON.parse(decodeURIComponent(escape(atob(cs.access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))))); } catch { return {}; } };
+function setCs(x) {
+  cs = x && x.access_token ? { access_token:x.access_token, refresh_token:x.refresh_token, expires_at:x.expires_at || Math.floor(Date.now() / 1000) + (x.expires_in || 3600) } : null;
+  if (cs) lset(ls, CSESS, cs); else ldel(ls, CSESS);
+}
+async function sbFetch(path, { method = 'GET', body, headers = {}, raw = false, auth = true } = {}) {
+  if (auth && cs && cs.expires_at * 1000 - Date.now() < 60000) {
+    try { setCs(await sbFetch('/auth/v1/token?grant_type=refresh_token', { method:'POST', body:{ refresh_token:cs.refresh_token }, auth:false })); } catch { setCs(null); }
+  }
+  const h = { apikey:SB.key, Authorization:'Bearer ' + (auth && cs ? cs.access_token : SB.key), ...headers };
+  if (body !== undefined && !(body instanceof Blob)) { h['Content-Type'] = 'application/json'; body = JSON.stringify(body); }
+  const r = await fetch(SB.url + path, { method, headers:h, body });
+  if (!r.ok) {
+    let m = ''; try { const j = await r.json(); m = j.msg || j.message || j.error_description || j.error || ''; } catch {}
+    const e = new Error(m || 'HTTP ' + r.status); e.status = r.status; throw e;
+  }
+  if (raw) return r;
+  const t = await r.text(); return t ? JSON.parse(t) : null;
+}
+/* شكل الصف كيف يتبعث للسيرفر */
+const profileRow = u => ({ id:u.id, name:u.name, email:u.email, phone:u.phone, role:u.role, blocked:!!u.blocked, at:u.at });
+function rowsOf(k) { return k === 'users' ? db.users.map(profileRow) : db[k]; }
+function snapshot() {
+  const S = {};
+  for (const k of Object.keys(TABLES)) S[k] = new Map(rowsOf(k).map(r => [r.id, JSON.stringify(r)]));
+  S.ov = new Map(Object.entries(db.ov).map(([pid, o]) => [pid, JSON.stringify({ pid, st:o.st || null, photo:o.photo || null })]));
+  return S;
+}
+async function cloudLoad() {
+  const get = t => sbFetch(`/rest/v1/${t}?select=*`).catch(e => { if (e.status === 401) setCs(null); return []; });
+  const keys = cs ? Object.keys(TABLES) : ['props'];
+  const res = await Promise.all([...keys.map(k => get(TABLES[k])), get('ov')]);
+  const raw = { ov:{} };
+  keys.forEach((k, i) => { raw[k] = arr(res[i]); });
+  arr(res[res.length - 1]).forEach(o => { raw.ov[o.pid] = { st:o.st, photo:o.photo }; });
+  raw.users = arr(raw.users).map(u => ({ ...u, hash:'cloud' }));
+  db = normalize(raw); invalidate(); shadow = snapshot();
+}
+/* يبعث للسيرفر الفرق بين db وآخر نسخة متزامنة */
+async function cloudPush(target) {
+  const base = shadow || {};
+  const send = async (t, key, prev, cur) => {
+    for (const [id, j] of cur) {
+      if (!prev.has(id)) await sbFetch(`/rest/v1/${t}`, { method:'POST', body:JSON.parse(j), headers:{ Prefer:'return=minimal' } });
+      else if (prev.get(id) !== j) await sbFetch(`/rest/v1/${t}?${key}=eq.${encodeURIComponent(id)}`, { method:'PATCH', body:JSON.parse(j), headers:{ Prefer:'return=minimal' } });
+    }
+    for (const id of prev.keys()) if (!cur.has(id)) await sbFetch(`/rest/v1/${t}?${key}=eq.${encodeURIComponent(id)}`, { method:'DELETE', headers:{ Prefer:'return=minimal' } });
+  };
+  for (const k of Object.keys(TABLES)) await send(TABLES[k], 'id', base[k] || new Map(), target[k]);
+  await send('ov', 'pid', base.ov || new Map(), target.ov);
+}
+function cloudQueue() {
+  const target = snapshot();
+  pushQ = pushQ.then(() => cloudPush(target)).then(() => { shadow = target; }).catch(async e => {
+    console.error(e);
+    toast('ما تسجّلتش العملية في السيرفر (' + (e.message || 'اتصال') + '). رجّعنا آخر نسخة.', true);
+    await cloudRefresh(true);
+  });
+  return pushQ;
+}
+const cloudMe = () => {
+  if (!cs) return null;
+  const c = claims();
+  if (c.app_metadata && c.app_metadata.role === 'admin') return { ...BROKER, uid:c.sub };
+  const u = db.users.find(x => x.id === c.sub);
+  return u && !u.blocked ? u : null;
+};
+async function cloudRefresh(force) {
+  if (!CLOUD || syncing) return;
+  syncing = true;
+  try {
+    if (!force) await pushQ;
+    const before = unseen().length;
+    await cloudLoad(); await imgSync();
+    const was = me; me = cloudMe();
+    if (was && !me) { leave(); return toast('انتهت الجلسة ولا الحساب موقوف. ادخل من جديد.', true); }
+    softRender(); pushNotify(before);
+  } catch (e) { console.error(e); } finally { syncing = false; }
+}
+async function onAuthCloud(f) {
+  const el = f.elements, email = el.email.value.trim().toLowerCase(), pass = el.pass.value;
+  if (!EMAIL_RE.test(email)) return setErr(f, 'أدخل بريداً إلكترونياً صحيحاً.');
+  if (pass.length < 8) return setErr(f, 'كلمة السر 8 أحرف على الأقل.');
+  busy(f, true, authMode === 'register' ? '⏳ جاري إنشاء الحساب…' : '⏳ جاري الدخول…');
+  try {
+    if (authMode === 'register') {
+      const name = el.fullname.value.trim().replace(/\s+/g, ' '), phone = cleanPhone(el.phone.value);
+      if (name.length < 3) return setErr(f, 'أدخل الاسم الكامل.');
+      if (phone && !/^[2-9]\d{7}$/.test(phone)) return setErr(f, 'رقم الهاتف التونسي 8 أرقام (مثال: 22123456).');
+      const r = await sbFetch('/auth/v1/signup', { method:'POST', body:{ email, password:pass, data:{ name, phone, role } }, auth:false });
+      if (!r || !r.access_token) { setAuthMode('login'); return setErr(f, '📧 بعثنالك إيميل تأكيد. أكّد حسابك من البريد ثم ادخل.'); }
+      setCs(r);
+    } else setCs(await sbFetch('/auth/v1/token?grant_type=password', { method:'POST', body:{ email, password:pass }, auth:false }));
+    await cloudLoad(); await imgSync();
+    const u = cloudMe();
+    if (!u) { setCs(null); await cloudLoad(); return setErr(f, 'هذا الحساب موقوف ولا ما عندوش ملف. تواصل مع الإدارة.'); }
+    f.reset(); closeDlg('dlgAuth');
+    if (authMode === 'register') toast('مرحباً ' + u.name + '! تم إنشاء حسابك.');
+    else if (u.role !== 'broker' && u.role !== role) toast(`دخلت بحسابك كـ${RL[u.role]}.`);
+    startSession(u);
+  } catch (e) {
+    const m = String(e.message || '');
+    setErr(f, /invalid login|invalid_grant|credentials/i.test(m) ? 'البريد أو كلمة السر غير صحيحة.' : /registered|exists/i.test(m) ? 'هذا البريد مسجّل مسبقاً. استعمل «تسجيل الدخول».' : /confirm/i.test(m) ? 'أكّد حسابك من الإيميل اللي وصلك أولاً.' : 'تعذّر الاتصال بالسيرفر: ' + m);
+  } finally { busy(f, false); }
+}
+async function cloudLogout() {
+  try { await sbFetch('/auth/v1/logout', { method:'POST' }); } catch {}
+  setCs(null);
+  try { await cloudLoad(); } catch {}
 }
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -861,8 +1004,8 @@ async function shrink(file, max = 1400, q = 0.72) {
   return out;
 }
 const imgErr = e => ({ type:'الملف ليس صورة.', size:'الصورة أكبر من 20 ميغابايت.', decode:'تعذّرت قراءة الصورة. استعمل JPG أو PNG (صور HEIC: غيّر إعداد الكاميرا إلى «الأكثر توافقاً»).' }[e && e.message] || 'تعذّرت معالجة الصورة.');
-async function saveImg(file, max) {
-  try { const id = await imgPut(await shrink(file, max)); return id ? { img:id } : { err:'مساحة التخزين ممتلئة. لا يمكن حفظ الصورة.' }; }
+async function saveImg(file, max, pub = false) {
+  try { const id = await imgPut(await shrink(file, max), undefined, pub); return id ? { img:id } : { err:'مساحة التخزين ممتلئة. لا يمكن حفظ الصورة.' }; }
   catch (e) { return { err:imgErr(e) }; }
 }
 function clearPrev(im) { if (im.dataset.u) URL.revokeObjectURL(im.dataset.u); delete im.dataset.u; im.hidden = true; im.removeAttribute('src'); }
@@ -921,6 +1064,7 @@ function peek(id, el) {
   i.focus();
 }
 async function onAuth(f) {
+  if (CLOUD) return onAuthCloud(f);
   const left = lockLeft('auth'); if (left) return setErr(f, lockMsg(left));
   const el = f.elements, email = el.email.value.trim().toLowerCase(), pass = el.pass.value;
   if (!EMAIL_RE.test(email)) return setErr(f, 'أدخل بريداً إلكترونياً صحيحاً.');
@@ -965,7 +1109,7 @@ async function onPin(f) {
 }
 function startSession(u) {
   me = u; lastAct = Date.now();
-  if (u.role === 'broker') lset(ss, SESS, { role:'broker', exp:Date.now() + 8 * 36e5 });
+  if (CLOUD) {} else if (u.role === 'broker') lset(ss, SESS, { role:'broker', exp:Date.now() + 8 * 36e5 });
   else lset(ls, SESS, { uid:u.id, exp:Date.now() + 30 * 864e5 });
   const p = pending; pending = null;
   if (!p) tab = defaultTab();
@@ -981,6 +1125,7 @@ function leave() {
   tab = 'landing'; render(); window.scrollTo(0, 0);
 }
 function logout() {
+  if (CLOUD) { leave(); return cloudLogout().then(() => render()); }
   if (isBroker()) ldel(ss, SESS); else ldel(ls, SESS);
   leave();
 }
@@ -1376,8 +1521,8 @@ const VIEWS = {
   },
 
   settings: () => `<section class="panel"><h2>💾 البيانات</h2>
-      <p class="mut">التخزين: <span id="quota">${idb ? 'IndexedDB (الصور) + localStorage (المعطيات)' : 'localStorage فقط (≈ 5 MB)'}</span></p>
-      <div class="note">⚠️ كل البيانات محفوظة في متصفح هذا الجهاز فقط. صدّر نسخة احتياطية بانتظام، وتنجم تسترجعها على أي جهاز آخر.</div>
+      ${CLOUD ? `<div class="note">☁️ وضع السحابة: المعطيات محفوظة في Supabase وتوصل لكل التليفونات (تحديث كل ${POLL_MS / 1000} ثانية). <span dir="ltr">${E(SB.url)}</span></div>` : `<p class="mut">التخزين: <span id="quota">${idb ? 'IndexedDB (الصور) + localStorage (المعطيات)' : 'localStorage فقط (≈ 5 MB)'}</span></p>
+      <div class="note">⚠️ الوضع المحلي: كل البيانات محفوظة في متصفح هذا الجهاز فقط، وما توصلش من تليفون لآخر. باش تشارك المعطيات بين الأجهزة فعّل Supabase في [S01].</div>`}
       <div class="btnrow"><button type="button" class="btn sm" data-act="export">⬇️ تصدير نسخة احتياطية (JSON)</button>
       <label class="btn sm no">⬆️ استرجاع نسخة<input type="file" id="impFile" class="sr" accept=".json,application/json"></label></div>
       <p class="mut">نسخة المنصة: ${APP_VER} · خروج تلقائي للإدارة بعد ${CFG.adminIdleMin} دقيقة بلا حركة.</p></section>
@@ -1704,7 +1849,7 @@ async function onPhoto(f) {
   if (!file) return setErr(f, 'اختر الصورة.');
   busy(f, true, '⏳ جاري الحفظ…');
   try {
-    const { img, err } = await saveImg(file, 1400); if (err) return setErr(f, err);
+    const { img, err } = await saveImg(file, 1400, true); if (err) return setErr(f, err);
     const prev = db.ov[pid] ? { ...db.ov[pid] } : null, old = prev && prev.photo;
     db.ov[pid] = { ...(prev || {}), photo:img };
     if (!commit(() => { if (prev) db.ov[pid] = prev; else delete db.ov[pid]; imgDel(img); })) return;
@@ -1847,6 +1992,7 @@ async function exportData(id, el) {
 }
 async function importData(input) {
   const file = input.files[0]; input.value = '';
+  if (CLOUD) return toast('في وضع السحابة المعطيات محفوظة في السيرفر؛ الاسترجاع من ملف متاح كان في الوضع المحلي.', true);
   if (!isBroker() || !file) return;
   let data;
   try { data = JSON.parse(await file.text()); } catch { return toast('الملف غير صالح (ليس JSON).', true); }
@@ -1944,7 +2090,7 @@ function openIntro() {
    ══════════════════════════════════════════════════════════════════════ */
 const A = {
   as: setRole, mode: setAuthMode, close: closeDlg, peek,
-  login: () => openAuth('tenant'), 'admin-login': () => openDlg('dlgPin'),
+  login: () => openAuth('tenant'), 'admin-login': () => CLOUD ? openAuth('tenant', 'login', '🔒 ادخل بحساب الإدارة (البريد وكلمة السر).') : openDlg('dlgPin'),
   logout, menu: () => toggleMenu(), 'menu-close': () => toggleMenu(false), tab: go, home: () => go(defaultTab()),
   notifs: () => toggleNotifs(), notif: id => go(id),
   'notif-perm': async () => { try { const r = await Notification.requestPermission(); toast(r === 'granted' ? 'تمّ تفعيل إشعارات المتصفح.' : 'ما تفعّلتش الإشعارات.'); } catch {} toggleNotifs(false); },
@@ -2016,13 +2162,14 @@ document.addEventListener('focusin', e => { if (e.target.dataset && e.target.dat
 $('dlgProp').addEventListener('close', () => { if (/^#p-/.test(location.hash)) history.replaceState(null, '', '#' + tab); });
 function route() {
   const h = location.hash.slice(1);
-  if (h === 'admin') { history.replaceState(null, '', '#' + tab); if (!isBroker()) openDlg('dlgPin'); return; }
+  if (h === 'admin') { history.replaceState(null, '', '#' + tab); if (!isBroker()) A['admin-login'](); return; }
   if (h.startsWith('p-')) { const p = prop(h.slice(2)); if (p) openDetail(p.id); return; }
   if (h !== tab && tabsFor(R()).some(i => i[0] === h)) { tab = h; render(); window.scrollTo(0, 0); }
 }
 window.addEventListener('popstate', route);
 window.addEventListener('storage', e => {
   if (e.storageArea !== ls) return;
+  if (CLOUD) { if (e.key === CSESS) { cs = lget(ls, CSESS); const n = cloudMe(); if ((n && n.id) !== (me && me.id)) { me = n; if (!me) leave(); else { tab = defaultTab(); render(); } } } if (e.key !== FAV) return; }
   if (e.key === SESS) return syncSession();
   if (e.key === FAV) { favs = new Set(arr(lget(ls, FAV)).filter(x => typeof x === 'string')); return; }
   if (e.key !== KEY) return;
@@ -2043,25 +2190,33 @@ window.addEventListener('error', () => toast('حدث خطأ غير متوقع. �
    IndexedDB → نقل الصور القديمة → المعطيات → الصور → الجلسة والتبويب من الرابط → تنظيف.
    ══════════════════════════════════════════════════════════════════════ */
 $('tk').textContent = CFG.ann;
-$('copy').textContent = `© ${new Date().getFullYear()} داره · نسخة ${APP_VER} · المعطيات محفوظة في متصفحك.`;
+$('copy').textContent = `© ${new Date().getFullYear()} داره · نسخة ${APP_VER} · ${CLOUD ? '☁️ متصل بالسحابة' : 'المعطيات محفوظة في متصفحك'}.`;
 $('payD17').textContent = CFG.d17; $('cpD17').dataset.copy = CFG.d17;
 $('payRib').textContent = CFG.rib; $('cpRib').dataset.copy = CFG.rib.replace(/\s/g, '');
 { const sf = obj(lget(ss, FKEY)); for (const k of Object.keys(F0)) if (typeof sf[k] === typeof F0[k]) F[k] = sf[k]; }
 ldel(ls, 'darek_lock');
 (async () => {
   idb = await idbOpen();
-  await imgMigrate();
-  await migrateV1();
-  db = load(); invalidate();
-  await imgSync();
-  me = restore();
+  if (CLOUD) {
+    try { await cloudLoad(); } catch (e) { console.error(e); toast('تعذّر الاتصال بالسيرفر. ثبّت الإنترنت ثم حدّث الصفحة.', true); }
+    await imgSync();
+    me = cloudMe();
+    setInterval(() => { if (!document.hidden) cloudRefresh(); }, POLL_MS);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) cloudRefresh(); });
+  } else {
+    await imgMigrate();
+    await migrateV1();
+    db = load(); invalidate();
+    await imgSync();
+    me = restore();
+  }
   const h = location.hash.slice(1);
   tab = tabsFor(R()).some(i => i[0] === h) ? h : defaultTab();
   $('app').hidden = false;
   render();
   if (h.startsWith('p-') || h === 'admin') route();
   if (!ls) toast('تنبيه: التخزين المحلي غير متاح في هذا المتصفح (وضع خاص؟)، لن تُحفظ بياناتك.', true);
-  setTimeout(() => imgGc(), 5000);
+  if (!CLOUD) setTimeout(() => imgGc(), 5000);
 })().catch(fail);
 })();
 </script>

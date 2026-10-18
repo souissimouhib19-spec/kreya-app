@@ -1,15 +1,54 @@
 <!DOCTYPE html>
 <!--
-  داره (Darek) — منصة العقارات والمبيتات في تونس
-  ⚠️ CSP: هذه الصفحة لا تشغّل إلا السكربت والتنسيق اللذين تطابق بصمتهما (sha256) سطر Content-Security-Policy أدناه.
-  إذا عدّلت السكربت أو التنسيق: افتح الصفحة، انسخ بصمة 'sha256-…' التي يطبعها المتصفح في Console، وضعها مكان القديمة.
-  أو آلياً: node tools/csp-hash.mjs (يحسب بصمتَي السكربت والتنسيق ويحدّث السطر)، و --check للتحقق فقط.
-  إن لم تفعل، سيظهر شريط أحمر وتتوقف المنصة (حماية مقصودة ضد حقن السكربتات).
+══════════════════════════════════════════════════════════════════════════════
+  داره (Darek) — منصة العقارات والمبيتات في تونس · ملف واحد (Single-File HTML)
+══════════════════════════════════════════════════════════════════════════════
+
+  📌 كيفاش تلقى روحك في الملف؟
+     كل قسم عندو علامة بين [ ] (مثلاً [S09]). اعمل Ctrl+F واكتب العلامة توصل للقسم طول.
+
+  🎨 التنسيق (CSS) — داخل وسم style
+     [C1] الألوان والأساسيات          [C6] بطاقات العقارات
+     [C2] صفحة اختيار الصفة            [C7] اللوحات، الأسطر والإحصائيات
+     [C3] الأزرار والنماذج             [C8] الدردشة والصور المصغّرة
+     [C4] النوافذ (dialogs)            [C9] الإشعارات، واتساب والحركة
+     [C5] الهيكل: الشريط، القائمة والتبويبات
+
+  🧱 الهيكل (HTML) — داخل وسم body
+     [H1] صفحة الترحيب          [H3] نوافذ الدفع، المعاينة والصورة
+     [H2] نوافذ الدخول           [H4] التطبيق (الشريط + المحتوى)
+
+  ⚙️ البرمجة (JavaScript) — داخل وسم script
+     [S01] الإعدادات (أرقام، RIB، الإعلان، رمز الإدارة)   ← أول بلاصة تبدّل فيها
+     [S02] المعطيات الثابتة (المدن، الفئات، العقارات النموذجية)
+     [S03] أدوات صغيرة (تنسيق، أرقام، تواريخ)
+     [S04] التخزين: قاعدة المعطيات في localStorage + الترحيل
+     [S05] الصور: IndexedDB (مساحة كبيرة، ما تعبّيش localStorage)
+     [S06] العقارات (ذاكرة مؤقتة + الرسوم الافتراضية)
+     [S07] التشفير وكلمات السر + الحماية من التخمين
+     [S08] واجهة عامة: إشعارات، نوافذ، ضغط الصور، معاينة
+     [S09] الجلسة: الدخول، التسجيل والخروج
+     [S10] التنقل: التبويبات + الرابط (#) باش التحديث ما يرجعكش للبداية
+     [S11] السكن «داري» بعد تأكيد العربون
+     [S12] العرض: render + الصفحات (VIEWS)
+     [S13] مكوّنات صغيرة: أسطر الدفع/الفواتير/التشكيات والدردشة
+     [S14] العمليات: المكتري · المالك · الإدارة
+     [S15] النسخ الاحتياطي: تصدير واسترجاع
+     [S16] الأحداث: النقرات، النماذج، التزامن بين النوافذ
+     [S17] التشغيل (boot)
+
+  ⚠️ CSP: الصفحة ما تشغّلش كان السكربت والتنسيق اللي بصمتهم (sha256) موجودة في سطر
+     Content-Security-Policy لتحت. كل ما تبدّل حرف في وسم script ولا وسم style:
+       node tools/csp-hash.mjs            ← يحسب البصمتين ويحدّث السطر وحدو
+       node tools/csp-hash.mjs --check    ← يثبّت برك
+     (ولا انسخ البصمة اللي يطبعها المتصفح في Console وحطّها مكان القديمة.)
+     التعليقات هذي (برّا وسمَي script وstyle) ما تبدّلش البصمة.
+══════════════════════════════════════════════════════════════════════════════
 -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Xlm6g1/C0wGlE2eQcVP6iwgyfnKJ+D0Z5QgDdUATupw='; style-src 'sha256-USuabot+ekORncyBqxdxmn0aiiUDOLlMrmywjeVbz/A=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-GQZ4/P9Kc25UC8VPdYbkzaoynCVdBG08cV2bbzYo3tI='; style-src 'sha256-ggqzfy+4uLuMYwRsgjgpvYb56lug/J9Kt+spF70dapE=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="داره: ابحث عن مبيت أو شقة في تونس، اطلب معاينة، وادفع العربون بإثبات تحويل تؤكده الإدارة.">
@@ -21,6 +60,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
+/* ════════════════════════════════════════════════════════════════
+   [C1] 🎨 الألوان والأساسيات — حب تبدّل لون المنصة؟ بدّل --red هنا
+   ════════════════════════════════════════════════════════════════ */
 :root{--bg:#f8f9fa;--card:#fff;--ink:#1e293b;--mut:#5b6b80;--line:#e2e8f0;--red:#c8102e;--redd:#7a0a1d;--ok:#047857;--okb:#d1fae5;--warn:#b45309;--soft:#fff1f2;--wa:#25d366;--wad:#15803d;--no:#475569;
 --sh:0 4px 6px -1px rgba(0,0,0,.05),0 2px 4px -2px rgba(0,0,0,.05);--shl:0 12px 24px -4px rgba(0,0,0,.12);--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
@@ -31,10 +73,11 @@ img{max-width:100%}
 [hidden]{display:none!important}
 .sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .jsfail{position:fixed;inset:0 0 auto;z-index:99;background:var(--red);color:#fff;text-align:center;padding:12px;font-weight:700}
-button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
 :focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+
+/* ════════════════════════════════════════════════════════════════
+   [C2] 🚪 صفحة اختيار الصفة (مكتري / مالك / إدارة)
+   ════════════════════════════════════════════════════════════════ */
 .welcome{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;background:linear-gradient(135deg,#fff1f2,#f8f9fa)}
 .welcome h1{font-size:clamp(24px,5vw,32px);font-weight:800;margin:0 0 8px;text-align:center;color:var(--red)}
 .welcome>p{color:var(--mut);margin:0 0 28px;text-align:center;font-size:16px}
@@ -42,36 +85,58 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .role{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:24px;text-align:center;cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;gap:10px}
 .role:hover{border-color:var(--red);transform:translateY(-5px);box-shadow:var(--shl)}
 .role .ic{font-size:48px;line-height:1}.role h2{margin:0;font-size:19px}.role p{margin:0;font-size:13px;color:var(--mut);flex:1}
-.btn{background:var(--red);color:#fff;border:0;padding:10px 20px;border-radius:99px;font-weight:700;width:100%;text-decoration:none;display:inline-block;text-align:center}
+
+/* ════════════════════════════════════════════════════════════════
+   [C3] 🔘 الأزرار والنماذج
+   ════════════════════════════════════════════════════════════════ */
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
+.btn{background:var(--red);color:#fff;border:0;padding:10px 20px;border-radius:99px;font-weight:700;width:100%;text-decoration:none;display:inline-block;text-align:center;cursor:pointer}
 .btn.ok{background:var(--ok)}.btn.no{background:var(--no)}.btn.wa{background:var(--wad)}
 .btn.sm{width:auto;padding:6px 14px;font-size:12.5px}
 .link{background:none;border:0;color:var(--mut);margin-top:10px;padding:6px 10px}
 .out{border:1px solid var(--line);padding:4px 12px;border-radius:8px;background:#fff;color:var(--ink);font-weight:600;font-size:13px}
-dialog{border:0;padding:0;background:transparent;width:100%;max-width:min(480px,calc(100vw - 32px))}
-dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
-.box{background:var(--card);border-radius:20px;padding:24px;box-shadow:var(--shl);text-align:center}
-.box h2{margin:0 0 12px;font-size:20px}
+.chipb{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 12px;font-size:12.5px;font-weight:600}
 .fld{display:block;text-align:right;font-size:12.5px;color:var(--mut);font-weight:600;margin-bottom:10px}
 .fld .opt{font-weight:400}
 input,select,textarea{width:100%;padding:10px 14px;margin-top:4px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:var(--ink);font-size:15px}
 input[type=file]{padding:8px;font-size:13px}
 textarea{min-height:96px;resize:vertical}
 input[dir=ltr]{text-align:left}
+.pw{position:relative;display:block}.pw input{padding-left:46px}
+.peek{position:absolute;left:6px;top:calc(50% + 2px);transform:translateY(-50%);border:0;background:none;font-size:18px;line-height:1;padding:6px}
 .err{color:var(--red);font-size:13px;min-height:1.4em;margin:4px 0 8px;font-weight:600}
 .seg{display:flex;background:#f1f5f9;border-radius:99px;padding:4px;margin-bottom:14px}
 .seg button{flex:1;border:0;background:none;border-radius:99px;padding:7px;font-weight:700;color:var(--mut)}
 .seg button[aria-selected=true]{background:#fff;color:var(--red);box-shadow:var(--sh)}
+.fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 12px}
+.prev{max-height:160px;border-radius:10px;margin:0 auto 8px;display:block;border:1px solid var(--line)}
+.filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.filters input,.filters select{width:auto;margin:0}
+.filters .q{flex:1;min-width:160px}.filters .mx{width:130px}
+
+/* ════════════════════════════════════════════════════════════════
+   [C4] 🪟 النوافذ (الدخول، الدفع، المعاينة، الصورة)
+   ════════════════════════════════════════════════════════════════ */
+dialog{border:0;padding:0;background:transparent;width:100%;max-width:min(480px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(15,23,42,.6);backdrop-filter:blur(4px)}
+.box{background:var(--card);border-radius:20px;padding:24px;box-shadow:var(--shl);text-align:center;max-height:calc(100dvh - 32px);overflow:auto}
+.box h2{margin:0 0 12px;font-size:20px}
 .paybox{background:var(--soft);padding:12px;border-radius:12px;font-size:13.5px;text-align:right;margin-bottom:10px;display:grid;gap:8px}
 .pr{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pr>span{min-width:96px;font-weight:700}
 .pr code{background:#fff;border-radius:6px;padding:2px 8px;font-size:14px;letter-spacing:.5px}
 .amt{color:var(--red);font-size:18px;font-weight:800}
 .steps{text-align:right;font-size:12.5px;margin:0 0 12px;padding-inline-start:20px}
-.prev{max-height:160px;border-radius:10px;margin:0 auto 8px;display:block;border:1px solid var(--line)}
 .slots{border:0;margin:0 0 4px;padding:0;text-align:right}
 .slot{display:flex;gap:10px;align-items:center;padding:10px 12px;margin-bottom:8px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer}
 .slot input{width:auto;margin:0;accent-color:var(--red)}
 .slot:has(input:checked){background:var(--soft);border-color:var(--red);font-weight:700}
 .full{max-height:72vh;width:auto;border-radius:12px;display:block;margin:0 auto 8px}
+
+/* ════════════════════════════════════════════════════════════════
+   [C5] 🧭 الهيكل: الشريط العلوي، الإعلان، التبويبات والقائمة الجانبية
+   ════════════════════════════════════════════════════════════════ */
 #app{min-height:100vh}
 .nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 16px}
 .navl,.navr{display:flex;align-items:center;gap:10px;min-width:0}
@@ -94,6 +159,10 @@ input[dir=ltr]{text-align:left}
 .menuh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .scrim{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:30}
 @media (min-width:960px){.tabs{display:flex}.hb{display:none}}
+
+/* ════════════════════════════════════════════════════════════════
+   [C6] 🏘️ بطاقات العقارات (شبكة التصفح)
+   ════════════════════════════════════════════════════════════════ */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
 .card:hover{transform:translateY(-3px);box-shadow:var(--shl)}
@@ -105,34 +174,42 @@ input[dir=ltr]{text-align:left}
 .body h3{margin:0;font-size:15px}
 .price{color:var(--red);font-weight:800;font-size:18px}
 .dist{background:var(--soft);color:var(--red);font-weight:700;font-size:12px;padding:3px 10px;border-radius:6px;width:fit-content}
-.mut{color:var(--mut);font-size:12.5px}
 .acts{display:flex;gap:6px;margin-top:auto;padding-top:10px;flex-wrap:wrap}
 .acts button{flex:1;padding:7px 6px;border-radius:8px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:12px;white-space:nowrap}
 .acts .dep{background:var(--warn);color:#fff;border-color:var(--warn)}.acts .vw{background:var(--red);color:#fff;border-color:var(--red)}.acts .wa{background:var(--wad);color:#fff;border-color:var(--wad)}
+
+/* ════════════════════════════════════════════════════════════════
+   [C7] 📋 اللوحات، الأسطر، الشارات والإحصائيات
+   ════════════════════════════════════════════════════════════════ */
 .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--sh);margin-bottom:16px}
 .panel h2{margin:0 0 10px;color:var(--red);font-size:16px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px 12px;padding:10px 0;border-top:1px solid var(--line);flex-wrap:wrap}
 .grow{flex:1;min-width:0}
 .rowact{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.mut{color:var(--mut);font-size:12.5px}
 .pill{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--red);white-space:nowrap}
 .pill.g{background:var(--okb);color:var(--ok)}.pill.x{background:#f1f5f9;color:var(--no)}.pill.w{background:#fef3c7;color:var(--warn)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
 .stat{background:var(--soft);border-radius:12px;padding:10px 12px}.stat b{display:block;font-size:22px;color:var(--red)}
-.filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
-.filters input,.filters select{width:auto;margin:0}
-.filters .q{flex:1;min-width:160px}.filters .mx{width:130px}
-.chipb{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 12px;font-size:12.5px;font-weight:600}
 .empty{text-align:center;padding:28px 12px;color:var(--mut)}
+.code{direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;border-radius:10px;padding:12px;font-size:12px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+.note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* ════════════════════════════════════════════════════════════════
+   [C8] 💬 الدردشة والصور المصغّرة
+   ════════════════════════════════════════════════════════════════ */
 .chat{background:#f1f5f9;border-radius:12px;padding:12px;height:300px;overflow-y:auto;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
 .msg{background:#fff;padding:8px 12px;border-radius:10px;max-width:80%;box-shadow:0 1px 2px rgba(0,0,0,.05);align-self:flex-end}
 .msg.me{background:var(--soft);align-self:flex-start}
 .txt{white-space:pre-wrap;overflow-wrap:anywhere}
 .chatf{display:flex;gap:8px}.chatf input{margin:0}
-.fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 12px}
 .thumbbtn{border:0;padding:0;background:none;margin-top:6px;display:block}
 .thumb{width:120px;height:80px;object-fit:cover;border-radius:8px;display:block;border:1px solid var(--line)}
-.code{direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;border-radius:10px;padding:12px;font-size:12px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
-.note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+
+/* ════════════════════════════════════════════════════════════════
+   [C9] 🔔 الإشعارات، زر واتساب والحركة
+   ════════════════════════════════════════════════════════════════ */
 .toast{position:fixed;left:50%;bottom:calc(92px + var(--sb));transform:translateX(-50%);z-index:60;background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-size:14px;max-width:90vw;text-align:center;box-shadow:var(--shl)}
 .toast.bad{background:var(--red)}
 .fwa{position:fixed;left:16px;bottom:calc(16px + var(--sb));z-index:35;width:58px;height:58px;border-radius:50%;border:0;background:var(--wa);display:flex;align-items:center;justify-content:center;animation:pu 2.2s infinite}
@@ -143,6 +220,9 @@ input[dir=ltr]{text-align:left}
 <body>
 <div class="jsfail" id="jsfail" role="alert">تعذّر تشغيل المنصة: JavaScript لا يعمل هنا. افتح الملف في متصفح (Safari أو Chrome) عبر رابط http(s)، لا في معاينة الملفات. إن استمر المشكل، حدّث بصمة CSP في أعلى الملف.</div>
 
+<!-- ════════════════════════════════════════════════════════════════
+     [H1] 🚪 صفحة الترحيب: اختيار الصفة
+     ════════════════════════════════════════════════════════════════ -->
 <main class="welcome" id="w">
   <h1>منصة داره (Darek) للعقارات والمبيتات</h1>
   <p>اختر صفتك للدخول: تصفح، حجز، معاينة، وتواصل مباشر</p>
@@ -153,6 +233,9 @@ input[dir=ltr]{text-align:left}
   </div>
 </main>
 
+<!-- ════════════════════════════════════════════════════════════════
+     [H2] 🔐 نوافذ الدخول: حساب المكتري/المالك + رمز الإدارة
+     ════════════════════════════════════════════════════════════════ -->
 <dialog id="dlgAuth" aria-labelledby="authT">
   <form id="fAuth" class="box" novalidate>
     <h2 id="authT">الدخول</h2>
@@ -162,10 +245,10 @@ input[dir=ltr]{text-align:left}
     </div>
     <div id="regOnly" hidden>
       <label class="fld">الاسم الكامل<input name="fullname" autocomplete="name" maxlength="60"></label>
-      <label class="fld">رقم الهاتف <span class="opt">(اختياري، 8 أرقام)</span><input name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="8" dir="ltr"></label>
+      <label class="fld">رقم الهاتف <span class="opt">(اختياري، 8 أرقام)</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" dir="ltr" placeholder="22 123 456"></label>
     </div>
-    <label class="fld">البريد الإلكتروني<input name="email" type="email" autocomplete="email" maxlength="80" dir="ltr"></label>
-    <label class="fld">كلمة السر <span class="opt">(8 أحرف على الأقل)</span><input name="pass" type="password" autocomplete="current-password" maxlength="128" dir="ltr"></label>
+    <label class="fld">البريد الإلكتروني<input name="email" type="email" autocomplete="email" maxlength="80" dir="ltr" autocapitalize="off" spellcheck="false"></label>
+    <label class="fld">كلمة السر <span class="opt">(8 أحرف على الأقل)</span><span class="pw"><input name="pass" type="password" autocomplete="current-password" maxlength="128" dir="ltr"><button type="button" class="peek" data-act="peek" aria-label="إظهار كلمة السر" aria-pressed="false">👁</button></span></label>
     <p class="err" role="alert"></p>
     <button type="submit" class="btn" id="authBtn">دخول</button>
     <button type="button" class="link" data-act="close" data-id="dlgAuth">إلغاء</button>
@@ -175,13 +258,16 @@ input[dir=ltr]{text-align:left}
 <dialog id="dlgPin" aria-labelledby="pinT">
   <form id="fPin" class="box" novalidate>
     <h2 id="pinT">دخول الإدارة 🔒</h2>
-    <label class="fld">الرمز السري<input name="pin" type="password" autocomplete="current-password" maxlength="128" dir="ltr"></label>
+    <label class="fld">الرمز السري<span class="pw"><input name="pin" type="password" autocomplete="current-password" maxlength="128" dir="ltr"><button type="button" class="peek" data-act="peek" aria-label="إظهار الرمز" aria-pressed="false">👁</button></span></label>
     <p class="err" role="alert"></p>
     <button type="submit" class="btn">دخول</button>
     <button type="button" class="link" data-act="close" data-id="dlgPin">إلغاء</button>
   </form>
 </dialog>
 
+<!-- ════════════════════════════════════════════════════════════════
+     [H3] 💳 نوافذ الدفع، طلب المعاينة، وعرض الصورة بالحجم الكامل
+     ════════════════════════════════════════════════════════════════ -->
 <dialog id="dlgPay" aria-labelledby="payT">
   <form id="fPay" class="box" novalidate>
     <h2 id="payT">💳 الدفع عبر D17 أو تحويل بنكي</h2>
@@ -192,8 +278,8 @@ input[dir=ltr]{text-align:left}
       <div class="pr"><span>RIB البنكي</span><code id="payRib" dir="ltr"></code><button type="button" class="chipb" data-act="copy" id="cpRib">نسخ</button></div>
     </div>
     <ol class="steps mut"><li>حوّل المبلغ عبر D17 أو التحويل البنكي.</li><li>ارفع صورة واضحة لإيصال التحويل.</li><li>تراجع الإدارة الإيصال وتظهر النتيجة في «طلباتي ومدفوعاتي».</li></ol>
-    <label class="fld">صورة إيصال التحويل<input id="payProof" name="proof" type="file" accept="image/*"></label>
-    <img id="payPrev" class="prev" alt="معاينة الإيصال" hidden>
+    <label class="fld">صورة إيصال التحويل<input name="proof" type="file" accept="image/*"></label>
+    <img class="prev" alt="معاينة الإيصال" hidden>
     <p class="err" role="alert"></p>
     <button type="submit" class="btn ok">إرسال إثبات الدفع ✓</button>
     <button type="button" class="link" data-act="close" data-id="dlgPay">إلغاء</button>
@@ -214,7 +300,7 @@ input[dir=ltr]{text-align:left}
 <dialog id="dlgImg" aria-labelledby="imgT">
   <div class="box">
     <h2 id="imgT">إيصال الدفع</h2>
-    <img id="imgFull" class="full" alt="إيصال الدفع بالحجم الكامل">
+    <img id="imgFull" class="full" alt="الصورة بالحجم الكامل">
     <p id="imgCap" class="mut"></p>
     <button type="button" class="btn sm" data-act="close" data-id="dlgImg">إغلاق</button>
   </div>
@@ -222,6 +308,10 @@ input[dir=ltr]{text-align:left}
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+<!-- ════════════════════════════════════════════════════════════════
+     [H4] 🧭 التطبيق بعد الدخول: الشريط، الإعلان، التبويبات والمحتوى
+     المحتوى (#dash) يتعبّى من الجافاسكريبت — شوف [S12]
+     ════════════════════════════════════════════════════════════════ -->
 <div id="app" hidden>
   <header class="nav">
     <div class="navl"><button type="button" class="hb" id="hb" data-act="menu" aria-label="القائمة" aria-controls="menu" aria-expanded="false">☰</button><div class="brand">🏠 داره</div></div>
@@ -241,16 +331,28 @@ input[dir=ltr]{text-align:left}
 (() => {
 document.getElementById('jsfail').remove();
 
-/* ================= الإعدادات ================= */
+/* ══════════════════════════════════════════════════════════════════════
+   [S01] ⚙️ الإعدادات — أوّل بلاصة تبدّل فيها
+   ──────────────────────────────────────────────────────────────────────
+   هنا: نص الإعلان، رقم واتساب، D17، الـRIB، نسبة العربون، واسم السمسار.
+   رمز الإدارة: ولّدو من «🔐 الأمان والبيانات» في لوحة الإدارة والصق السطر مكان admin:
+   (ما دام hash فارغ، يتقبّل الرمز القديم SHA-256 مؤقتاً.)
+   ══════════════════════════════════════════════════════════════════════ */
+const APP_VER = '3.0';
 const CFG = Object.freeze({
   ann: '🔥 عروض مميزة: حجز سريع للعقارات والمبيتات في تونس والساحل عبر منصة داره!',
   wa: '21629461304', d17: '29461304', rib: '14 000 00029384812', depPct: 20,
   brokerName: 'السمسار مهيب',
-  /* رمز الإدارة (PBKDF2-SHA256). ولّده من: لوحة الإدارة ← 🔐 الأمان والبيانات، ثم الصق السطر هنا.
-     ما دام hash فارغاً يُقبل الرمز القديم (SHA-256) مؤقتاً. */
   admin: Object.freeze({ salt: '', iter: 310000, hash: '' }),
   adminLegacySha256: '8bfa6ec511c7840857b9bb932cadbbcea45d49b6f9fba4a808f6e0a255a9bd78'
 });
+
+/* ══════════════════════════════════════════════════════════════════════
+   [S02] 🗂️ المعطيات الثابتة
+   ──────────────────────────────────────────────────────────────────────
+   حب تزيد ولاية؟ زيدها في CITIES. حرفي صيانة؟ في PROS.
+   SEED = العقارات النموذجية متاع الإدارة (ما تتفسخش).
+   ══════════════════════════════════════════════════════════════════════ */
 const USER_ITER = 150000;
 const CITIES = ['تونس','أريانة','بن عروس','منوبة','نابل','سوسة','المنستير','صفاقس'];
 const CATS = { girls:'بنات فقط', students:'طلبة', family:'عائلات', all:'الكل' };
@@ -266,19 +368,24 @@ const SEED = [
 ].map(([id,title,city,addr,fac,min,price,st,end,cat,term]) => Object.freeze({ id,title,city,addr,fac,min,price,st,end,cat,term,owner:'broker',ok:true,seed:true }));
 const BROKER = Object.freeze({ id:'broker', name:CFG.brokerName, role:'broker' });
 
-/* ================= أدوات ================= */
+/* ══════════════════════════════════════════════════════════════════════
+   [S03] 🧰 أدوات صغيرة: تنسيق، أرقام، تواريخ، تنظيف المدخلات
+   ──────────────────────────────────────────────────────────────────────
+   E() = تهريب HTML (لازم على كل نص جاي من المستعمل قبل ما يدخل للصفحة).
+   digits() = يحوّل الأرقام العربية ٠١٢ إلى 012 (لوحات المفاتيح في التليفون).
+   ══════════════════════════════════════════════════════════════════════ */
 const $ = id => document.getElementById(id);
 const E = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const uid = () => (crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,16) : Date.now().toString(36) + Math.random().toString(36).slice(2,10));
 const now = () => new Date().toISOString();
 const nf = new Intl.NumberFormat('en-US');
 const money = n => nf.format(Math.round(+n || 0)) + ' د.ت';
+const nf3 = new Intl.NumberFormat('en-US', { maximumFractionDigits:3 });
+const dinar = n => nf3.format(+n || 0) + ' د.ت';
 const dF = new Intl.DateTimeFormat('ar-TN-u-nu-latn', { day:'numeric', month:'short', year:'numeric' });
 const dtF = new Intl.DateTimeFormat('ar-TN-u-nu-latn', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
 const fmt = (s, f) => { const d = new Date(s); return isNaN(d) ? E(s) : f.format(d); };
 const fDate = s => fmt(s, dF), fDT = s => fmt(s, dtF);
-const nf3 = new Intl.NumberFormat('en-US', { maximumFractionDigits:3 });
-const dinar = n => nf3.format(+n || 0) + ' د.ت';
 const MONTH_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
 const mF = new Intl.DateTimeFormat('ar-TN-u-nu-latn', { month:'long', year:'numeric' });
 const fMonth = m => MONTH_RE.test(m) ? mF.format(new Date(m + '-15T12:00:00')) : '—';
@@ -288,32 +395,32 @@ const obj = v => v && typeof v === 'object' && !Array.isArray(v) ? v : {};
 const str = (v, m = 200) => typeof v === 'string' ? v.slice(0, m) : typeof v === 'number' ? String(v) : '';
 const num = (v, max = 1e7) => { const n = Number(v); return Number.isFinite(n) && n >= 0 ? Math.min(n, max) : 0; };
 const oneOf = (v, list, d) => list.includes(v) ? v : d;
+const digits = s => String(s ?? '').replace(/[٠-٩]/g, d => d.charCodeAt(0) - 1632).replace(/[۰-۹]/g, d => d.charCodeAt(0) - 1776);
+const parseAmt = s => { const t = digits(s).trim().replace(/\s/g, '').replace(',', '.'); return /^\d+(\.\d+)?$/.test(t) ? Number(t) : NaN; };
+const cleanPhone = s => digits(s).replace(/\D/g, '').replace(/^(00216|216)(?=\d{8}$)/, '');
 const norm = s => String(s || '').toLowerCase().replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');
 const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/;
 const byAtDesc = (a, b) => String(b.at).localeCompare(String(a.at));
-const isBroker = () => me && me.role === 'broker';
+const byOpenThenNew = (a, b) => ((b.st === 'open') - (a.st === 'open')) || byAtDesc(a, b);
+const isBroker = () => !!me && me.role === 'broker';
 
-/* ================= التخزين ================= */
-const KEY = 'darek_db_v2', OLD = 'darek_db_v1', IMG = 'darek_img_', SESS = 'darek_sess', LOCK = 'darek_lock';
+/* ══════════════════════════════════════════════════════════════════════
+   [S04] 💾 التخزين: قاعدة المعطيات (localStorage) + الترحيل
+   ──────────────────────────────────────────────────────────────────────
+   db = كل المعطيات (مستعملين، عقارات، مدفوعات، رسائل، فواتير، تشكيات).
+   القاعدة الذهبية: بدّل في db ثم commit(undo). كان فشل الحفظ، undo يرجّع كل شي.
+   normalize() تنظّف أي معطيات داخلة (من التخزين ولا من نسخة احتياطية).
+   حب تزيد نوع معطيات جديد؟ زيدو في normalize()، وكان فيه صورة زيدو في imgRefs() [S05].
+   ⚠️ كل شي محفوظ في هذا المتصفح برك (ما فماش سيرفر).
+   ══════════════════════════════════════════════════════════════════════ */
+const KEY = 'darek_db_v2', OLD = 'darek_db_v1', IMG_LS = 'darek_img_', SESS = 'darek_sess', LOCK = 'darek_lock_', FKEY = 'darek_filters';
+const IMG_ID = /^i\w{1,40}$/;
 const probe = s => { try { const st = window[s], k = '__d'; st.setItem(k,'1'); st.removeItem(k); return st; } catch { return null; } };
 const ls = probe('localStorage'), ss = probe('sessionStorage');
 const lget = (st, k) => { try { return JSON.parse(st && st.getItem(k) || 'null'); } catch { return null; } };
 const lset = (st, k, v) => { try { st && st.setItem(k, JSON.stringify(v)); return true; } catch { return false; } };
 const ldel = (st, k) => { try { st && st.removeItem(k); } catch {} };
-
-const safeImg = u => typeof u === 'string' && /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(u) ? u : '';
-const imgCache = new Map();
-function imgPut(data) {
-  const id = 'i' + uid();
-  if (ls) { try { ls.setItem(IMG + id, data); } catch { return null; } }
-  imgCache.set(id, data); return id;
-}
-function imgGet(id) {
-  if (!id) return '';
-  if (!imgCache.has(id)) imgCache.set(id, safeImg(ls ? ls.getItem(IMG + id) : ''));
-  return imgCache.get(id);
-}
-function imgDel(id) { if (!id) return; imgCache.delete(id); ldel(ls, IMG + id); }
+const imgRef = v => typeof v === 'string' && IMG_ID.test(v) ? v : '';
 
 function normalize(r) {
   r = obj(r);
@@ -321,7 +428,7 @@ function normalize(r) {
   for (const [k, v] of Object.entries(obj(r.ov))) {
     const o = obj(v), x = {};
     if (o.st === 'available' || o.st === 'rented') x.st = o.st;
-    if (typeof o.photo === 'string' && /^i\w+$/.test(o.photo)) x.photo = o.photo;
+    if (imgRef(o.photo)) x.photo = o.photo;
     if (Object.keys(x).length) ov[str(k, 40)] = x;
   }
   return {
@@ -330,39 +437,134 @@ function normalize(r) {
     props: arr(r.props).filter(p => p && p.id).map(p => ({ id:str(p.id,40), title:str(p.title,80), city:oneOf(p.city,CITIES,CITIES[0]), addr:str(p.addr,80), fac:str(p.fac,60) || '—', min:num(p.min,240), price:num(p.price,1e6), st:oneOf(p.st,['available','rented'],'available'), end:str(p.end,40) || '—', cat:oneOf(p.cat,Object.keys(CATS),'all'), term:oneOf(p.term,Object.keys(TERMS),'month'), owner:str(p.owner,40), ok:p.ok === true, at:str(p.at,40) })),
     ov,
     views: arr(r.views).filter(v => v && v.id).map(v => ({ id:str(v.id,40), pid:str(v.pid,40), uid:str(v.uid,40), name:str(v.name,60), slot:str(v.slot,80), at:str(v.at,40), st:oneOf(v.st,['pending','confirmed','cancelled'],'pending') })),
-    payments: arr(r.payments).filter(p => p && p.id).map(p => ({ id:str(p.id,40), pid:str(p.pid,40), uid:str(p.uid,40), name:str(p.name,60), type:oneOf(p.type,['dep','rent'],'dep'), amt:num(p.amt,1e6), img:/^i\w+$/.test(p.img) ? p.img : '', at:str(p.at,40), st:oneOf(p.st,['pending','confirmed','rejected'],'pending') })),
+    payments: arr(r.payments).filter(p => p && p.id).map(p => ({ id:str(p.id,40), pid:str(p.pid,40), uid:str(p.uid,40), name:str(p.name,60), type:oneOf(p.type,['dep','rent'],'dep'), amt:num(p.amt,1e6), img:imgRef(p.img), at:str(p.at,40), st:oneOf(p.st,['pending','confirmed','rejected'],'pending') })),
     chats: arr(r.chats).filter(c => c && c.id && c.thr).map(c => ({ id:str(c.id,40), thr:str(c.thr,40), from:c.from === 'broker' ? 'broker' : 'user', name:str(c.name,60), txt:str(c.txt,1000), at:str(c.at,40) })),
     /* محادثات المكتري ↔ المالك: خيط لكل (عقار، مكتري) */
     dms: arr(r.dms).filter(c => c && c.id && c.pid && c.uid).map(c => ({ id:str(c.id,40), pid:str(c.pid,40), uid:str(c.uid,40), from:c.from === 'owner' ? 'owner' : 'tenant', name:str(c.name,60), txt:str(c.txt,1000), at:str(c.at,40) })),
-    bills: arr(r.bills).filter(b => b && b.id).map(b => ({ id:str(b.id,40), pid:str(b.pid,40), uid:str(b.uid,40), name:str(b.name,60), kind:oneOf(b.kind,Object.keys(BILL),'steg'), amt:num(b.amt,1e5), month:MONTH_RE.test(b.month) ? b.month : '', img:/^i\w+$/.test(b.img) ? b.img : '', at:str(b.at,40) })),
-    issues: arr(r.issues).filter(x => x && x.id).map(x => ({ id:str(x.id,40), pid:str(x.pid,40), uid:str(x.uid,40), name:str(x.name,60), txt:str(x.txt,1000), img:/^i\w+$/.test(x.img) ? x.img : '', at:str(x.at,40), st:oneOf(x.st,['open','resolved'],'open'), by:str(x.by,60), rat:str(x.rat,40) }))
+    bills: arr(r.bills).filter(b => b && b.id).map(b => ({ id:str(b.id,40), pid:str(b.pid,40), uid:str(b.uid,40), name:str(b.name,60), kind:oneOf(b.kind,Object.keys(BILL),'steg'), amt:num(b.amt,1e5), month:MONTH_RE.test(b.month) ? b.month : '', img:imgRef(b.img), at:str(b.at,40) })),
+    issues: arr(r.issues).filter(x => x && x.id).map(x => ({ id:str(x.id,40), pid:str(x.pid,40), uid:str(x.uid,40), name:str(x.name,60), txt:str(x.txt,1000), img:imgRef(x.img), at:str(x.at,40), st:oneOf(x.st,['open','resolved'],'open'), by:str(x.by,60), rat:str(x.rat,40) }))
   };
 }
-/* ترحيل بيانات النسخة الأولى (الصور كانت داخل قاعدة البيانات) */
-function migrate(o) {
-  o = obj(o);
-  const out = { ...o, props: arr(o.extra), payments: [], ov: {} };
-  for (const p of arr(o.payments)) { const d = safeImg(p && p.img); out.payments.push({ ...p, img: d ? imgPut(d) : '' }); }
-  for (const [k, v] of Object.entries(obj(o.ov))) { const d = safeImg(v && v.photo); out.ov[k] = { ...obj(v), photo: d ? imgPut(d) : undefined }; }
-  return out;
-}
-function load() {
-  let raw = lget(ls, KEY);
-  if (!raw) { const o = lget(ls, OLD); if (o) { raw = normalize(migrate(o)); if (lset(ls, KEY, raw)) ldel(ls, OLD); } }
-  return normalize(raw);
-}
-let db = load();
+const load = () => normalize(lget(ls, KEY));
+let db = normalize(null);
 const save = () => !ls || lset(ls, KEY, db);
 function commit(undo) {
   invalidate();
   if (save()) return true;
   if (undo) undo();
   invalidate();
-  toast('تعذّر الحفظ: مساحة التخزين ممتلئة. صدّر البيانات أو احذف صوراً قديمة.', true);
+  toast('تعذّر الحفظ: مساحة التخزين ممتلئة. صدّر نسخة احتياطية ثم احذف معطيات قديمة.', true);
   return false;
 }
+/* ترحيل النسخة الأولى (v1): الصور كانت داخل قاعدة المعطيات نفسها */
+async function migrateV1() {
+  const o = lget(ls, OLD); if (!o || lget(ls, KEY)) return;
+  const out = { ...obj(o), props:arr(o.extra), payments:[], ov:{} };
+  for (const p of arr(o.payments)) { const b = dataToBlob(p && p.img); out.payments.push({ ...p, img:b ? (await imgPut(b)) || '' : '' }); }
+  for (const [k, v] of Object.entries(obj(o.ov))) { const b = dataToBlob(v && v.photo); out.ov[k] = { ...obj(v), photo:b ? (await imgPut(b)) || undefined : undefined }; }
+  if (lset(ls, KEY, normalize(out))) ldel(ls, OLD);
+}
 
-/* ================= العقارات (مع ذاكرة مؤقتة) ================= */
+/* ══════════════════════════════════════════════════════════════════════
+   [S05] 🖼️ الصور: IndexedDB
+   ──────────────────────────────────────────────────────────────────────
+   علاش؟ localStorage فيه 5 ميغا برك وكل صورة base64 تاكل منو برشا → «مساحة ممتلئة».
+   توّا الصور تتخزّن كـBlob في IndexedDB (مئات الميغات) وتتعرض بروابط blob:.
+   - imgPut(blob) → يرجّع id (ولا null كان فشل)      - imgGet(id) → رابط للعرض (فوري)
+   - imgDel(id)                                      - imgSync() → يحمّل الصور الناقصة
+   كان IndexedDB موش متوفّر (متصفح قديم/خاص)، نرجعو أوتوماتيك لـlocalStorage.
+   الصور القديمة (darek_img_* في localStorage) تتنقل وحدها لـIndexedDB عند التشغيل.
+   ══════════════════════════════════════════════════════════════════════ */
+let idb = null, askedPersist = false;
+const urls = new Map();
+function idbOpen() {
+  return new Promise(res => {
+    if (!window.indexedDB) return res(null);
+    let r; try { r = indexedDB.open('darek', 1); } catch { return res(null); }
+    r.onupgradeneeded = () => r.result.createObjectStore('img');
+    r.onsuccess = () => { const d = r.result; d.onversionchange = () => d.close(); res(d); };
+    r.onerror = r.onblocked = () => res(null);
+  });
+}
+function idbDo(mode, fn) {
+  return new Promise((res, rej) => {
+    let tx; try { tx = idb.transaction('img', mode); } catch (e) { return rej(e); }
+    const r = fn(tx.objectStore('img'));
+    tx.oncomplete = () => res(r ? r.result : undefined);
+    tx.onerror = tx.onabort = () => rej(tx.error || new Error('idb'));
+  });
+}
+const safeImg = u => typeof u === 'string' && /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(u) ? u : '';
+const isImgBlob = b => b instanceof Blob && /^image\/(jpeg|png|webp)$/.test(b.type);
+function dataToBlob(u) {
+  const d = safeImg(u); if (!d) return null;
+  const bin = atob(d.slice(d.indexOf(',') + 1)), a = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
+  return new Blob([a], { type:'image/jpeg' });
+}
+const blobToData = b => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); r.readAsDataURL(b); });
+async function imgPut(blob, id = 'i' + uid()) {
+  try {
+    if (!askedPersist && navigator.storage && navigator.storage.persist) { askedPersist = true; navigator.storage.persist().catch(() => {}); }
+    if (idb) { await idbDo('readwrite', st => st.put({ blob, at:Date.now() }, id)); urls.set(id, URL.createObjectURL(blob)); return id; }
+    const data = await blobToData(blob);
+    if (ls) ls.setItem(IMG_LS + id, data);
+    urls.set(id, data); return id;
+  } catch { return null; }
+}
+const imgGet = id => (id && urls.get(id)) || '';
+async function imgBlob(id) {
+  if (idb) { try { const r = await idbDo('readonly', st => st.get(id)); if (r && isImgBlob(r.blob)) return r.blob; } catch {} }
+  try { return dataToBlob(ls ? ls.getItem(IMG_LS + id) : ''); } catch { return null; }
+}
+async function imgDel(id) {
+  if (!id) return;
+  const u = urls.get(id); urls.delete(id);
+  if (u && u.startsWith('blob:')) URL.revokeObjectURL(u);
+  ldel(ls, IMG_LS + id);
+  if (idb) { try { await idbDo('readwrite', st => st.delete(id)); } catch {} }
+}
+function imgRefs() {
+  const s = new Set(), add = i => { if (imgRef(i)) s.add(i); };
+  db.payments.forEach(p => add(p.img)); db.bills.forEach(b => add(b.img)); db.issues.forEach(x => add(x.img)); Object.values(db.ov).forEach(o => add(o.photo));
+  return s;
+}
+async function imgSync() {
+  for (const id of imgRefs()) {
+    if (urls.has(id)) continue;
+    const b = await imgBlob(id);
+    if (b) urls.set(id, URL.createObjectURL(b));
+  }
+}
+async function imgMigrate() {
+  if (!idb || !ls) return;
+  const keys = [];
+  for (let i = 0; i < ls.length; i++) { const k = ls.key(i); if (k && k.startsWith(IMG_LS)) keys.push(k); }
+  for (const k of keys) {
+    const id = k.slice(IMG_LS.length), b = dataToBlob(ls.getItem(k));
+    if (!b || !IMG_ID.test(id)) { ldel(ls, k); continue; }
+    try { await idbDo('readwrite', st => st.put({ blob:b, at:Date.now() }, id)); ldel(ls, k); } catch { break; }
+  }
+}
+/* تنظيف: صور يتيمة (ما عادش حتى سطر يستعملها) عمرها أكثر من يوم */
+async function imgGc() {
+  if (!idb) return;
+  const refs = imgRefs(), old = Date.now() - 864e5;
+  try {
+    for (const k of await idbDo('readonly', st => st.getAllKeys())) {
+      if (refs.has(k)) continue;
+      const r = await idbDo('readonly', st => st.get(k));
+      if (!r || !(r.at > old)) await idbDo('readwrite', st => st.delete(k));
+    }
+  } catch {}
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   [S06] 🏘️ العقارات: العقارات النموذجية + اللي زادهم الملاّكة
+   ──────────────────────────────────────────────────────────────────────
+   props() = القائمة الكاملة (مع التعديلات db.ov: الحالة والصورة).
+   art() = رسم افتراضي ملوّن لكل عقار ما عندوش صورة.
+   ══════════════════════════════════════════════════════════════════════ */
 let _props = null, _byId = null;
 const invalidate = () => { _props = null; _byId = null; };
 function props() {
@@ -379,13 +581,18 @@ function art(id) {
   artCache.set(id, u); return u;
 }
 
-/* ================= التشفير ================= */
+/* ══════════════════════════════════════════════════════════════════════
+   [S07] 🔐 التشفير وكلمات السر + الحماية من التخمين
+   ──────────────────────────────────────────────────────────────────────
+   كلمات السر تتخزّن PBKDF2-SHA256 (ملح + 150000 دورة)، عمرها ما تتخزّن واضحة.
+   Sha = بديل JavaScript كي crypto.subtle موش موجود (صفحة موش HTTPS) — أبطأ برشا.
+   القفل (lock) منفصل: «auth» للحسابات و«pin» للإدارة، باش غلط الواحد ما يقفلش الآخر.
+   ══════════════════════════════════════════════════════════════════════ */
 const enc = new TextEncoder();
 const hex = b => Array.from(new Uint8Array(b), x => x.toString(16).padStart(2,'0')).join('');
 const unhex = h => new Uint8Array((h.match(/../g) || []).map(x => parseInt(x, 16)));
 const randHex = n => hex(crypto.getRandomValues(new Uint8Array(n)));
 const ctEq = (a, b) => { if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length || !a.length) return false; let r = 0; for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i); return r === 0; };
-/* بديل JavaScript لـ SHA-256/PBKDF2 عند غياب crypto.subtle (صفحة غير HTTPS) */
 const Sha = (() => {
   const K = new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
   const IV = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
@@ -433,41 +640,55 @@ async function pbkdf2(pass, saltHex, iter) {
     const k = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveBits']);
     return hex(await crypto.subtle.deriveBits({ name:'PBKDF2', hash:'SHA-256', salt:unhex(saltHex), iterations:iter }, k, 256));
   }
-  await new Promise(r => setTimeout(r, 20));
+  await new Promise(r => setTimeout(r, 30));
   return hex(Sha.pbkdf2(enc.encode(pass), unhex(saltHex), iter));
 }
 async function verifyAdmin(p) {
   if (CFG.admin.hash) return ctEq(await pbkdf2(p, CFG.admin.salt, CFG.admin.iter), CFG.admin.hash);
   return ctEq(await sha256Hex(p), CFG.adminLegacySha256);
 }
-/* إبطاء محاولات التخمين */
-const lockLeft = () => Math.max(0, (obj(lget(ls, LOCK)).until || 0) - Date.now());
-function lockFail() {
-  const s = obj(lget(ls, LOCK)); s.n = (s.n || 0) + 1;
+const lockLeft = scope => Math.max(0, (obj(lget(ls, LOCK + scope)).until || 0) - Date.now());
+function lockFail(scope) {
+  const s = obj(lget(ls, LOCK + scope)); s.n = (s.n || 0) + 1;
   if (s.n >= 5) { s.until = Date.now() + 30000 * 2 ** Math.min(5, s.k || 0); s.k = (s.k || 0) + 1; s.n = 0; }
-  lset(ls, LOCK, s);
+  lset(ls, LOCK + scope, s);
 }
-const lockOk = () => ldel(ls, LOCK);
+const lockOk = scope => ldel(ls, LOCK + scope);
+const lockMsg = ms => `محاولات كثيرة. أعد المحاولة بعد ${Math.ceil(ms / 1000)} ثانية.`;
 
-/* ================= واجهة عامة ================= */
+/* ══════════════════════════════════════════════════════════════════════
+   [S08] 🪟 واجهة عامة: إشعارات، نوافذ، أزرار مشغولة، واتساب، ضغط الصور ومعاينتها
+   ──────────────────────────────────────────────────────────────────────
+   shrink(file) يصغّر أي صورة (حتى من كاميرا التليفون) لـJPEG خفيف ويصلّح اتجاهها.
+   أي <input type=file> في نموذج فيه <img class="prev"> تتعرض معاينتو وحدها.
+   ══════════════════════════════════════════════════════════════════════ */
 let tT;
 function toast(m, bad) {
   const t = $('toast'); t.textContent = m; t.classList.toggle('bad', !!bad); t.hidden = false;
-  clearTimeout(tT); tT = setTimeout(() => { t.hidden = true; }, 3800);
+  clearTimeout(tT); tT = setTimeout(() => { t.hidden = true; }, 4200);
 }
 function openDlg(id) {
   const d = $(id); d.querySelectorAll('.err').forEach(e => { e.textContent = ''; });
   if (typeof d.showModal === 'function') { if (!d.open) d.showModal(); } else d.setAttribute('open', '');
-  const f = [...d.querySelectorAll('input:not([type=radio]),button[type=submit],button')].find(x => !x.closest('[hidden]'));
+  const f = [...d.querySelectorAll('input:not([type=radio]):not([type=file])')].find(x => !x.closest('[hidden]')) || d.querySelector('button[type=submit],button');
   if (f) setTimeout(() => f.focus(), 30);
 }
 function closeDlg(id) { const d = $(id); if (d.open) { if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); } }
-document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d) closeDlg(d.id); }));
+document.querySelectorAll('dialog').forEach(d => {
+  d.addEventListener('click', e => { if (e.target === d) closeDlg(d.id); });
+  d.addEventListener('close', () => d.querySelectorAll('img.prev').forEach(clearPrev));
+});
 const setErr = (f, m) => { f.querySelector('.err').textContent = m; return false; };
-const busy = (f, on) => f.querySelectorAll('button').forEach(b => { b.disabled = on; });
-function goWA(num, txt) {
+/* يعطّل أزرار النموذج ويكتب «لحظة…» على زر الإرسال باش المستعمل يفهم إلّي الخدمة ماشية */
+function busy(f, on, label = '⏳ لحظة…') {
+  f.querySelectorAll('button').forEach(b => { b.disabled = on; });
+  const s = f.querySelector('button[type=submit]'); if (!s) return;
+  if (on) { s.dataset.t = s.textContent; s.textContent = label; }
+  else if (s.dataset.t) { s.textContent = s.dataset.t; delete s.dataset.t; }
+}
+function goWA(n, txt) {
   const a = document.createElement('a');
-  a.href = 'https://wa.me/' + String(num).replace(/\D/g,'') + '?text=' + encodeURIComponent(txt);
+  a.href = 'https://wa.me/' + String(n).replace(/\D/g,'') + '?text=' + encodeURIComponent(txt);
   a.target = '_blank'; a.rel = 'noopener noreferrer';
   document.body.appendChild(a); a.click(); a.remove();
 }
@@ -476,23 +697,49 @@ async function copy(text) {
   try { await navigator.clipboard.writeText(text); toast('تم النسخ: ' + text); }
   catch { toast('انسخ يدوياً: ' + text); }
 }
-async function shrink(file, max, q) {
-  if (!file || !/^image\//.test(file.type)) throw new Error('type');
-  if (file.size > 15 * 1024 * 1024) throw new Error('size');
+const isImgFile = f => !!f && (/^image\//.test(f.type) || (!f.type && /\.(jpe?g|png|webp|gif|bmp|heic|heif)$/i.test(f.name || '')));
+async function shrink(file, max = 1400, q = 0.72) {
+  if (!isImgFile(file)) throw new Error('type');
+  if (file.size > 20 * 1024 * 1024) throw new Error('size');
   let src = null;
-  if (window.createImageBitmap) { try { src = await createImageBitmap(file); } catch {} }
+  if (window.createImageBitmap) { try { src = await createImageBitmap(file, { imageOrientation:'from-image' }); } catch { try { src = await createImageBitmap(file); } catch {} } }
   if (!src) src = await new Promise((res, rej) => { const u = URL.createObjectURL(file), im = new Image(); im.onload = () => { URL.revokeObjectURL(u); res(im); }; im.onerror = () => { URL.revokeObjectURL(u); rej(new Error('decode')); }; im.src = u; });
-  const w = src.width, h = src.height, k = Math.min(1, max / Math.max(w, h));
+  const w = src.width, h = src.height;
+  if (!w || !h) throw new Error('decode');
+  const k = Math.min(1, max / Math.max(w, h));
   const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w * k)); c.height = Math.max(1, Math.round(h * k));
   const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(src, 0, 0, c.width, c.height);
   if (src.close) src.close();
-  return c.toDataURL('image/jpeg', q);
+  const b = c.toBlob ? await new Promise(r => c.toBlob(r, 'image/jpeg', q)) : null;
+  const out = b || dataToBlob(c.toDataURL('image/jpeg', q));
+  if (!out) throw new Error('decode');
+  return out;
 }
-const imgErr = e => ({ type:'الملف ليس صورة.', size:'الصورة أكبر من 15 ميغابايت.', decode:'تعذّرت قراءة الصورة. استعمل JPG أو PNG.' }[e && e.message] || 'تعذّرت معالجة الصورة.');
+const imgErr = e => ({ type:'الملف ليس صورة.', size:'الصورة أكبر من 20 ميغابايت.', decode:'تعذّرت قراءة الصورة. استعمل JPG أو PNG (صور HEIC: غيّر إعداد الكاميرا إلى «الأكثر توافقاً»).' }[e && e.message] || 'تعذّرت معالجة الصورة.');
+/* حفظ صورة من نموذج: يرجّع { img } ولا { err } */
+async function saveImg(file, max) {
+  try { const id = await imgPut(await shrink(file, max)); return id ? { img:id } : { err:'مساحة التخزين ممتلئة. لا يمكن حفظ الصورة.' }; }
+  catch (e) { return { err:imgErr(e) }; }
+}
+function clearPrev(im) { if (im.dataset.u) URL.revokeObjectURL(im.dataset.u); delete im.dataset.u; im.hidden = true; im.removeAttribute('src'); }
+function showPrev(input) {
+  const im = input.form && input.form.querySelector('img.prev'); if (!im) return;
+  clearPrev(im);
+  const f = input.files[0]; if (!isImgFile(f)) return;
+  im.dataset.u = URL.createObjectURL(f); im.src = im.dataset.u; im.hidden = false;
+}
 
-/* ================= الجلسة والدخول ================= */
-let me = null, role = 'tenant', authMode = 'login', tab = 'props', curThr = null, curHome = null, curDm = null, payCtx = null, viewCtx = null, prevUrl = null;
-const F = { q:'', city:'', cat:'', term:'', max:0 };
+/* ══════════════════════════════════════════════════════════════════════
+   [S09] 👤 الجلسة: الدخول، التسجيل والخروج
+   ──────────────────────────────────────────────────────────────────────
+   - جلسة المكتري/المالك: localStorage (30 يوم) → تبقى حتى بعد غلق المتصفح.
+   - جلسة الإدارة: sessionStorage (8 ساعات) → تتمسح كي تسكّر النافذة.
+   - الحساب مربوط بالبريد + الصفة: نفس البريد ينجم يكون مكتري ومالك بحسابين.
+   - حساب استرجعناه من نسخة احتياطية (بلا كلمة سر): صاحبو يعاود «حساب جديد» بنفس البريد.
+   ══════════════════════════════════════════════════════════════════════ */
+let me = null, role = 'tenant', authMode = 'login', tab = 'props', curThr = null, curHome = null, curDm = null, payCtx = null, viewCtx = null;
+const F0 = Object.freeze({ q:'', city:'', cat:'', term:'', max:0 });
+const F = { ...F0 };
 function restore() {
   const b = lget(ss, SESS);
   if (b && b.role === 'broker' && b.exp > Date.now()) return BROKER;
@@ -515,40 +762,53 @@ function setAuthMode(m) {
   $('authBtn').textContent = authMode === 'register' ? 'إنشاء الحساب والدخول' : 'دخول';
   f.querySelector('.err').textContent = '';
 }
+function peek(id, el) {
+  const i = el.previousElementSibling, show = i.type === 'password';
+  i.type = show ? 'text' : 'password';
+  el.setAttribute('aria-pressed', String(show)); el.setAttribute('aria-label', show ? 'إخفاء' : 'إظهار');
+  i.focus();
+}
 async function onAuth(f) {
-  const left = lockLeft(); if (left) return setErr(f, `محاولات كثيرة. أعد المحاولة بعد ${Math.ceil(left / 1000)} ثانية.`);
+  const left = lockLeft('auth'); if (left) return setErr(f, lockMsg(left));
   const el = f.elements, email = el.email.value.trim().toLowerCase(), pass = el.pass.value;
   if (!EMAIL_RE.test(email)) return setErr(f, 'أدخل بريداً إلكترونياً صحيحاً.');
   if (pass.length < 8) return setErr(f, 'كلمة السر 8 أحرف على الأقل.');
   let u = db.users.find(x => x.email === email && x.role === role);
-  busy(f, true);
-  try {
-    if (authMode === 'register') {
-      const name = el.fullname.value.trim().replace(/\s+/g, ' '), phone = el.phone.value.replace(/\s/g, '');
-      if (name.length < 3) return setErr(f, 'أدخل الاسم الكامل.');
-      if (phone && !/^[2-9]\d{7}$/.test(phone)) return setErr(f, 'رقم الهاتف التونسي 8 أرقام.');
-      if (u && u.hash) return setErr(f, 'هذا البريد مسجّل مسبقاً. استعمل «تسجيل الدخول».');
+  if (authMode === 'register') {
+    const name = el.fullname.value.trim().replace(/\s+/g, ' '), phone = cleanPhone(el.phone.value);
+    if (name.length < 3) return setErr(f, 'أدخل الاسم الكامل.');
+    if (phone && !/^[2-9]\d{7}$/.test(phone)) return setErr(f, 'رقم الهاتف التونسي 8 أرقام (مثال: 22123456).');
+    if (u && u.hash) return setErr(f, 'هذا البريد مسجّل مسبقاً. استعمل «تسجيل الدخول».');
+    if (pass.toLowerCase() === email || /^(.)\1+$/.test(pass) || /^(12345678|123456789|azertyui|password)/i.test(pass)) return setErr(f, 'كلمة السر سهلة برشا. اختر كلمة أقوى.');
+    busy(f, true, '⏳ جاري إنشاء الحساب…');
+    try {
       const salt = randHex(16), hash = await pbkdf2(pass, salt, USER_ITER);
       if (u) { const old = { ...u }; Object.assign(u, { name, phone, salt, hash, iter:USER_ITER }); if (!commit(() => Object.assign(u, old))) return; }
       else { u = { id:'u' + uid(), name, email, phone, role, salt, hash, iter:USER_ITER, at:now() }; db.users.push(u); if (!commit(() => db.users.pop())) return; }
-    } else {
-      if (!u) { lockFail(); return setErr(f, 'البريد أو كلمة السر غير صحيحة. ليس لديك حساب؟ اختر «حساب جديد».'); }
-      if (!u.hash) { /* حساب قديم بلا كلمة سر: تُعتمد كلمة السر الحالية */
-        u.salt = randHex(16); u.hash = await pbkdf2(pass, u.salt, USER_ITER); u.iter = USER_ITER;
-        if (!commit()) return; toast('تم تأمين حسابك بكلمة السر الجديدة.');
-      } else if (!ctEq(await pbkdf2(pass, u.salt, u.iter), u.hash)) { lockFail(); return setErr(f, 'البريد أو كلمة السر غير صحيحة.'); }
+    } finally { busy(f, false); }
+    toast('مرحباً ' + u.name + '! تم إنشاء حسابك.');
+  } else {
+    if (!u) {
+      const other = db.users.find(x => x.email === email && x.hash);
+      if (other) return setErr(f, `هذا البريد مسجّل كـ${RL[other.role]}. ارجع واختر صفة «${RL[other.role]}».`);
+      lockFail('auth'); return setErr(f, 'البريد أو كلمة السر غير صحيحة. ليس لديك حساب؟ اختر «حساب جديد».');
     }
-    lockOk(); f.reset(); closeDlg('dlgAuth'); startSession(u);
-  } finally { busy(f, false); }
+    if (!u.hash) { setAuthMode('register'); return setErr(f, 'هذا الحساب يحتاج كلمة سر جديدة: أكمل «حساب جديد» بنفس البريد.'); }
+    busy(f, true, '⏳ جاري التحقق…');
+    let ok;
+    try { ok = ctEq(await pbkdf2(pass, u.salt, u.iter), u.hash); } finally { busy(f, false); }
+    if (!ok) { lockFail('auth'); return setErr(f, 'البريد أو كلمة السر غير صحيحة.'); }
+  }
+  lockOk('auth'); f.reset(); closeDlg('dlgAuth'); startSession(u);
 }
 async function onPin(f) {
-  const left = lockLeft(); if (left) return setErr(f, `محاولات كثيرة. أعد المحاولة بعد ${Math.ceil(left / 1000)} ثانية.`);
+  const left = lockLeft('pin'); if (left) return setErr(f, lockMsg(left));
   const p = f.elements.pin.value; if (!p) return setErr(f, 'أدخل الرمز السري.');
-  busy(f, true);
-  try {
-    if (!(await verifyAdmin(p))) { lockFail(); f.elements.pin.select(); return setErr(f, 'الرمز غير صحيح.'); }
-    lockOk(); f.reset(); closeDlg('dlgPin'); startSession(BROKER);
-  } finally { busy(f, false); }
+  busy(f, true, '⏳ جاري التحقق…');
+  let ok;
+  try { ok = await verifyAdmin(p); } finally { busy(f, false); }
+  if (!ok) { lockFail('pin'); f.elements.pin.select(); return setErr(f, 'الرمز غير صحيح.'); }
+  lockOk('pin'); f.reset(); closeDlg('dlgPin'); startSession(BROKER);
 }
 function startSession(u) {
   me = u;
@@ -557,21 +817,38 @@ function startSession(u) {
   enterApp();
 }
 function enterApp() {
-  const home = housed();
-  tab = { tenant:home ? 'home' : 'props', landlord:'my_props', broker:'broker_all' }[me.role];
-  $('who').textContent = RL[me.role] + ' · ' + me.name;
-  $('heroP').textContent = { tenant:home ? 'دارك: محادثة المالك، الفواتير والتشكيات في مكان واحد' : 'ابحث، عاين، واحجز مبيتك بثقة', landlord:'أضف عقاراتك وتابع حجوزاتها ومداخيلها', broker:'راجع الطلبات والمدفوعات من مكان واحد' }[me.role];
+  const h = location.hash.slice(1), items = tabsFor(me.role);
+  tab = items.some(i => i[0] === h) ? h : items[0][0];
   $('w').hidden = true; $('app').hidden = false;
   render(); window.scrollTo(0, 0);
 }
-function logout() {
-  ldel(ss, SESS); ldel(ls, SESS);
-  me = null; curThr = null; curHome = null; curDm = null; Object.assign(F, { q:'', city:'', cat:'', term:'', max:0 });
+/* leave() = ترجع لصفحة الترحيب بلا ما تمسّ الجلسة المخزّنة؛ logout() = تمسحها زادة */
+function leave() {
+  me = null; curThr = null; curHome = null; curDm = null; Object.assign(F, F0); ldel(ss, FKEY);
   toggleMenu(false); $('dash').innerHTML = '';
+  document.querySelectorAll('dialog').forEach(d => closeDlg(d.id));
+  history.replaceState(null, '', location.pathname + location.search);
   $('app').hidden = true; $('w').hidden = false; window.scrollTo(0, 0);
 }
+function logout() {
+  if (isBroker()) ldel(ss, SESS); else ldel(ls, SESS);
+  leave();
+}
+/* نافذة أخرى دخلت ولا خرجت → نتبعوها */
+function syncSession() {
+  const next = restore();
+  if (next && me && next.id === me.id) return;
+  if (me && !isBroker()) { leave(); toast('تغيّرت الجلسة من نافذة أخرى.'); }
+  if (!me && next) { me = next; enterApp(); }
+}
 
-/* ================= التنقل ================= */
+/* ══════════════════════════════════════════════════════════════════════
+   [S10] 🧭 التنقل: التبويبات حسب الصفة + الرابط (#)
+   ──────────────────────────────────────────────────────────────────────
+   حب تزيد تبويب؟ 1) زيدو في tabsFor()  2) زيد الصفحة متاعو في VIEWS [S12].
+   التبويب الحالي يتكتب في الرابط (#pays مثلاً) → التحديث (F5) يرجّعك لنفس البلاصة،
+   وزر «رجوع» في المتصفح/التليفون يرجّعك للتبويب اللي قبلو.
+   ══════════════════════════════════════════════════════════════════════ */
 function counts() {
   return {
     props: db.props.filter(p => !p.ok).length,
@@ -592,6 +869,7 @@ function tabsFor(r) {
   const c = counts();
   return [['broker_all','⚡ لوحة التحكم',c.props + c.views],['pays','💳 المدفوعات',c.pays],['inbox','💬 رسائل الدعم',c.inbox],['tenants','🏠 مكترو الإدارة',dmN],['ll_issues','⚠️ التشكيات',issN],['ll_bills','🧾 الفواتير'],['props','🏘️ العقارات المنشورة'],['settings','🔐 الأمان والبيانات']];
 }
+const heroText = () => isBroker() ? 'راجع الطلبات والمدفوعات من مكان واحد' : me.role === 'landlord' ? 'أضف عقاراتك وتابع حجوزاتها ومداخيلها' : housed() ? 'دارك: محادثة المالك، الفواتير والتشكيات في مكان واحد' : 'ابحث، عاين، واحجز مبيتك بثقة';
 function paintNav(items) {
   const h = items.map(([k, l, n]) => `<button type="button" data-act="tab" data-id="${k}"${tab === k ? ' class="on" aria-current="page"' : ''}>${E(l)}${n ? `<span class="cnt">${n}</span>` : ''}</button>`).join('');
   $('tabs').innerHTML = h;
@@ -602,17 +880,19 @@ function toggleMenu(f) {
   m.classList.toggle('open', o); $('scrim').hidden = !o; $('hb').setAttribute('aria-expanded', String(o));
   if (o) { const b = m.querySelector('button.on') || m.querySelector('button'); if (b) b.focus(); }
 }
+function go(id) {
+  toggleMenu(false);
+  if (tab !== id) { tab = id; history.pushState(null, '', '#' + id); }
+  render(); window.scrollTo(0, 0); $('dash').focus({ preventScroll:true });
+}
 
-/* ================= العرض ================= */
-const empty = t => `<div class="empty">${t}</div>`;
-const PILL = { pending:['قيد المراجعة',''], confirmed:['مؤكد ✓','g'], rejected:['مرفوض','x'], cancelled:['ملغى','x'], available:['متاح','g'], rented:['مكرى','x'], open:['مفتوحة','w'], resolved:['تمّ الإصلاح ✓','g'] };
-const pill = s => { const [l, c] = PILL[s] || [s, '']; return `<span class="pill ${c}">${E(l)}</span>`; };
-const btn = (act, id, label, cls = '') => `<button type="button" class="btn sm ${cls}" data-act="${act}" data-id="${E(id)}">${label}</button>`;
-const uname = id => (db.users.find(x => x.id === id) || {}).name || (id === 'broker' ? 'الإدارة' : 'مستخدم');
-const thumb = (act, id, img, label) => img ? `<button type="button" class="thumbbtn" data-act="${act}" data-id="${E(id)}" aria-label="${label}"><img class="thumb" src="${img}" alt="" loading="lazy" decoding="async"></button>` : '';
-
-/* ================= السكن بعد تأكيد العربون ================= */
-/* مساكن المكتري = عقارات أكّدت الإدارة عربونه فيها */
+/* ══════════════════════════════════════════════════════════════════════
+   [S11] 🏠 السكن «داري»: بعد ما الإدارة تأكّد العربون
+   ──────────────────────────────────────────────────────────────────────
+   homesOf(مكتري) = العقارات اللي عربونو فيها مؤكد.
+   tenantsOf(مالك) = المكترين المؤكدين في عقاراتو.
+   الإدارة = «مالك» العقارات النموذجية (owner:'broker')، وتشوف الفواتير والتشكيات الكل.
+   ══════════════════════════════════════════════════════════════════════ */
 const homesOf = tu => [...new Set(db.payments.filter(p => p.uid === tu && p.type === 'dep' && p.st === 'confirmed').map(p => p.pid))].map(prop).filter(Boolean);
 const housed = () => !!me && me.role === 'tenant' && homesOf(me.id).length > 0;
 function myHomes() {
@@ -620,11 +900,9 @@ function myHomes() {
   if (!H.some(p => p.id === curHome)) curHome = H.length ? H[0].id : null;
   return H;
 }
-/* المالك (أو الإدارة لعقاراتها) يرى ما يخصّ عقاراته فقط؛ الإدارة ترى الفواتير والتشكيات كلها */
 const ownsProp = pid => { const p = prop(pid); return !!(me && p && p.owner === me.id); };
 const ownIssues = () => isBroker() ? db.issues : db.issues.filter(x => ownsProp(x.pid));
 const ownBills = () => isBroker() ? db.bills : db.bills.filter(b => ownsProp(b.pid));
-/* مكترو المالك المؤكدون: [{ key, pid, uid }] */
 function tenantsOf(owner) {
   const m = new Map();
   for (const py of db.payments) {
@@ -642,16 +920,53 @@ function dmThreads() {
   return T.map(t => { let last = null; for (const c of db.dms) if (c.pid === t.pid && c.uid === t.uid) last = c; return { ...t, last, unread:!!last && last.from === other }; })
     .sort((a, b) => String(b.last ? b.last.at : '').localeCompare(String(a.last ? a.last.at : '')));
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   [S12] 🖥️ العرض: render() + الصفحات (VIEWS)
+   ──────────────────────────────────────────────────────────────────────
+   كل تبويب = دالة في VIEWS ترجّع HTML. render() ترسم التبويب الحالي.
+   softRender() = نفس الشي أما تحافظ على اللي المستعمل بدا يكتب فيه
+   (تستعمل كي توصل تحديثات من نافذة أخرى، باش ما يضيعلوش النص).
+   ══════════════════════════════════════════════════════════════════════ */
+const empty = t => `<div class="empty">${t}</div>`;
+const PILL = { pending:['قيد المراجعة',''], confirmed:['مؤكد ✓','g'], rejected:['مرفوض','x'], cancelled:['ملغى','x'], available:['متاح','g'], rented:['مكرى','x'], open:['مفتوحة','w'], resolved:['تمّ الإصلاح ✓','g'] };
+const pill = s => { const [l, c] = PILL[s] || [s, '']; return `<span class="pill ${c}">${E(l)}</span>`; };
+const btn = (act, id, label, cls = '') => `<button type="button" class="btn sm ${cls}" data-act="${act}" data-id="${E(id)}">${label}</button>`;
+const opt = (v, l, cur) => `<option value="${E(v)}"${cur === v ? ' selected' : ''}>${E(l)}</option>`;
+const uname = id => (db.users.find(x => x.id === id) || {}).name || (id === 'broker' ? 'الإدارة' : 'مستخدم');
+const thumb = (act, id, img, label) => img ? `<button type="button" class="thumbbtn" data-act="${act}" data-id="${E(id)}" aria-label="${label}"><img class="thumb" src="${img}" alt="" loading="lazy" decoding="async"></button>` : '';
+const prevImg = '<img class="prev" alt="معاينة الصورة" hidden>';
 const homePick = H => H.length > 1 ? `<section class="panel"><label class="fld">المسكن<select id="home">${H.map(p => opt(p.id, p.title, curHome)).join('')}</select></label></section>` : '';
 
 function render() {
   if (!me) return;
   const items = tabsFor(me.role);
   if (!items.some(i => i[0] === tab)) tab = items[0][0];
+  if (location.hash.slice(1) !== tab) history.replaceState(null, '', '#' + tab);
+  $('who').textContent = RL[me.role] + ' · ' + me.name;
+  $('heroP').textContent = heroText();
   paintNav(items);
   $('dash').innerHTML = VIEWS[tab]();
   if (tab === 'props') paintGrid();
+  if (tab === 'settings') fillQuota();
   const c = $('chBox'); if (c) c.scrollTop = c.scrollHeight;
+}
+function softRender() {
+  if (!me) return;
+  const d = $('dash');
+  /* صورة مختارة في نموذج؟ ما نعاودوش الرسم (المتصفح ما يخلّيناش نرجّعوها) — نحدّثو الشريط برك */
+  if ([...d.querySelectorAll('input[type=file]')].some(i => i.files && i.files.length)) return paintNav(tabsFor(me.role));
+  const key = el => el.form && el.form.id && el.name ? el.form.id + '.' + el.name : '';
+  const fields = () => d.querySelectorAll('form input:not([type=file]):not([type=radio]),form textarea,form select');
+  const vals = new Map(), a = document.activeElement, aKey = a && d.contains(a) ? key(a) : '';
+  const sel = aKey && typeof a.selectionStart === 'number' ? [a.selectionStart, a.selectionEnd] : null;
+  fields().forEach(el => { const k = key(el); if (k) vals.set(k, el.value); });
+  render();
+  fields().forEach(el => { const k = key(el); if (vals.has(k)) el.value = vals.get(k); });
+  if (aKey) {
+    const [fid, name] = aKey.split('.'), el = $(fid) && $(fid).elements[name];
+    if (el && el.focus) { el.focus({ preventScroll:true }); if (sel) try { el.setSelectionRange(sel[0], sel[1]); } catch {} }
+  }
 }
 
 function filtered() {
@@ -677,9 +992,16 @@ function paintGrid() {
   g.innerHTML = L.map(p => card(p, mine[p.id])).join('') || empty('لا توجد عقارات مطابقة. جرّب تغيير معايير البحث.');
   $('cnt').textContent = `${L.length} عقار`;
 }
-const opt = (v, l, cur) => `<option value="${E(v)}"${cur === v ? ' selected' : ''}>${E(l)}</option>`;
+async function fillQuota() {
+  if (!$('quota') || !navigator.storage || !navigator.storage.estimate) return;
+  try {
+    const { usage = 0, quota = 0 } = await navigator.storage.estimate(), pers = navigator.storage.persisted ? await navigator.storage.persisted() : false;
+    if ($('quota')) $('quota').textContent = `${(usage / 1048576).toFixed(1)} MB مستعملة من ${(quota / 1048576).toFixed(0)} MB متاحة${pers ? ' · 🔒 محمية من المسح التلقائي' : ''}`;
+  } catch {}
+}
 
 const VIEWS = {
+  /* ─────────────── 🏘️ مشترك: تصفح العقارات ─────────────── */
   props: () => `<div class="filters" role="search">
     <label class="sr" for="q">بحث</label><input id="q" class="q" type="search" data-filter="q" placeholder="🔍 حي، مدينة، كلية..." value="${E(F.q)}" maxlength="60">
     <select data-filter="city" aria-label="الولاية">${opt('', 'كل الولايات', F.city)}${CITIES.map(c => opt(c, c, F.city)).join('')}</select>
@@ -689,6 +1011,7 @@ const VIEWS = {
     <button type="button" class="chipb" data-act="reset-filters">مسح</button></div>
     <p class="mut" id="cnt" aria-live="polite"></p><div class="grid" id="grid"></div>`,
 
+  /* ─────────────── 🧑‍🎓 المكتري ─────────────── */
   my_rents: () => {
     const pays = db.payments.filter(p => p.uid === me.id).sort(byAtDesc), vs = db.views.filter(v => v.uid === me.id).sort(byAtDesc);
     const booked = [...new Set(pays.filter(p => p.type === 'dep' && p.st === 'confirmed').map(p => p.pid))].map(prop).filter(Boolean);
@@ -696,56 +1019,6 @@ const VIEWS = {
     <section class="panel"><h2>📅 طلبات المعاينة</h2>${vs.map(v => { const p = prop(v.pid); return `<div class="row"><div class="grow"><b>${E(p ? p.title : 'عقار محذوف')}</b><div class="mut">${E(v.slot)}</div></div><div class="rowact">${pill(v.st)}${v.st === 'pending' ? btn('view-cancel', v.id, 'إلغاء', 'no') : ''}</div></div>`; }).join('') || empty('لا توجد طلبات معاينة بعد.')}</section>
     <section class="panel"><h2>💳 مدفوعاتي</h2>${pays.map(py => payRow(py, false)).join('') || empty('لا توجد مدفوعات بعد.')}</section>`;
   },
-
-  my_props: () => {
-    const mine = props().filter(p => p.owner === me.id);
-    return `<section class="panel"><h2>➕ إضافة عقار جديد</h2><form id="fProp" novalidate><div class="fr">
-      <label class="fld">العنوان<input name="title" maxlength="80" placeholder="مثال: استوديو S+1 مفروش"></label>
-      <label class="fld">الولاية<select name="city">${CITIES.map(c => opt(c, c, '')).join('')}</select></label>
-      <label class="fld">الحي / النهج<input name="addr" maxlength="80"></label>
-      <label class="fld">السعر (د.ت)<input name="price" type="number" min="1" max="100000" inputmode="numeric"></label>
-      <label class="fld">الفئة<select name="cat">${Object.entries(CATS).map(([v, l]) => opt(v, l, '')).join('')}</select></label>
-      <label class="fld">المدة<select name="term">${Object.entries(TERMS).map(([v, l]) => opt(v, 'بال' + l, 'month')).join('')}</select></label>
-      <label class="fld">الكلية القريبة <span class="opt">(اختياري)</span><input name="fac" maxlength="60"></label>
-      <label class="fld">دقائق مشياً <span class="opt">(اختياري)</span><input name="min" type="number" min="0" max="240" inputmode="numeric"></label>
-      </div><p class="err" role="alert"></p><button type="submit" class="btn sm">إرسال للإدارة</button></form></section>
-    ${mine.length ? `<section class="panel"><h2>📷 ربط تصميم Canva (صورة العقار)</h2><form id="fPhoto" novalidate>
-      <label class="fld">العقار<select name="pid">${mine.map(p => opt(p.id, p.title, '')).join('')}</select></label>
-      <label class="fld">الصورة (PNG / JPG / WEBP)<input name="file" type="file" accept="image/png,image/jpeg,image/webp"></label>
-      <p class="err" role="alert"></p><button type="submit" class="btn sm">حفظ الصورة للعقار</button></form></section>` : ''}
-    <section class="panel"><h2>عقاراتي</h2>${mine.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])}</div></div><div class="rowact"><span class="pill ${p.ok ? 'g' : ''}">${p.ok ? 'منشور' : 'قيد المراجعة'}</span>${p.ok ? pill(p.st) : btn('prop-del', p.id, 'حذف', 'no')}</div></div>`).join('') || empty('لم تضف أي عقار بعد.')}</section>`;
-  },
-
-  pays: () => {
-    const admin = isBroker();
-    const L = (admin ? db.payments : db.payments.filter(py => { const p = prop(py.pid); return p && p.owner === me.id; }))
-      .slice().sort((a, b) => ((b.st === 'pending') - (a.st === 'pending')) || byAtDesc(a, b));
-    const sum = s => L.filter(py => py.st === s).reduce((a, py) => a + py.amt, 0);
-    return `<section class="panel"><h2>${admin ? '💳 مراقبة المدفوعات والعرابين' : '💰 مداخيل عقاراتي'}</h2>
-    <div class="stats"><div class="stat"><b>${money(sum('confirmed'))}</b><span class="mut">مؤكد</span></div><div class="stat"><b>${money(sum('pending'))}</b><span class="mut">قيد المراجعة</span></div><div class="stat"><b>${L.length}</b><span class="mut">عملية</span></div></div>
-    ${L.map(py => payRow(py, admin)).join('') || empty('لا توجد مدفوعات حالياً.')}</section>`;
-  },
-
-  broker_all: () => {
-    const pend = db.props.filter(p => !p.ok), vs = db.views.slice().sort(byAtDesc), c = counts();
-    return `<section class="panel"><h2>⚡ ملخص</h2><div class="stats">
-      <div class="stat"><b>${db.users.length}</b><span class="mut">مستخدم</span></div><div class="stat"><b>${props().length}</b><span class="mut">عقار</span></div>
-      <div class="stat"><b>${c.pays}</b><span class="mut">دفع قيد المراجعة</span></div><div class="stat"><b>${c.views}</b><span class="mut">معاينة قيد الانتظار</span></div><div class="stat"><b>${c.props}</b><span class="mut">عقار ينتظر النشر</span></div></div></section>
-    <section class="panel"><h2>🏠 عقارات في انتظار الموافقة</h2>${pend.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} - ${E(p.addr)} · ${money(p.price)} / ${E(TERMS[p.term])} · ${E(uname(p.owner))}</div></div><div class="rowact">${btn('pub', p.id, 'نشر', 'ok')}${btn('prop-del', p.id, 'رفض وحذف', 'no')}</div></div>`).join('') || empty('لا توجد عقارات في الانتظار.')}</section>
-    <section class="panel"><h2>📅 طلبات المعاينة</h2>${vs.map(v => { const p = prop(v.pid); return `<div class="row"><div class="grow"><b>${E(v.name)}</b><div class="mut">${E(p ? p.title : 'عقار محذوف')} · ${E(v.slot)}</div></div><div class="rowact">${pill(v.st)}${v.st === 'pending' ? btn('view-ok', v.id, 'تأكيد', 'ok') + btn('view-no', v.id, 'إلغاء', 'no') : ''}</div></div>`; }).join('') || empty('لا توجد طلبات.')}</section>
-    <section class="panel"><h2>🗂️ إدارة العقارات المنشورة</h2>${props().filter(p => p.ok).map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])}</div></div><div class="rowact">${pill(p.st)}${btn('prop-st', p.id, p.st === 'available' ? 'تعليم كمكرى' : 'تعليم كمتاح')}${p.seed ? '' : btn('unpub', p.id, 'إخفاء', 'no')}</div></div>`).join('')}</section>`;
-  },
-
-  inbox: () => {
-    const T = threads();
-    if (!T.length) return `<section class="panel"><h2>💬 رسائل الدعم</h2>${empty('لا توجد رسائل.')}</section>`;
-    if (!T.some(t => t.id === curThr)) curThr = T[0].id;
-    return `<section class="panel"><h2>💬 رسائل الدعم</h2><label class="fld">المحادثة<select id="thr">${T.map(t => opt(t.id, (t.unread ? '● ' : '') + uname(t.id) + ' (' + (RL[(db.users.find(u => u.id === t.id) || {}).role] || '') + ')', curThr)).join('')}</select></label>${chatBox(curThr)}</section>`;
-  },
-
-  support: () => `<section class="panel"><h2>💬 الدعم الفوري</h2><p class="mut">تُحفظ الرسائل على هذا الجهاز. للرد السريع استعمل واتساب.</p>${chatBox(me.id)}<button type="button" class="btn sm wa" data-act="wa-help">تواصل عبر واتساب</button></section>`,
-
-  pros: () => `<section class="panel"><h2>🛠️ خدمات الصيانة وحرفاء داره</h2>${PROS.map(([n, ph, z, s]) => `<div class="row"><div class="grow"><b>${E(n)}</b><div class="mut">${E(z)} · ${E(s)}</div></div><a class="btn sm wa" href="https://wa.me/216${E(ph)}" target="_blank" rel="noopener noreferrer">واتساب</a></div>`).join('')}</section>`,
 
   home: () => {
     const H = myHomes(), p = prop(curHome); if (!p) return empty('لا يوجد مسكن مؤكد.');
@@ -761,10 +1034,10 @@ const VIEWS = {
     const L = db.bills.filter(b => b.pid === p.id && b.uid === me.id).sort((a, b) => b.month.localeCompare(a.month) || byAtDesc(a, b));
     return `${homePick(H)}<section class="panel"><h2>🧾 تسجيل فاتورة</h2><form id="fBill" novalidate><div class="fr">
       <label class="fld">النوع<select name="kind">${Object.entries(BILL).map(([v, l]) => opt(v, l, 'steg')).join('')}</select></label>
-      <label class="fld">المبلغ (د.ت)<input name="amt" type="number" min="0.001" max="100000" step="0.001" inputmode="decimal" dir="ltr"></label>
+      <label class="fld">المبلغ (د.ت)<input name="amt" inputmode="decimal" maxlength="12" dir="ltr" placeholder="48.250" autocomplete="off"></label>
       <label class="fld">الشهر<input name="month" type="month" value="${thisMonth()}" max="${thisMonth()}" dir="ltr"></label>
       <label class="fld">صورة الفاتورة<input name="file" type="file" accept="image/*"></label>
-      </div><p class="err" role="alert"></p><button type="submit" class="btn sm">حفظ الفاتورة</button></form></section>
+      </div>${prevImg}<p class="err" role="alert"></p><button type="submit" class="btn sm">حفظ الفاتورة</button></form></section>
     <section class="panel"><h2>فواتيري · ${E(p.title)}</h2>${billStats(L)}${L.map(b => billRow(b, true)).join('') || empty('لم تسجّل أي فاتورة بعد.')}</section>`;
   },
 
@@ -774,8 +1047,32 @@ const VIEWS = {
     return `${homePick(H)}<section class="panel"><h2>⚠️ تشكية جديدة</h2><p class="mut">صِف العطب (ماء، كهرباء، قفل، رطوبة…). تصل التشكية إلى المالك وإلى الإدارة.</p><form id="fIssue" novalidate>
       <label class="fld">وصف العطب<textarea name="txt" maxlength="1000" placeholder="مثال: تسرّب ماء تحت حوض المطبخ منذ يومين"></textarea></label>
       <label class="fld">صورة العطب <span class="opt">(مستحسنة)</span><input name="file" type="file" accept="image/*"></label>
-      <p class="err" role="alert"></p><button type="submit" class="btn sm">إرسال التشكية</button></form></section>
+      ${prevImg}<p class="err" role="alert"></p><button type="submit" class="btn sm">إرسال التشكية</button></form></section>
     <section class="panel"><h2>تشكياتي</h2>${L.map(x => issueRow(x, false)).join('') || empty('لا توجد تشكيات.')}</section>`;
+  },
+
+  pros: () => `<section class="panel"><h2>🛠️ خدمات الصيانة وحرفاء داره</h2>${PROS.map(([n, ph, z, s]) => `<div class="row"><div class="grow"><b>${E(n)}</b><div class="mut">${E(z)} · ${E(s)}</div></div><a class="btn sm wa" href="https://wa.me/216${E(ph)}" target="_blank" rel="noopener noreferrer">واتساب</a></div>`).join('')}</section>`,
+
+  support: () => `<section class="panel"><h2>💬 الدعم الفوري</h2><p class="mut">تُحفظ الرسائل على هذا الجهاز. للرد السريع استعمل واتساب.</p>${chatBox(me.id)}<button type="button" class="btn sm wa" data-act="wa-help">تواصل عبر واتساب</button></section>`,
+
+  /* ─────────────── 🏠 المالك ─────────────── */
+  my_props: () => {
+    const mine = props().filter(p => p.owner === me.id);
+    return `<section class="panel"><h2>➕ إضافة عقار جديد</h2><form id="fProp" novalidate><div class="fr">
+      <label class="fld">العنوان<input name="title" maxlength="80" placeholder="مثال: استوديو S+1 مفروش"></label>
+      <label class="fld">الولاية<select name="city">${CITIES.map(c => opt(c, c, '')).join('')}</select></label>
+      <label class="fld">الحي / النهج<input name="addr" maxlength="80"></label>
+      <label class="fld">السعر (د.ت)<input name="price" inputmode="numeric" maxlength="7" dir="ltr" autocomplete="off"></label>
+      <label class="fld">الفئة<select name="cat">${Object.entries(CATS).map(([v, l]) => opt(v, l, '')).join('')}</select></label>
+      <label class="fld">المدة<select name="term">${Object.entries(TERMS).map(([v, l]) => opt(v, 'بال' + l, 'month')).join('')}</select></label>
+      <label class="fld">الكلية القريبة <span class="opt">(اختياري)</span><input name="fac" maxlength="60"></label>
+      <label class="fld">دقائق مشياً <span class="opt">(اختياري)</span><input name="min" inputmode="numeric" maxlength="3" dir="ltr" autocomplete="off"></label>
+      </div><p class="err" role="alert"></p><button type="submit" class="btn sm">إرسال للإدارة</button></form></section>
+    ${mine.length ? `<section class="panel"><h2>📷 ربط تصميم Canva (صورة العقار)</h2><form id="fPhoto" novalidate>
+      <label class="fld">العقار<select name="pid">${mine.map(p => opt(p.id, p.title, '')).join('')}</select></label>
+      <label class="fld">الصورة (PNG / JPG / WEBP)<input name="file" type="file" accept="image/*"></label>
+      ${prevImg}<p class="err" role="alert"></p><button type="submit" class="btn sm">حفظ الصورة للعقار</button></form></section>` : ''}
+    <section class="panel"><h2>عقاراتي</h2>${mine.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])}</div>${thumb('prop-img', p.id, imgGet(p.photo), 'عرض صورة العقار')}</div><div class="rowact"><span class="pill ${p.ok ? 'g' : ''}">${p.ok ? 'منشور' : 'قيد المراجعة'}</span>${p.ok ? pill(p.st) : btn('prop-del', p.id, 'حذف', 'no')}</div></div>`).join('') || empty('لم تضف أي عقار بعد.')}</section>`;
   },
 
   tenants: () => {
@@ -798,33 +1095,55 @@ const VIEWS = {
     return `<section class="panel"><h2>⚠️ ${isBroker() ? 'كل التشكيات' : 'تشكيات عقاراتي'}</h2>${L.map(x => issueRow(x, true)).join('') || empty('لا توجد تشكيات.')}</section>`;
   },
 
-  settings: () => {
-    let bytes = 0;
-    if (ls) for (let i = 0; i < ls.length; i++) { const k = ls.key(i); if (k && k.startsWith('darek')) bytes += (k.length + (ls.getItem(k) || '').length) * 2; }
-    return `<section class="panel"><h2>💾 البيانات</h2>
-      <p class="mut">المساحة المستعملة: <b>${(bytes / 1048576).toFixed(2)} MB</b> من حوالي 5 MB يسمح بها المتصفح.</p>
-      <div class="note">⚠️ كل البيانات محفوظة في متصفح هذا الجهاز فقط. صدّر نسخة احتياطية بانتظام.</div>
-      <button type="button" class="btn sm" data-act="export">⬇️ تصدير نسخة احتياطية (JSON)</button></section>
+  pays: () => {
+    const admin = isBroker();
+    const L = (admin ? db.payments : db.payments.filter(py => ownsProp(py.pid)))
+      .slice().sort((a, b) => ((b.st === 'pending') - (a.st === 'pending')) || byAtDesc(a, b));
+    const sum = s => L.filter(py => py.st === s).reduce((a, py) => a + py.amt, 0);
+    return `<section class="panel"><h2>${admin ? '💳 مراقبة المدفوعات والعرابين' : '💰 مداخيل عقاراتي'}</h2>
+    <div class="stats"><div class="stat"><b>${money(sum('confirmed'))}</b><span class="mut">مؤكد</span></div><div class="stat"><b>${money(sum('pending'))}</b><span class="mut">قيد المراجعة</span></div><div class="stat"><b>${L.length}</b><span class="mut">عملية</span></div></div>
+    ${L.map(py => payRow(py, admin)).join('') || empty('لا توجد مدفوعات حالياً.')}</section>`;
+  },
+
+  /* ─────────────── ⚡ الإدارة ─────────────── */
+  broker_all: () => {
+    const pend = db.props.filter(p => !p.ok), vs = db.views.slice().sort(byAtDesc), c = counts();
+    return `<section class="panel"><h2>⚡ ملخص</h2><div class="stats">
+      <div class="stat"><b>${db.users.length}</b><span class="mut">مستخدم</span></div><div class="stat"><b>${props().length}</b><span class="mut">عقار</span></div>
+      <div class="stat"><b>${c.pays}</b><span class="mut">دفع قيد المراجعة</span></div><div class="stat"><b>${c.views}</b><span class="mut">معاينة قيد الانتظار</span></div><div class="stat"><b>${c.props}</b><span class="mut">عقار ينتظر النشر</span></div><div class="stat"><b>${c.issues}</b><span class="mut">تشكية مفتوحة</span></div></div></section>
+    <section class="panel"><h2>🏠 عقارات في انتظار الموافقة</h2>${pend.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} - ${E(p.addr)} · ${money(p.price)} / ${E(TERMS[p.term])} · ${E(uname(p.owner))}</div></div><div class="rowact">${btn('pub', p.id, 'نشر', 'ok')}${btn('prop-del', p.id, 'رفض وحذف', 'no')}</div></div>`).join('') || empty('لا توجد عقارات في الانتظار.')}</section>
+    <section class="panel"><h2>📅 طلبات المعاينة</h2>${vs.map(v => { const p = prop(v.pid); return `<div class="row"><div class="grow"><b>${E(v.name)}</b><div class="mut">${E(p ? p.title : 'عقار محذوف')} · ${E(v.slot)}</div></div><div class="rowact">${pill(v.st)}${v.st === 'pending' ? btn('view-ok', v.id, 'تأكيد', 'ok') + btn('view-no', v.id, 'إلغاء', 'no') : ''}</div></div>`; }).join('') || empty('لا توجد طلبات.')}</section>
+    <section class="panel"><h2>🗂️ إدارة العقارات المنشورة</h2>${props().filter(p => p.ok).map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])}</div></div><div class="rowact">${pill(p.st)}${btn('prop-st', p.id, p.st === 'available' ? 'تعليم كمكرى' : 'تعليم كمتاح')}${p.seed ? '' : btn('unpub', p.id, 'إخفاء', 'no')}</div></div>`).join('')}</section>`;
+  },
+
+  inbox: () => {
+    const T = threads();
+    if (!T.length) return `<section class="panel"><h2>💬 رسائل الدعم</h2>${empty('لا توجد رسائل.')}</section>`;
+    if (!T.some(t => t.id === curThr)) curThr = T[0].id;
+    return `<section class="panel"><h2>💬 رسائل الدعم</h2><label class="fld">المحادثة<select id="thr">${T.map(t => opt(t.id, (t.unread ? '● ' : '') + uname(t.id) + ' (' + (RL[(db.users.find(u => u.id === t.id) || {}).role] || '') + ')', curThr)).join('')}</select></label>${chatBox(curThr)}</section>`;
+  },
+
+  settings: () => `<section class="panel"><h2>💾 البيانات</h2>
+      <p class="mut">التخزين: <span id="quota">${idb ? 'IndexedDB (الصور) + localStorage (المعطيات)' : 'localStorage فقط (≈ 5 MB)'}</span></p>
+      <div class="note">⚠️ كل البيانات محفوظة في متصفح هذا الجهاز فقط. صدّر نسخة احتياطية بانتظام، وتنجم تسترجعها على أي جهاز آخر.</div>
+      <div class="btnrow"><button type="button" class="btn sm" data-act="export">⬇️ تصدير نسخة احتياطية (JSON)</button>
+      <label class="btn sm no">⬆️ استرجاع نسخة<input type="file" id="impFile" class="sr" accept=".json,application/json"></label></div>
+      <p class="mut">نسخة المنصة: ${APP_VER}</p></section>
     <section class="panel"><h2>🔐 رمز الإدارة</h2>
-      ${CFG.admin.hash ? '<p class="mut">رمز الإدارة محمي بـ PBKDF2-SHA256.</p>' : '<div class="note">الرمز الحالي محفوظ بتجزئة SHA-256 سريعة، يمكن تخمينها. ولّد رمزاً قوياً (12 حرفاً فأكثر) والصق السطر الناتج في إعدادات الملف مكان <code>admin:</code>.</div>'}
+      ${CFG.admin.hash ? '<p class="mut">رمز الإدارة محمي بـ PBKDF2-SHA256.</p>' : '<div class="note">الرمز الحالي محفوظ بتجزئة SHA-256 سريعة، يمكن تخمينها. ولّد رمزاً قوياً (12 حرفاً فأكثر) والصق السطر الناتج في إعدادات الملف مكان <code>admin:</code> (القسم [S01]).</div>'}
       <form id="fAdmin" novalidate><div class="fr"><label class="fld">الرمز الجديد<input name="p1" type="password" autocomplete="new-password" maxlength="128" dir="ltr"></label><label class="fld">تأكيد الرمز<input name="p2" type="password" autocomplete="new-password" maxlength="128" dir="ltr"></label></div>
-      <p class="err" role="alert"></p><button type="submit" class="btn sm">توليد السطر</button></form><div id="adminOut"></div></section>`;
-  }
+      <p class="err" role="alert"></p><button type="submit" class="btn sm">توليد السطر</button></form><div id="adminOut"></div></section>`
 };
 
+/* ══════════════════════════════════════════════════════════════════════
+   [S13] 🧩 مكوّنات صغيرة: أسطر الدفع، الفواتير، التشكيات، والدردشة
+   ══════════════════════════════════════════════════════════════════════ */
 function payRow(py, admin) {
-  const p = prop(py.pid), img = imgGet(py.img);
+  const p = prop(py.pid);
   return `<div class="row"><div class="grow"><b>${E(py.name)}</b> <span class="mut">· ${E(p ? p.title : 'عقار محذوف')}</span>
-    <div class="mut">${py.type === 'dep' ? 'عربون' : 'كراء'} · ${money(py.amt)} · ${fDate(py.at)}</div>
-    ${img ? `<button type="button" class="thumbbtn" data-act="img" data-id="${E(py.id)}" aria-label="عرض الإيصال بالحجم الكامل"><img class="thumb" src="${img}" alt="إيصال" loading="lazy" decoding="async"></button>` : ''}</div>
+    <div class="mut">${py.type === 'dep' ? 'عربون' : 'كراء'} · ${money(py.amt)} · ${fDate(py.at)}</div>${thumb('img', py.id, imgGet(py.img), 'عرض الإيصال بالحجم الكامل')}</div>
     <div class="rowact">${pill(py.st)}${admin && py.st === 'pending' ? btn('pay-ok', py.id, 'قبول', 'ok') + btn('pay-no', py.id, 'رفض', 'no') : ''}</div></div>`;
 }
-function threads() {
-  const m = new Map();
-  for (const c of db.chats) m.set(c.thr, c);
-  return [...m.entries()].map(([id, last]) => ({ id, last, unread: last.from === 'user' })).sort((a, b) => String(b.last.at).localeCompare(String(a.last.at)));
-}
-const byOpenThenNew = (a, b) => ((b.st === 'open') - (a.st === 'open')) || byAtDesc(a, b);
 function billStats(L) {
   const t = k => L.filter(b => b.kind === k).reduce((a, b) => a + b.amt, 0);
   return `<div class="stats">${Object.entries(BILL).map(([k, l]) => `<div class="stat"><b>${dinar(t(k))}</b><span class="mut">${E(l)}</span></div>`).join('')}<div class="stat"><b>${L.length}</b><span class="mut">فاتورة</span></div></div>`;
@@ -842,18 +1161,31 @@ function issueRow(x, staff) {
     <div class="mut">${staff ? fDT(x.at) : ''}${x.st === 'resolved' ? `${staff ? ' · ' : ''}تمّ الحل بواسطة ${E(x.by)} · ${fDate(x.rat)}` : ''}</div>${thumb('iss-img', x.id, imgGet(x.img), 'عرض صورة العطب بالحجم الكامل')}</div>
     <div class="rowact">${pill(x.st)}${staff && x.st === 'open' ? btn('iss-ok', x.id, 'تمّ الإصلاح', 'ok') : ''}</div></div>`;
 }
-function dmBox(pid, tu) {
-  const asOwner = me.role !== 'tenant', msgs = db.dms.filter(c => c.pid === pid && c.uid === tu);
-  return `<div class="chat" id="chBox" role="log" aria-live="polite">${msgs.map(c => { const mine = (c.from === 'owner') === asOwner; return `<div class="msg${mine ? ' me' : ''}"><b>${E(c.name)}</b><div class="txt">${E(c.txt)}</div><div class="mut">${fDT(c.at)}</div></div>`; }).join('') || '<div class="mut">لا توجد رسائل بعد. ابدأ المحادثة.</div>'}</div>
-  <form id="fDm" class="chatf"><label class="sr" for="chIn">رسالتك</label><input id="chIn" name="txt" maxlength="1000" autocomplete="off" placeholder="اكتب رسالتك..."><button type="submit" class="btn sm">إرسال</button></form>`;
+const msgHtml = (c, mine) => `<div class="msg${mine ? ' me' : ''}"><b>${E(c.name)}</b><div class="txt">${E(c.txt)}</div><div class="mut">${fDT(c.at)}</div></div>`;
+const chatForm = id => `<form id="${id}" class="chatf"><label class="sr" for="chIn">رسالتك</label><input id="chIn" name="txt" maxlength="1000" autocomplete="off" enterkeyhint="send" placeholder="اكتب رسالتك..."><button type="submit" class="btn sm">إرسال</button></form>`;
+/* رسائل الدعم (مستعمل ↔ الإدارة) */
+function threads() {
+  const m = new Map();
+  for (const c of db.chats) m.set(c.thr, c);
+  return [...m.entries()].map(([id, last]) => ({ id, last, unread: last.from === 'user' })).sort((a, b) => String(b.last.at).localeCompare(String(a.last.at)));
 }
 function chatBox(thr) {
   const msgs = db.chats.filter(c => c.thr === thr);
-  return `<div class="chat" id="chBox" role="log" aria-live="polite">${msgs.map(c => { const mine = (c.from === 'broker') === isBroker(); return `<div class="msg${mine ? ' me' : ''}"><b>${E(c.name)}</b><div class="txt">${E(c.txt)}</div><div class="mut">${fDT(c.at)}</div></div>`; }).join('') || '<div class="mut">لا توجد رسائل بعد.</div>'}</div>
-  <form id="fChat" class="chatf"><label class="sr" for="chIn">رسالتك</label><input id="chIn" name="txt" maxlength="1000" autocomplete="off" placeholder="اكتب رسالتك..."><button type="submit" class="btn sm">إرسال</button></form>`;
+  return `<div class="chat" id="chBox" role="log" aria-live="polite">${msgs.map(c => msgHtml(c, (c.from === 'broker') === isBroker())).join('') || '<div class="mut">لا توجد رسائل بعد.</div>'}</div>${chatForm('fChat')}`;
+}
+/* محادثة المكتري ↔ المالك */
+function dmBox(pid, tu) {
+  const asOwner = me.role !== 'tenant', msgs = db.dms.filter(c => c.pid === pid && c.uid === tu);
+  return `<div class="chat" id="chBox" role="log" aria-live="polite">${msgs.map(c => msgHtml(c, (c.from === 'owner') === asOwner)).join('') || '<div class="mut">لا توجد رسائل بعد. ابدأ المحادثة.</div>'}</div>${chatForm('fDm')}`;
 }
 
-/* ================= العمليات ================= */
+/* ══════════════════════════════════════════════════════════════════════
+   [S14] 🛠️ العمليات (كل زر/نموذج يوصل لهنا)
+   ──────────────────────────────────────────────────────────────────────
+   كل عملية: 1) تثبّت الصلاحية  2) تثبّت المدخلات  3) تبدّل db  4) commit(undo)  5) render()
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────── 🧑‍🎓 المكتري: دفع، معاينة، فواتير، تشكيات ─────────────── */
 function openPay(id, type) {
   if (!me || me.role !== 'tenant') return;
   const p = prop(id); if (!p || !p.ok) return toast('العقار غير متوفر.', true);
@@ -869,22 +1201,20 @@ function openPay(id, type) {
   payCtx = { pid:id, type, amt };
   $('payFor').textContent = (type === 'dep' ? `عربون حجز (${CFG.depPct}%)` : 'خلاص كراء ' + TERMS[p.term]) + ': ' + p.title;
   $('payAmt').textContent = nf.format(amt);
-  clearPreview(); $('fPay').reset(); openDlg('dlgPay');
+  $('fPay').reset(); openDlg('dlgPay');
 }
-function clearPreview() { if (prevUrl) URL.revokeObjectURL(prevUrl); prevUrl = null; const i = $('payPrev'); i.hidden = true; i.removeAttribute('src'); }
 async function onPay(f) {
   if (!payCtx || !me) return;
   const file = f.elements.proof.files[0];
   if (!file) return setErr(f, 'اختر صورة إيصال التحويل.');
-  busy(f, true);
+  busy(f, true, '⏳ جاري رفع الإيصال…');
   try {
-    const data = await shrink(file, 1400, 0.72);
-    const img = imgPut(data); if (!img) return setErr(f, 'مساحة التخزين ممتلئة. لا يمكن حفظ الإيصال.');
+    const { img, err } = await saveImg(file, 1400); if (err) return setErr(f, err);
     db.payments.push({ id:'y' + uid(), pid:payCtx.pid, uid:me.id, name:me.name, type:payCtx.type, amt:payCtx.amt, img, at:now(), st:'pending' });
     if (!commit(() => { db.payments.pop(); imgDel(img); })) return;
-    f.reset(); clearPreview(); closeDlg('dlgPay'); payCtx = null;
+    f.reset(); closeDlg('dlgPay'); payCtx = null;
     toast('تم إرسال إثبات الدفع. ستراجعه الإدارة قريباً.'); render();
-  } catch (e) { setErr(f, imgErr(e)); } finally { busy(f, false); }
+  } finally { busy(f, false); }
 }
 function openView(id) {
   if (!me || me.role !== 'tenant') return;
@@ -901,40 +1231,56 @@ function onView(f) {
   if (!viewCtx || !me) return;
   const sel = f.querySelector('input[name=slot]:checked'); if (!sel) return setErr(f, 'اختر موعداً.');
   const p = prop(viewCtx.pid), slot = viewCtx.slots[+sel.value];
+  if (!p) return setErr(f, 'العقار لم يعد متوفراً.');
   db.views.push({ id:'v' + uid(), pid:p.id, uid:me.id, name:me.name, slot, at:now(), st:'pending' });
   if (!commit(() => db.views.pop())) return;
   closeDlg('dlgView'); viewCtx = null; render();
   toast('تم تسجيل طلب المعاينة.');
   waB(`مرحباً، نحب نعاين العقار "${p.title}" يوم ${slot}.`);
 }
-function onProp(f) {
-  if (!me || me.role !== 'landlord') return;
-  const el = f.elements, title = el.title.value.trim(), addr = el.addr.value.trim(), price = Number(el.price.value), fac = el.fac.value.trim(), min = el.min.value ? Number(el.min.value) : 0;
-  if (title.length < 5) return setErr(f, 'العنوان قصير جداً (5 أحرف على الأقل).');
-  if (addr.length < 3) return setErr(f, 'أدخل الحي أو النهج.');
-  if (!Number.isInteger(price) || price < 1 || price > 100000) return setErr(f, 'أدخل سعراً صحيحاً بين 1 و 100000 د.ت.');
-  if (!Number.isInteger(min) || min < 0 || min > 240) return setErr(f, 'عدد الدقائق بين 0 و 240.');
-  db.props.push({ id:'n' + uid(), title, city:oneOf(el.city.value, CITIES, CITIES[0]), addr, price, fac:fac || '—', min, st:'available', end:'—', cat:oneOf(el.cat.value, Object.keys(CATS), 'all'), term:oneOf(el.term.value, Object.keys(TERMS), 'month'), owner:me.id, ok:false, at:now() });
-  if (!commit(() => db.props.pop())) return;
-  toast('تمت إضافة العقار. في انتظار موافقة الإدارة.'); render();
-}
-async function onPhoto(f) {
-  if (!me || me.role !== 'landlord') return;
-  const pid = f.elements.pid.value, file = f.elements.file.files[0], p = prop(pid);
-  if (!p || p.owner !== me.id) return setErr(f, 'اختر عقاراً من عقاراتك.');
-  if (!file) return setErr(f, 'اختر الصورة.');
-  busy(f, true);
+const homeOk = () => { const p = prop(curHome); return housed() && p && homesOf(me.id).some(h => h.id === p.id) ? p : null; };
+async function onBill(f) {
+  const p = homeOk(); if (!p) return;
+  const el = f.elements, kind = oneOf(el.kind.value, Object.keys(BILL), ''), amt = Math.round(parseAmt(el.amt.value) * 1000) / 1000, month = digits(el.month.value).trim(), file = el.file.files[0];
+  if (!kind) return setErr(f, 'اختر نوع الفاتورة.');
+  if (!(amt > 0 && amt <= 100000)) return setErr(f, 'أدخل مبلغاً صحيحاً (مثال: 48.250 أو 48,250).');
+  if (!MONTH_RE.test(month) || month > thisMonth()) return setErr(f, 'اختر شهراً صحيحاً (الصيغة 2026-03).');
+  if (db.bills.some(b => b.pid === p.id && b.uid === me.id && b.kind === kind && b.month === month)) return setErr(f, 'فاتورة هذا الشهر مسجّلة مسبقاً لهذا النوع. احذفها أولاً لتعويضها.');
+  if (!file) return setErr(f, 'اختر صورة الفاتورة.');
+  busy(f, true, '⏳ جاري الحفظ…');
   try {
-    const img = imgPut(await shrink(file, 1200, 0.78)); if (!img) return setErr(f, 'مساحة التخزين ممتلئة.');
-    const prev = db.ov[pid] ? { ...db.ov[pid] } : null, old = prev && prev.photo;
-    db.ov[pid] = { ...(prev || {}), photo:img };
-    if (!commit(() => { if (prev) db.ov[pid] = prev; else delete db.ov[pid]; imgDel(img); })) return;
-    imgDel(old); toast('تم ربط الصورة بالعقار.'); render();
-  } catch (e) { setErr(f, imgErr(e)); } finally { busy(f, false); }
+    const { img, err } = await saveImg(file, 1600); if (err) return setErr(f, err);
+    db.bills.push({ id:'b' + uid(), pid:p.id, uid:me.id, name:me.name, kind, amt, month, img, at:now() });
+    if (!commit(() => { db.bills.pop(); imgDel(img); })) return;
+    toast('تم حفظ الفاتورة.'); render();
+  } finally { busy(f, false); }
 }
+async function onIssue(f) {
+  const p = homeOk(); if (!p) return;
+  const txt = f.elements.txt.value.trim(), file = f.elements.file.files[0];
+  if (txt.length < 10) return setErr(f, 'صِف العطب بوضوح (10 أحرف على الأقل).');
+  busy(f, true, '⏳ جاري الإرسال…');
+  try {
+    let img = '';
+    if (file) { const r = await saveImg(file, 1400); if (r.err) return setErr(f, r.err); img = r.img; }
+    db.issues.push({ id:'k' + uid(), pid:p.id, uid:me.id, name:me.name, txt:txt.slice(0, 1000), img, at:now(), st:'open', by:'', rat:'' });
+    if (!commit(() => { db.issues.pop(); imgDel(img); })) return;
+    toast('تم إرسال التشكية إلى المالك والإدارة.'); render();
+  } finally { busy(f, false); }
+}
+function delBill(id) {
+  const i = db.bills.findIndex(b => b.id === id); if (i < 0) return;
+  const b = db.bills[i]; if (!me || b.uid !== me.id) return;
+  if (!confirm('حذف هذه الفاتورة؟')) return;
+  db.bills.splice(i, 1);
+  if (!commit(() => db.bills.splice(i, 0, b))) return;
+  imgDel(b.img); toast('تم حذف الفاتورة.'); render();
+}
+
+/* ─────────────── 💬 الرسائل (الدعم + المالك) ─────────────── */
 function onChat(f) {
   if (!me) return;
-  const inp = f.elements.txt, t = inp.value.trim(); if (!t) return;
+  const t = f.elements.txt.value.trim(); if (!t) return;
   const thr = isBroker() ? curThr : me.id;
   if (!thr || (isBroker() && !threads().some(x => x.id === thr))) return;
   db.chats.push({ id:'c' + uid(), thr, from:isBroker() ? 'broker' : 'user', name:me.name, txt:t.slice(0, 1000), at:now() });
@@ -950,44 +1296,32 @@ function onDm(f) {
   if (!commit(() => db.dms.pop())) return;
   render(); const n = $('chIn'); if (n) n.focus();
 }
-async function onBill(f) {
-  if (!housed()) return;
-  const p = prop(curHome); if (!p || !homesOf(me.id).some(h => h.id === p.id)) return;
-  const el = f.elements, kind = oneOf(el.kind.value, Object.keys(BILL), ''), amt = Math.round(Number(el.amt.value) * 1000) / 1000, month = el.month.value.trim(), file = el.file.files[0];
-  if (!kind) return setErr(f, 'اختر نوع الفاتورة.');
-  if (!(amt > 0 && amt <= 100000)) return setErr(f, 'أدخل مبلغاً صحيحاً (مثال: 48.250).');
-  if (!MONTH_RE.test(month) || month > thisMonth()) return setErr(f, 'اختر شهراً صحيحاً (الصيغة 2026-03).');
-  if (db.bills.some(b => b.pid === p.id && b.uid === me.id && b.kind === kind && b.month === month)) return setErr(f, 'فاتورة هذا الشهر مسجّلة مسبقاً لهذا النوع. احذفها أولاً لتعويضها.');
-  if (!file) return setErr(f, 'اختر صورة الفاتورة.');
-  busy(f, true);
-  try {
-    const img = imgPut(await shrink(file, 1400, 0.72)); if (!img) return setErr(f, 'مساحة التخزين ممتلئة. لا يمكن حفظ الصورة.');
-    db.bills.push({ id:'b' + uid(), pid:p.id, uid:me.id, name:me.name, kind, amt, month, img, at:now() });
-    if (!commit(() => { db.bills.pop(); imgDel(img); })) return;
-    toast('تم حفظ الفاتورة.'); render();
-  } catch (e) { setErr(f, imgErr(e)); } finally { busy(f, false); }
+
+/* ─────────────── 🏠 المالك: إضافة عقار، صورة، حلّ التشكيات ─────────────── */
+function onProp(f) {
+  if (!me || me.role !== 'landlord') return;
+  const el = f.elements, title = el.title.value.trim(), addr = el.addr.value.trim(), price = parseAmt(el.price.value), fac = el.fac.value.trim(), min = el.min.value.trim() ? parseAmt(el.min.value) : 0;
+  if (title.length < 5) return setErr(f, 'العنوان قصير جداً (5 أحرف على الأقل).');
+  if (addr.length < 3) return setErr(f, 'أدخل الحي أو النهج.');
+  if (!Number.isInteger(price) || price < 1 || price > 100000) return setErr(f, 'أدخل سعراً صحيحاً بين 1 و 100000 د.ت.');
+  if (!Number.isInteger(min) || min < 0 || min > 240) return setErr(f, 'عدد الدقائق بين 0 و 240.');
+  db.props.push({ id:'n' + uid(), title, city:oneOf(el.city.value, CITIES, CITIES[0]), addr, price, fac:fac || '—', min, st:'available', end:'—', cat:oneOf(el.cat.value, Object.keys(CATS), 'all'), term:oneOf(el.term.value, Object.keys(TERMS), 'month'), owner:me.id, ok:false, at:now() });
+  if (!commit(() => db.props.pop())) return;
+  toast('تمت إضافة العقار. في انتظار موافقة الإدارة.'); render();
 }
-async function onIssue(f) {
-  if (!housed()) return;
-  const p = prop(curHome); if (!p || !homesOf(me.id).some(h => h.id === p.id)) return;
-  const txt = f.elements.txt.value.trim(), file = f.elements.file.files[0];
-  if (txt.length < 10) return setErr(f, 'صِف العطب بوضوح (10 أحرف على الأقل).');
-  busy(f, true);
+async function onPhoto(f) {
+  if (!me || me.role !== 'landlord') return;
+  const pid = f.elements.pid.value, file = f.elements.file.files[0], p = prop(pid);
+  if (!p || p.owner !== me.id) return setErr(f, 'اختر عقاراً من عقاراتك.');
+  if (!file) return setErr(f, 'اختر الصورة.');
+  busy(f, true, '⏳ جاري الحفظ…');
   try {
-    let img = '';
-    if (file) { img = imgPut(await shrink(file, 1400, 0.72)); if (!img) return setErr(f, 'مساحة التخزين ممتلئة. لا يمكن حفظ الصورة.'); }
-    db.issues.push({ id:'k' + uid(), pid:p.id, uid:me.id, name:me.name, txt:txt.slice(0, 1000), img, at:now(), st:'open', by:'', rat:'' });
-    if (!commit(() => { db.issues.pop(); imgDel(img); })) return;
-    toast('تم إرسال التشكية إلى المالك والإدارة.'); render();
-  } catch (e) { setErr(f, imgErr(e)); } finally { busy(f, false); }
-}
-function delBill(id) {
-  const i = db.bills.findIndex(b => b.id === id); if (i < 0) return;
-  const b = db.bills[i]; if (!me || b.uid !== me.id) return;
-  if (!confirm('حذف هذه الفاتورة؟')) return;
-  db.bills.splice(i, 1);
-  if (!commit(() => db.bills.splice(i, 0, b))) return;
-  imgDel(b.img); toast('تم حذف الفاتورة.'); render();
+    const { img, err } = await saveImg(file, 1200); if (err) return setErr(f, err);
+    const prev = db.ov[pid] ? { ...db.ov[pid] } : null, old = prev && prev.photo;
+    db.ov[pid] = { ...(prev || {}), photo:img };
+    if (!commit(() => { if (prev) db.ov[pid] = prev; else delete db.ov[pid]; imgDel(img); })) return;
+    imgDel(old); toast('تم ربط الصورة بالعقار.'); render();
+  } finally { busy(f, false); }
 }
 function resolveIssue(id) {
   const x = db.issues.find(k => k.id === id); if (!x || x.st !== 'open') return;
@@ -997,19 +1331,8 @@ function resolveIssue(id) {
   if (!commit(() => Object.assign(x, { st:'open', by:'', rat:'' }))) return;
   toast('تم تعليم التشكية كمحلولة.'); render();
 }
-async function onAdmin(f) {
-  if (!isBroker()) return;
-  const a = f.elements.p1.value, b = f.elements.p2.value;
-  if (a.length < 12) return setErr(f, 'الرمز 12 حرفاً على الأقل (يُنصح بعبارة من عدة كلمات).');
-  if (a !== b) return setErr(f, 'الرمزان غير متطابقين.');
-  busy(f, true);
-  try {
-    const salt = randHex(16), hash = await pbkdf2(a, salt, 310000);
-    const line = `admin: Object.freeze({ salt: '${salt}', iter: 310000, hash: '${hash}' }),`;
-    $('adminOut').innerHTML = `<p class="mut">انسخ هذا السطر وضعه مكان سطر <code>admin:</code> في الملف، ثم أعد رفع الملف:</p><pre class="code">${E(line)}</pre><button type="button" class="chipb" data-act="copy-admin">نسخ السطر</button>`;
-    $('adminOut').dataset.line = line; f.reset();
-  } finally { busy(f, false); }
-}
+
+/* ─────────────── ⚡ الإدارة: المدفوعات، المعاينات، النشر، رمز الإدارة ─────────────── */
 function setPay(id, st) {
   if (!isBroker()) return;
   const py = db.payments.find(p => p.id === id); if (!py || py.st !== 'pending') return;
@@ -1051,13 +1374,28 @@ function delProp(id) {
   if (ov) imgDel(ov.photo);
   toast('تم حذف العقار.'); render();
 }
+async function onAdmin(f) {
+  if (!isBroker()) return;
+  const a = f.elements.p1.value, b = f.elements.p2.value;
+  if (a.length < 12) return setErr(f, 'الرمز 12 حرفاً على الأقل (يُنصح بعبارة من عدة كلمات).');
+  if (a !== b) return setErr(f, 'الرمزان غير متطابقين.');
+  busy(f, true, '⏳ جاري التوليد…');
+  try {
+    const salt = randHex(16), hash = await pbkdf2(a, salt, 310000);
+    const line = `admin: Object.freeze({ salt: '${salt}', iter: 310000, hash: '${hash}' }),`;
+    $('adminOut').innerHTML = `<p class="mut">انسخ هذا السطر وضعه مكان سطر <code>admin:</code> في القسم [S01]، ثم شغّل <code>node tools/csp-hash.mjs</code> وأعد رفع الملف:</p><pre class="code">${E(line)}</pre><button type="button" class="chipb" data-act="copy-admin">نسخ السطر</button>`;
+    $('adminOut').dataset.line = line; f.reset();
+  } finally { busy(f, false); }
+}
+
+/* ─────────────── 🖼️ عرض الصور بالحجم الكامل (مع التثبت من الصلاحية) ─────────────── */
 function showImg(title, src, cap) {
-  if (!src) return;
+  if (!src) return toast('الصورة غير متوفرة على هذا الجهاز.', true);
   $('imgT').textContent = title; $('imgFull').alt = title; $('imgFull').src = src; $('imgCap').textContent = cap;
   openDlg('dlgImg');
 }
 /* الصورة يراها صاحبها، مالك العقار، والإدارة */
-const canSee = r => !!r && (isBroker() || (me && r.uid === me.id) || ownsProp(r.pid));
+const canSee = r => !!r && (isBroker() || (!!me && r.uid === me.id) || ownsProp(r.pid));
 function showReceipt(id) {
   const py = db.payments.find(p => p.id === id); if (!canSee(py)) return;
   showImg('إيصال الدفع', imgGet(py.img), `${py.name} · ${money(py.amt)} · ${fDate(py.at)}`);
@@ -1070,72 +1408,141 @@ function showIssue(id) {
   const x = db.issues.find(k => k.id === id); if (!canSee(x)) return;
   showImg('⚠️ صورة العطب', imgGet(x.img), `${x.name} · ${fDT(x.at)}`);
 }
-function exportData() {
+function showPropImg(id) { const p = prop(id); if (p) showImg('📷 ' + p.title, imgGet(p.photo), p.city + ' · ' + p.addr); }
+
+/* ══════════════════════════════════════════════════════════════════════
+   [S15] 📦 النسخ الاحتياطي: تصدير واسترجاع
+   ──────────────────────────────────────────────────────────────────────
+   التصدير = ملف JSON فيه كل المعطيات + الصور (بلا كلمات السر، للأمان).
+   الاسترجاع = يعوّض المعطيات الكل. الحسابات اللي موجودة على الجهاز تحافظ على كلمة السر؛
+   الحسابات الجديدة يعاود صاحبها «حساب جديد» بنفس البريد باش يحط كلمة سر.
+   ══════════════════════════════════════════════════════════════════════ */
+async function exportData(id, el) {
   if (!isBroker()) return;
-  const images = {}, add = i => { const d = imgGet(i); if (d) images[i] = d; };
-  db.payments.forEach(p => add(p.img)); db.bills.forEach(b => add(b.img)); db.issues.forEach(x => add(x.img)); Object.values(db.ov).forEach(o => add(o.photo));
-  const data = { app:'darek', v:2, exportedAt:now(), db:{ ...db, users:db.users.map(({ salt, hash, iter, ...u }) => u) }, images };
-  const url = URL.createObjectURL(new Blob([JSON.stringify(data)], { type:'application/json' }));
-  const a = document.createElement('a'); a.href = url; a.download = 'darek-backup-' + now().slice(0, 10) + '.json';
-  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 10000);
-  toast('تم تنزيل النسخة الاحتياطية (بدون كلمات السر).');
+  el.disabled = true;
+  try {
+    const images = {};
+    for (const i of imgRefs()) { const b = await imgBlob(i); if (b) images[i] = await blobToData(b); }
+    const data = { app:'darek', v:2, ver:APP_VER, exportedAt:now(), db:{ ...db, users:db.users.map(({ salt, hash, iter, ...u }) => u) }, images };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(data)], { type:'application/json' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'darek-backup-' + now().slice(0, 10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 10000);
+    toast(`تم تنزيل النسخة الاحتياطية (${Object.keys(images).length} صورة، بدون كلمات السر).`);
+  } finally { el.disabled = false; }
+}
+async function importData(input) {
+  const file = input.files[0]; input.value = '';
+  if (!isBroker() || !file) return;
+  let data;
+  try { data = JSON.parse(await file.text()); } catch { return toast('الملف غير صالح (ليس JSON).', true); }
+  if (!data || data.app !== 'darek' || !data.db) return toast('هذا ليس ملف نسخة احتياطية لداره.', true);
+  const next = normalize(data.db);
+  if (!confirm(`استرجاع النسخة (${next.users.length} مستخدم، ${next.props.length} عقار، ${next.payments.length} دفعة) سيعوّض كل المعطيات الحالية على هذا الجهاز. متأكد؟`)) return;
+  const old = new Map(db.users.map(u => [u.id, u]));
+  next.users.forEach(u => { const o = old.get(u.id); if (o && o.email === u.email && o.hash) Object.assign(u, { salt:o.salt, hash:o.hash, iter:o.iter }); });
+  let n = 0;
+  for (const [i, d] of Object.entries(obj(data.images))) {
+    if (!IMG_ID.test(i) || urls.has(i)) continue;
+    const b = dataToBlob(d); if (b && await imgPut(b, i)) n++;
+  }
+  const prev = db; db = next;
+  if (!commit(() => { db = prev; })) return;
+  await imgSync();
+  toast(`تم الاسترجاع (${n} صورة جديدة).`); render();
 }
 
-/* ================= الأحداث ================= */
+/* ══════════════════════════════════════════════════════════════════════
+   [S16] 🖱️ الأحداث: النقرات، النماذج، الفلاتر، والتزامن بين النوافذ
+   ──────────────────────────────────────────────────────────────────────
+   A = خريطة الأزرار: data-act="اسم" → الدالة. زر جديد؟ زيدو هنا.
+   FORMS = خريطة النماذج: id النموذج → الدالة.
+   storage = كي نافذة أخرى (ولا تبويب آخر) تبدّل المعطيات، هذي تتحدّث وحدها.
+   ══════════════════════════════════════════════════════════════════════ */
 const A = {
-  role: openRole, mode: setAuthMode, close: closeDlg,
-  logout, menu: () => toggleMenu(), 'menu-close': () => toggleMenu(false),
-  tab: id => { tab = id; toggleMenu(false); render(); window.scrollTo(0, 0); $('dash').focus({ preventScroll:true }); },
+  role: openRole, mode: setAuthMode, close: closeDlg, peek,
+  logout, menu: () => toggleMenu(), 'menu-close': () => toggleMenu(false), tab: go,
   view: openView, dep: id => openPay(id, 'dep'), rent: id => openPay(id, 'rent'),
   ask: id => { const p = prop(id); if (p) waB(`مرحباً، نحب نستفسر على العقار "${p.title}" (${p.city}).`); },
   wa: () => waB('مرحباً، نحب نستفسر على منصة داره'), 'wa-help': () => waB('مرحباً، نحتاج مساعدة في منصة داره'),
   copy: (id, el) => copy(el.dataset.copy), 'copy-admin': () => copy($('adminOut').dataset.line || ''),
-  img: showReceipt, 'bill-img': showBill, 'iss-img': showIssue, 'bill-del': delBill, 'iss-ok': resolveIssue, export: exportData,
+  img: showReceipt, 'bill-img': showBill, 'iss-img': showIssue, 'prop-img': showPropImg,
+  'bill-del': delBill, 'iss-ok': resolveIssue, export: exportData,
   'pay-ok': id => setPay(id, 'confirmed'), 'pay-no': id => setPay(id, 'rejected'),
   'view-ok': id => setView(id, 'confirmed'), 'view-no': id => setView(id, 'cancelled'), 'view-cancel': id => setView(id, 'cancelled'),
   pub: id => setPub(id, true), unpub: id => setPub(id, false), 'prop-st': setPropSt, 'prop-del': delProp,
-  'reset-filters': () => { Object.assign(F, { q:'', city:'', cat:'', term:'', max:0 }); render(); }
+  'reset-filters': () => { Object.assign(F, F0); ldel(ss, FKEY); render(); }
 };
 const FORMS = { fAuth:onAuth, fPin:onPin, fPay:onPay, fView:onView, fProp:onProp, fPhoto:onPhoto, fChat:onChat, fDm:onDm, fBill:onBill, fIssue:onIssue, fAdmin:onAdmin };
+const fail = err => { console.error(err); toast('حدث خطأ غير متوقع. حاول مرة أخرى.', true); };
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-act]'); if (!t) return;
   const fn = A[t.dataset.act]; if (!fn) return;
-  e.preventDefault(); fn(t.dataset.id, t);
+  e.preventDefault();
+  try { Promise.resolve(fn(t.dataset.id, t)).catch(fail); } catch (err) { fail(err); }
 });
 document.addEventListener('submit', e => {
-  const fn = FORMS[e.target.id]; if (!fn) return;
-  e.preventDefault(); Promise.resolve(fn(e.target)).catch(err => { console.error(err); toast('حدث خطأ غير متوقع.', true); });
+  const f = e.target, fn = FORMS[f.id]; if (!fn) return;
+  e.preventDefault();
+  if (f.dataset.busy) return; /* منع الإرسال مرتين (نقرة مزدوجة) */
+  f.dataset.busy = '1';
+  Promise.resolve().then(() => fn(f)).catch(fail).finally(() => { delete f.dataset.busy; });
 });
 let fT;
+const saveF = () => lset(ss, FKEY, F);
 document.addEventListener('input', e => {
   const k = e.target.dataset.filter;
-  if (k === 'q' || k === 'max') { F[k] = k === 'max' ? num(e.target.value, 1e6) : e.target.value; clearTimeout(fT); fT = setTimeout(paintGrid, 150); }
+  if (k === 'q' || k === 'max') { F[k] = k === 'max' ? num(digits(e.target.value), 1e6) : e.target.value; saveF(); clearTimeout(fT); fT = setTimeout(paintGrid, 150); }
 });
 document.addEventListener('change', e => {
   const t = e.target, k = t.dataset.filter;
-  if (k && k !== 'q' && k !== 'max') { F[k] = t.value; paintGrid(); }
+  if (k && k !== 'q' && k !== 'max') { F[k] = t.value; saveF(); paintGrid(); }
   else if (t.id === 'thr') { curThr = t.value; render(); }
   else if (t.id === 'home') { curHome = t.value; render(); }
   else if (t.id === 'dmThr') { curDm = t.value; render(); }
-  else if (t.id === 'payProof') { clearPreview(); const f = t.files[0]; if (f && /^image\//.test(f.type)) { prevUrl = URL.createObjectURL(f); const i = $('payPrev'); i.src = prevUrl; i.hidden = false; } }
+  else if (t.id === 'impFile') importData(t).catch(fail);
+  else if (t.type === 'file') showPrev(t);
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('menu').classList.contains('open')) { toggleMenu(false); $('hb').focus(); } });
-$('dlgPay').addEventListener('close', clearPreview);
+window.addEventListener('popstate', () => {
+  if (!me) return;
+  const h = location.hash.slice(1);
+  if (h !== tab && tabsFor(me.role).some(i => i[0] === h)) { tab = h; render(); window.scrollTo(0, 0); }
+});
 window.addEventListener('storage', e => {
+  if (e.storageArea !== ls) return;
+  if (e.key === SESS) return syncSession();
   if (e.key !== KEY) return;
-  db = normalize(lget(ls, KEY)); invalidate();
-  if (me && me.role !== 'broker') { me = db.users.find(u => u.id === me.id) || null; if (!me) return logout(); }
-  render();
+  db = load(); invalidate();
+  imgSync().catch(() => {}).then(() => {
+    if (!me) return;
+    if (!isBroker()) { me = db.users.find(u => u.id === me.id) || null; if (!me) return leave(); }
+    softRender();
+  });
 });
 window.addEventListener('error', () => toast('حدث خطأ غير متوقع. حدّث الصفحة.', true));
 
-/* ================= التشغيل ================= */
+/* ══════════════════════════════════════════════════════════════════════
+   [S17] 🚀 التشغيل
+   ──────────────────────────────────────────────────────────────────────
+   الترتيب مهم: نفتحو IndexedDB → ننقلو الصور القديمة → نحمّلو المعطيات →
+   نحمّلو الصور → نرجّعو الجلسة (والتبويب من الرابط) → ننظّفو الصور اليتيمة.
+   ══════════════════════════════════════════════════════════════════════ */
 $('tk').textContent = CFG.ann;
 $('payD17').textContent = CFG.d17; $('cpD17').dataset.copy = CFG.d17;
 $('payRib').textContent = CFG.rib; $('cpRib').dataset.copy = CFG.rib.replace(/\s/g, '');
-me = restore();
-if (me) enterApp();
-if (!ls) toast('تنبيه: التخزين المحلي غير متاح في هذا المتصفح، لن تُحفظ بياناتك.', true);
+{ const sf = obj(lget(ss, FKEY)); for (const k of Object.keys(F0)) if (typeof sf[k] === typeof F0[k]) F[k] = sf[k]; }
+ldel(ls, 'darek_lock');
+(async () => {
+  idb = await idbOpen();
+  await imgMigrate();
+  await migrateV1();
+  db = load();
+  await imgSync();
+  me = restore();
+  if (me) enterApp();
+  if (!ls) toast('تنبيه: التخزين المحلي غير متاح في هذا المتصفح (وضع خاص؟)، لن تُحفظ بياناتك.', true);
+  setTimeout(() => imgGc(), 5000);
+})().catch(fail);
 })();
 </script>
 </body>

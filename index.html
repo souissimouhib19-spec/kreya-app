@@ -13,7 +13,7 @@
      [C3] الأزرار والنماذج              [C9] الإشعارات، واتساب والحركة
      [C4] النوافذ (dialogs)             [C10] الخريطة، تفاصيل العقار، الجولة التعريفية
      [C5] الهيكل: الشريط، القائمة والتبويبات
-     [C6] بطاقات العقارات والفلاتر
+     [C6] بطاقات العقارات والفلاتر      [C11] لوحة السمسار والرسم البياني
 
   🧱 الهيكل (HTML) — داخل وسم body
      [H1] الشريط العلوي والإشعارات   [H3] نوافذ الدفع، المعاينة، الصورة، التفاصيل، الجولة
@@ -41,7 +41,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-eaUPRbaq2xLgOsNG3wRc5CT0ttRxwi75ddeCalNq8gw='; style-src 'sha256-eE6VgCBYXeKSPbTbKGfLIUIGapAixz3CEyBZOerWKeU=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: https:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-boR3pD77MEUPp6jBDaxEfJB5DOP9Jgw4fMIuQEaTsZQ='; style-src 'sha256-brWgradalpE5h8UjWgsHvDLOBA6UT8FJTBWyZfcYj5A=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: https:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="داره: ابحث عن مبيت أو شقة في تونس، اطلب معاينة، وادفع العربون بإثبات تحويل تؤكده الإدارة.">
@@ -282,6 +282,35 @@ dialog::backdrop{background:rgba(22,10,16,.62);backdrop-filter:blur(5px)}
 @media (prefers-reduced-motion:reduce){*,::before,::after{transition:none!important;animation:none!important}.tick span{position:static;display:block;text-align:center;padding-top:4px}html{scroll-behavior:auto}}
 
 /* ════════════════════════════════════════════════════════════════
+   [C11] 📈 لوحة السمسار: الرسم البياني، الجداول، قائمة القرارات
+   ════════════════════════════════════════════════════════════════ */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--sh)}
+.kpi span{display:block;font-size:13px;color:var(--mut);font-weight:600}
+.kpi b{display:block;font-size:clamp(20px,2.6vw,26px);font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.kpi small{color:var(--mut);font-size:12px}
+.kpi.hl{background:linear-gradient(135deg,var(--redd),var(--red));border:0;color:#fff}.kpi.hl span,.kpi.hl small,.kpi.hl b{color:#fff}
+.chartbox{position:relative}
+.chart{width:100%;height:auto;display:block}
+.chart .grid line{stroke:var(--line);stroke-width:1}
+.chart .ax{fill:var(--mut);font-size:11px;font-variant-numeric:tabular-nums}
+.chart .bar{fill:var(--red)}.chart .bar.cur{fill:var(--redd)}
+.chart .hit{fill:transparent;cursor:pointer}.chart .hit:hover+.bar,.chart .hit:focus+.bar{fill:#e0405a}
+.chart .base{stroke:#bdb4ba;stroke-width:1}
+.chart .bar,.chart .val,.chart .ax,.chart .base{pointer-events:none}
+.chart .val{fill:var(--ink);font-size:11px;font-weight:700;text-anchor:middle}
+.tip{position:absolute;z-index:5;pointer-events:none;background:var(--ink);color:#fff;border-radius:10px;padding:6px 10px;font-size:12.5px;white-space:nowrap;transform:translate(-50%,-110%)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th,.tbl td{padding:8px 10px;border-top:1px solid var(--line);text-align:right;vertical-align:middle}
+.tbl th{color:var(--mut);font-size:12.5px;font-weight:700;border-top:0}
+.tbl td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tscroll{overflow-x:auto}
+.q{display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.q .tag{font-size:12px;font-weight:800;padding:4px 10px;border-radius:8px;background:#f3f1f5;white-space:nowrap}
+@media (max-width:640px){.q{grid-template-columns:1fr}}
+.blocked{opacity:.55}
+
+/* ════════════════════════════════════════════════════════════════
    [C10] 🗺️ الخريطة، تفاصيل العقار، الجولة التعريفية
    ════════════════════════════════════════════════════════════════ */
 .mapwrap{display:grid;grid-template-columns:minmax(0,320px) 1fr;gap:16px;align-items:start}
@@ -454,6 +483,8 @@ document.getElementById('jsfail').remove();
                فارغ = تتعرض جولة بالخطوات في بلاصتو.
    رمز الإدارة: ولّدو من «🔐 الأمان والبيانات» والصق السطر مكان admin:
    adminIdleMin: الإدارة تخرج وحدها بعد هالعدد من الدقائق بلا حركة.
+   commission: عمولة السمسار (%) على كل دفعة مؤكدة في عقارات الملاّكة. الباقي = مستحقات المالك.
+   (عقارات الإدارة نفسها: الدخل الكل للسمسار.)
    ══════════════════════════════════════════════════════════════════════ */
 const APP_VER = '4.0';
 const CFG = Object.freeze({
@@ -462,6 +493,7 @@ const CFG = Object.freeze({
   brokerName: 'السمسار مهيب',
   introVideo: '',
   adminIdleMin: 30,
+  commission: 10,
   admin: Object.freeze({ salt: '', iter: 310000, hash: '' }),
   adminLegacySha256: '8bfa6ec511c7840857b9bb932cadbbcea45d49b6f9fba4a808f6e0a255a9bd78'
 });
@@ -554,7 +586,7 @@ function normalize(r) {
   }
   return {
     v: 2,
-    users: arr(r.users).filter(u => u && u.id && u.email).map(u => ({ id:str(u.id,40), name:str(u.name,60), email:str(u.email,80).toLowerCase(), phone:/^\d{8}$/.test(u.phone) ? u.phone : '', role:oneOf(u.role,['tenant','landlord'],'tenant'), salt:str(u.salt,64), hash:str(u.hash,64), iter:num(u.iter,2e6) || USER_ITER, at:str(u.at,40) })),
+    users: arr(r.users).filter(u => u && u.id && u.email).map(u => ({ id:str(u.id,40), name:str(u.name,60), email:str(u.email,80).toLowerCase(), phone:/^\d{8}$/.test(u.phone) ? u.phone : '', role:oneOf(u.role,['tenant','landlord'],'tenant'), salt:str(u.salt,64), hash:str(u.hash,64), iter:num(u.iter,2e6) || USER_ITER, at:str(u.at,40), blocked:u.blocked === true })),
     props: arr(r.props).filter(p => p && p.id).map(p => ({ id:str(p.id,40), title:str(p.title,80), city:oneOf(p.city,CITIES,CITIES[0]), addr:str(p.addr,80), fac:str(p.fac,60) || '—', min:num(p.min,240), price:num(p.price,1e6), st:oneOf(p.st,['available','rented'],'available'), end:str(p.end,40) || '—', cat:oneOf(p.cat,Object.keys(CATS),'all'), term:oneOf(p.term,Object.keys(TERMS),'month'), rooms:Math.round(num(p.rooms,4)), area:Math.round(num(p.area,2000)), furn:p.furn === true, desc:str(p.desc,600), owner:str(p.owner,40), ok:p.ok === true, at:str(p.at,40), pat:str(p.pat,40) })),
     ov,
     views: arr(r.views).filter(v => v && v.id).map(v => ({ id:str(v.id,40), pid:str(v.pid,40), uid:str(v.uid,40), name:str(v.name,60), slot:str(v.slot,80), at:str(v.at,40), dat:str(v.dat,40), st:oneOf(v.st,['pending','confirmed','cancelled'],'pending') })),
@@ -562,7 +594,9 @@ function normalize(r) {
     chats: arr(r.chats).filter(c => c && c.id && c.thr).map(c => ({ id:str(c.id,40), thr:str(c.thr,40), from:c.from === 'broker' ? 'broker' : 'user', name:str(c.name,60), txt:str(c.txt,1000), at:str(c.at,40) })),
     dms: arr(r.dms).filter(c => c && c.id && c.pid && c.uid).map(c => ({ id:str(c.id,40), pid:str(c.pid,40), uid:str(c.uid,40), from:c.from === 'owner' ? 'owner' : 'tenant', name:str(c.name,60), txt:str(c.txt,1000), at:str(c.at,40) })),
     bills: arr(r.bills).filter(b => b && b.id).map(b => ({ id:str(b.id,40), pid:str(b.pid,40), uid:str(b.uid,40), name:str(b.name,60), kind:oneOf(b.kind,Object.keys(BILL),'steg'), amt:num(b.amt,1e5), month:MONTH_RE.test(b.month) ? b.month : '', img:imgRef(b.img), at:str(b.at,40) })),
-    issues: arr(r.issues).filter(x => x && x.id).map(x => ({ id:str(x.id,40), pid:str(x.pid,40), uid:str(x.uid,40), name:str(x.name,60), txt:str(x.txt,1000), img:imgRef(x.img), at:str(x.at,40), st:oneOf(x.st,['open','resolved'],'open'), by:str(x.by,60), rat:str(x.rat,40) }))
+    issues: arr(r.issues).filter(x => x && x.id).map(x => ({ id:str(x.id,40), pid:str(x.pid,40), uid:str(x.uid,40), name:str(x.name,60), txt:str(x.txt,1000), img:imgRef(x.img), at:str(x.at,40), st:oneOf(x.st,['open','resolved'],'open'), by:str(x.by,60), rat:str(x.rat,40) })),
+    /* تحويلات السمسار للملاّكة (المال اللي خلّصو للمالك من المقبوض) */
+    payouts: arr(r.payouts).filter(x => x && x.id && x.owner).map(x => ({ id:str(x.id,40), owner:str(x.owner,40), amt:num(x.amt,1e7), note:str(x.note,120), at:str(x.at,40) }))
   };
 }
 const load = () => normalize(lget(ls, KEY));
@@ -782,7 +816,8 @@ function openDlg(id) {
   const d = $(id); d.querySelectorAll('.err').forEach(e => { e.textContent = ''; });
   if (typeof d.showModal === 'function') { if (!d.open) d.showModal(); } else d.setAttribute('open', '');
   const f = [...d.querySelectorAll('input:not([type=radio]):not([type=file]):not([type=checkbox])')].find(x => !x.closest('[hidden]')) || d.querySelector('button[type=submit],button');
-  if (f) setTimeout(() => f.focus(), 30);
+  /* ما نسرقوش التركيز كان المستعمل (ولا مدير كلمات السر) بدا يكتب في حقل آخر */
+  if (f) setTimeout(() => { const a = document.activeElement; if (!a || a === d || !d.contains(a)) f.focus(); }, 30);
 }
 function closeDlg(id) { const d = $(id); if (d && d.open) { if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); } }
 document.querySelectorAll('dialog').forEach(d => {
@@ -852,7 +887,7 @@ function restore() {
   const b = lget(ss, SESS);
   if (b && b.role === 'broker' && b.exp > Date.now()) return BROKER;
   const s = lget(ls, SESS);
-  if (s && s.exp > Date.now()) { const u = db.users.find(x => x.id === s.uid); if (u && u.hash) return u; }
+  if (s && s.exp > Date.now()) { const u = db.users.find(x => x.id === s.uid); if (u && u.hash && !u.blocked) return u; }
   return null;
 }
 function openAuth(r = 'tenant', mode = 'login', why = '') {
@@ -910,6 +945,7 @@ async function onAuth(f) {
       if (other) { setRole(other.role); return setErr(f, `هذا البريد مسجّل كـ${RL[other.role]}. اخترنالك صفة «${RL[other.role]}»، اضغط «دخول» من جديد.`); }
       lockFail('auth'); return setErr(f, 'البريد أو كلمة السر غير صحيحة. ليس لديك حساب؟ اختر «حساب جديد».');
     }
+    if (u.blocked) return setErr(f, 'هذا الحساب موقوف من الإدارة. تواصل معنا عبر واتساب.');
     if (!u.hash) { setAuthMode('register'); return setErr(f, 'هذا الحساب يحتاج كلمة سر جديدة: أكمل «حساب جديد» بنفس البريد.'); }
     busy(f, true, '⏳ جاري التحقق…');
     let ok;
@@ -979,9 +1015,9 @@ function tabsFor(r) {
   const dmN = dmThreads().filter(t => t.unread).length, issN = ownIssues().filter(x => x.st === 'open').length;
   if (r === 'landlord') return [['my_props','🏠 عقاراتي'],['tenants','💬 مكترِيّ',dmN],['ll_bills','🧾 الفواتير'],['ll_issues','⚠️ التشكيات',issN],['pays','💰 المداخيل'],['props','🏘️ العقارات'],['support','💬 الدعم']];
   const c = counts();
-  return [['broker_all','⚡ لوحة التحكم',c.props + c.views],['pays','💳 المدفوعات',c.pays],['inbox','💬 رسائل الدعم',c.inbox],['tenants','🏠 مكترو الإدارة',dmN],['ll_issues','⚠️ التشكيات',issN],['ll_bills','🧾 الفواتير'],['props','🏘️ العقارات'],['settings','🔐 الأمان والبيانات']];
+  return [['broker_all','⚡ لوحة التحكم',c.props + c.views + c.pays + c.issues],['finance','💰 المالية'],['pays','💳 المدفوعات',c.pays],['users','👥 المستخدمون'],['inbox','💬 رسائل الدعم',c.inbox],['tenants','🏠 مكترو الإدارة',dmN],['ll_issues','⚠️ التشكيات',issN],['ll_bills','🧾 الفواتير'],['props','🏘️ العقارات'],['settings','🔐 الأمان والبيانات']];
 }
-const heroText = () => isBroker() ? 'راجع الطلبات والمدفوعات من مكان واحد' : me.role === 'landlord' ? 'أضف عقاراتك وتابع حجوزاتها ومداخيلها' : housed() ? 'دارك: محادثة المالك، الفواتير والتشكيات في مكان واحد' : 'ابحث، عاين، واحجز مبيتك بثقة';
+const heroText = () => isBroker() ? 'أنت الوسيط: كل الدفعات، المال، المشاكل والقرارات في يدك' : me.role === 'landlord' ? 'أضف عقاراتك وتابع حجوزاتها ومداخيلها' : housed() ? 'دارك: محادثة المالك، الفواتير والتشكيات في مكان واحد' : 'ابحث، عاين، واحجز مبيتك بثقة';
 function paintNav(items) {
   const h = items.map(([k, l, n]) => `<button type="button" data-act="tab" data-id="${k}"${tab === k ? ' class="on" aria-current="page"' : ''}>${E(l)}${n ? `<span class="cnt">${n}</span>` : ''}</button>`).join('');
   $('tabs').innerHTML = h;
@@ -1272,20 +1308,64 @@ const VIEWS = {
     const L = (admin ? db.payments : db.payments.filter(py => ownsProp(py.pid)))
       .slice().sort((a, b) => ((b.st === 'pending') - (a.st === 'pending')) || byAtDesc(a, b));
     const sum = s => L.filter(py => py.st === s).reduce((a, py) => a + py.amt, 0);
+    const mine = !admin && finance().owners.find(o => o.id === me.id);
     return `<section class="panel"><h2>${admin ? '💳 مراقبة المدفوعات والعرابين' : '💰 مداخيل عقاراتي'}</h2>
-    <div class="stats"><div class="stat"><b>${money(sum('confirmed'))}</b><span class="mut">مؤكد</span></div><div class="stat"><b>${money(sum('pending'))}</b><span class="mut">قيد المراجعة</span></div><div class="stat"><b>${L.length}</b><span class="mut">عملية</span></div></div>
-    ${L.map(py => payRow(py, admin)).join('') || empty('لا توجد مدفوعات حالياً.')}</section>`;
+    <div class="stats"><div class="stat"><b>${money(sum('confirmed'))}</b><span class="mut">مؤكد</span></div><div class="stat"><b>${money(sum('pending'))}</b><span class="mut">قيد المراجعة</span></div>${mine ? `<div class="stat"><b>${money(mine.net)}</b><span class="mut">صافي لك (بعد ${CFG.commission}% عمولة)</span></div><div class="stat"><b>${money(mine.paid)}</b><span class="mut">وصلك</span></div><div class="stat"><b>${money(mine.due)}</b><span class="mut">باقي عند الوسيط</span></div>` : `<div class="stat"><b>${L.length}</b><span class="mut">عملية</span></div>`}</div>
+    ${L.map(py => payRow(py, admin)).join('') || empty('لا توجد مدفوعات حالياً.')}
+    ${mine && db.payouts.some(x => x.owner === me.id) ? `<h2>💸 التحويلات اللي وصلتك</h2>${db.payouts.filter(x => x.owner === me.id).sort(byAtDesc).map(x => `<div class="row"><div class="grow">${fDT(x.at)}${x.note ? ' · ' + E(x.note) : ''}</div><b class="num">${money(x.amt)}</b></div>`).join('')}` : ''}</section>`;
   },
 
   /* ─────────────── ⚡ الإدارة ─────────────── */
   broker_all: () => {
-    const pend = db.props.filter(p => !p.ok), vs = db.views.slice().sort(byAtDesc), c = counts();
-    return `<section class="panel"><h2>⚡ ملخص</h2><div class="stats">
-      <div class="stat"><b>${db.users.length}</b><span class="mut">مستخدم</span></div><div class="stat"><b>${props().length}</b><span class="mut">عقار</span></div>
-      <div class="stat"><b>${c.pays}</b><span class="mut">دفع قيد المراجعة</span></div><div class="stat"><b>${c.views}</b><span class="mut">معاينة قيد الانتظار</span></div><div class="stat"><b>${c.props}</b><span class="mut">عقار ينتظر النشر</span></div><div class="stat"><b>${c.issues}</b><span class="mut">تشكية مفتوحة</span></div></div></section>
-    <section class="panel"><h2>🏠 عقارات في انتظار الموافقة</h2>${pend.map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} - ${E(p.addr)} · ${money(p.price)} / ${E(TERMS[p.term])} · ${E(uname(p.owner))}</div>${p.desc ? `<div class="mut txt">${E(p.desc)}</div>` : ''}</div><div class="rowact">${btn('details', p.id, 'معاينة', 'ghost')}${btn('pub', p.id, 'نشر', 'ok')}${btn('prop-del', p.id, 'رفض وحذف', 'no')}</div></div>`).join('') || empty('لا توجد عقارات في الانتظار.')}</section>
-    <section class="panel"><h2>📅 طلبات المعاينة</h2>${vs.map(v => { const p = prop(v.pid); return `<div class="row"><div class="grow"><b>${E(v.name)}</b><div class="mut">${E(p ? p.title : 'عقار محذوف')} · ${E(v.slot)}</div></div><div class="rowact">${pill(v.st)}${v.st === 'pending' ? btn('view-ok', v.id, 'تأكيد', 'ok') + btn('view-no', v.id, 'إلغاء', 'no') : ''}</div></div>`; }).join('') || empty('لا توجد طلبات.')}</section>
-    <section class="panel"><h2>🗂️ إدارة العقارات المنشورة</h2>${published().map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])}</div></div><div class="rowact">${pill(p.st)}${btn('prop-st', p.id, p.st === 'available' ? 'تعليم كمكرى' : 'تعليم كمتاح')}${p.seed ? '' : btn('unpub', p.id, 'إخفاء', 'no')}</div></div>`).join('')}</section>`;
+    const c = counts(), fin = finance(), m = fin.months, cur = m[m.length - 1], prev = m[m.length - 2];
+    const trend = prev.v ? Math.round((cur.v - prev.v) / prev.v * 100) : null;
+    const Q = decisions();
+    return `<div class="kpis">
+      <div class="kpi hl"><span>عمولتك (المجموع)</span><b>${money(fin.mine)}</b><small>${CFG.commission}% من عقارات الملاّكة + دخل عقاراتك</small></div>
+      <div class="kpi"><span>المقبوض هذا الشهر</span><b>${money(cur.v)}</b><small>${trend === null ? 'لا مقارنة' : (trend >= 0 ? '▲ ' : '▼ ') + Math.abs(trend) + '% مقارنة بالشهر الفارط'}</small></div>
+      <div class="kpi"><span>في انتظار قرارك</span><b>${Q.length}</b><small>${money(fin.pending)} دفعات قيد المراجعة</small></div>
+      <div class="kpi"><span>مستحقات الملاّكة</span><b>${money(fin.due)}</b><small>لازم تتحوّل للملاّكة</small></div>
+      <div class="kpi"><span>المستخدمون</span><b>${db.users.length}</b><small>${props().length} عقار · ${c.issues} تشكية مفتوحة</small></div>
+    </div>
+    <section class="panel"><div class="sech"><div><h2>📈 المقبوض الشهري (آخر 12 شهر)</h2></div>${btn('tab', 'finance', 'التفاصيل المالية ←', 'ghost')}</div>${barChart(m)}</section>
+    <section class="panel"><h2>🧭 في انتظار قرارك (${Q.length})</h2>${Q.map(qRow).join('') || empty('كل شي محسوم ✅ ما فماش طلبات في الانتظار.')}</section>
+    <section class="panel"><h2>🗂️ إدارة العقارات المنشورة</h2>${published().map(p => `<div class="row"><div class="grow"><b>${E(p.title)}</b><div class="mut">${E(p.city)} · ${money(p.price)} / ${E(TERMS[p.term])} · ${E(uname(p.owner))}</div></div><div class="rowact">${pill(p.st)}${btn('details', p.id, 'عرض', 'ghost')}${btn('prop-st', p.id, p.st === 'available' ? 'تعليم كمكرى' : 'تعليم كمتاح')}${p.seed ? '' : btn('unpub', p.id, 'إخفاء', 'no')}</div></div>`).join('')}</section>`;
+  },
+
+  finance: () => {
+    const fin = finance(), m = fin.months, L = fin.owners;
+    const owners = db.users.filter(u => u.role === 'landlord');
+    return `<div class="kpis">
+      <div class="kpi"><span>إجمالي المقبوض المؤكد</span><b>${money(fin.total)}</b><small>${fin.count} دفعة مؤكدة</small></div>
+      <div class="kpi hl"><span>عمولتك</span><b>${money(fin.mine)}</b><small>${CFG.commission}% + دخل عقارات الإدارة</small></div>
+      <div class="kpi"><span>حُوِّل للملاّكة</span><b>${money(fin.paid)}</b><small>${db.payouts.length} تحويل</small></div>
+      <div class="kpi"><span>باقي للملاّكة</span><b>${money(fin.due)}</b><small>المال اللي عندك لهم</small></div>
+      <div class="kpi"><span>قيد المراجعة</span><b>${money(fin.pending)}</b><small>إيصالات تستنى قرارك</small></div>
+    </div>
+    <section class="panel"><div class="sech"><div><h2>📈 المقبوض الشهري</h2><p class="mut">مجموع الدفعات المؤكدة (عربون + كراء) حسب شهر التأكيد.</p></div><button type="button" class="btn sm ghost" data-act="csv">⬇️ تصدير المدفوعات (Excel / CSV)</button></div>${barChart(m)}
+      <details><summary class="mut">عرض الأرقام في جدول</summary><div class="tscroll"><table class="tbl"><thead><tr><th>الشهر</th><th>المقبوض</th><th>عدد الدفعات</th></tr></thead><tbody>${m.slice().reverse().map(x => `<tr><td>${E(x.label)}</td><td class="n">${money(x.v)}</td><td class="n">${x.n}</td></tr>`).join('')}</tbody></table></div></details></section>
+    <section class="panel"><h2>🏦 مستحقات الملاّكة</h2><div class="tscroll"><table class="tbl"><thead><tr><th>المالك</th><th>المقبوض</th><th>عمولتك</th><th>الصافي</th><th>حُوِّل</th><th>الباقي</th></tr></thead><tbody>
+      ${L.map(o => `<tr><td><b>${E(o.name)}</b><div class="mut">${o.props} عقار</div></td><td class="n">${money(o.collected)}</td><td class="n">${money(o.fee)}</td><td class="n">${money(o.net)}</td><td class="n">${money(o.paid)}</td><td class="n"><b>${money(o.due)}</b></td></tr>`).join('') || `<tr><td colspan="6">${empty('ما فماش ملاّكة بعد.')}</td></tr>`}
+      </tbody></table></div>
+      ${owners.length ? `<form id="fPayout" novalidate><h2>💸 تسجيل تحويل لمالك</h2><div class="fr">
+        <label class="fld">المالك<select name="owner">${owners.map(u => opt(u.id, u.name + ' — باقي ' + money((L.find(o => o.id === u.id) || {}).due || 0), '')).join('')}</select></label>
+        <label class="fld">المبلغ (د.ت)<input name="amt" inputmode="decimal" maxlength="10" dir="ltr" autocomplete="off"></label>
+        <label class="fld">ملاحظة <span class="opt">(اختياري)</span><input name="note" maxlength="120" placeholder="D17، تحويل بنكي، نقداً…"></label>
+      </div><p class="err" role="alert"></p><button type="submit" class="btn sm ok">تسجيل التحويل</button></form>` : ''}</section>
+    <section class="panel"><h2>🏠 الدخل حسب العقار</h2><div class="tscroll"><table class="tbl"><thead><tr><th>العقار</th><th>المالك</th><th>المقبوض</th><th>عمولتك</th></tr></thead><tbody>
+      ${fin.byProp.map(r => `<tr><td>${E(r.title)}</td><td>${E(r.owner)}</td><td class="n">${money(r.v)}</td><td class="n">${money(r.fee)}</td></tr>`).join('') || `<tr><td colspan="4">${empty('ما فماش دفعات مؤكدة بعد.')}</td></tr>`}
+      </tbody></table></div></section>
+    <section class="panel"><h2>📒 سجل التحويلات للملاّكة</h2>${db.payouts.slice().sort(byAtDesc).map(x => `<div class="row"><div class="grow"><b>${E(uname(x.owner))}</b><div class="mut">${fDT(x.at)}${x.note ? ' · ' + E(x.note) : ''}</div></div><div class="rowact"><b class="num">${money(x.amt)}</b>${btn('payout-del', x.id, 'إلغاء', 'no')}</div></div>`).join('') || empty('ما سجّلت حتى تحويل بعد.')}</section>`;
+  },
+
+  users: () => {
+    const U = db.users.slice().sort(byAtDesc);
+    const n = r => U.filter(u => u.role === r).length;
+    return `<div class="kpis"><div class="kpi"><span>المكترون</span><b>${n('tenant')}</b></div><div class="kpi"><span>الملاّكة</span><b>${n('landlord')}</b></div><div class="kpi"><span>موقوفون</span><b>${U.filter(u => u.blocked).length}</b></div></div>
+    <section class="panel"><h2>👥 كل المستخدمين</h2><div class="tscroll"><table class="tbl"><thead><tr><th>الاسم</th><th>الصفة</th><th>التواصل</th><th>النشاط</th><th>التسجيل</th><th></th></tr></thead><tbody>
+    ${U.map(u => { const pays = db.payments.filter(p => p.uid === u.id), np = props().filter(p => p.owner === u.id).length;
+      return `<tr class="${u.blocked ? 'blocked' : ''}"><td><b>${E(u.name)}</b>${u.blocked ? ' <span class="pill x">موقوف</span>' : ''}</td><td>${E(RL[u.role])}</td><td><div dir="ltr" class="mut">${E(u.email)}</div>${u.phone ? `<a class="mut" href="https://wa.me/216${E(u.phone)}" target="_blank" rel="noopener noreferrer" dir="ltr">+216 ${E(u.phone)}</a>` : ''}</td><td class="n">${u.role === 'landlord' ? np + ' عقار' : pays.length + ' دفعة'}</td><td class="n">${fDate(u.at)}</td><td>${btn('user-block', u.id, u.blocked ? 'تفعيل' : 'إيقاف', u.blocked ? 'ok' : 'no')}</td></tr>`; }).join('') || `<tr><td colspan="6">${empty('ما فماش مستخدمين بعد.')}</td></tr>`}
+    </tbody></table></div></section>`;
   },
 
   inbox: () => {
@@ -1360,6 +1440,62 @@ function openDetail(id) {
     </aside></div>`;
   openDlg('dlgProp');
   if (p.ok && location.hash !== '#p-' + id) history.replaceState(null, '', '#p-' + id);
+}
+/* ── المالية: كل الحسابات في بلاصة وحدة ── */
+function finance() {
+  const pct = CFG.commission / 100, ok = db.payments.filter(p => p.st === 'confirmed');
+  const keyOf = p => String(p.dat || p.at).slice(0, 7);
+  const months = [], d = new Date(); d.setDate(15);
+  for (let i = 11; i >= 0; i--) { const x = new Date(d.getFullYear(), d.getMonth() - i, 15); const k = x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0'); months.push({ k, label:mF.format(x), short:new Intl.DateTimeFormat('ar-TN-u-nu-latn', { month:'short' }).format(x), v:0, n:0 }); }
+  const byM = new Map(months.map(m => [m.k, m])), byP = new Map(), own = new Map();
+  let total = 0, mine = 0;
+  for (const p of ok) {
+    total += p.amt;
+    const m = byM.get(keyOf(p)); if (m) { m.v += p.amt; m.n++; }
+    const pr = prop(p.pid), owner = pr ? pr.owner : 'broker', fee = owner === 'broker' ? p.amt : p.amt * pct;
+    mine += fee;
+    const r = byP.get(p.pid) || { title:pr ? pr.title : 'عقار محذوف', owner:uname(owner), v:0, fee:0 }; r.v += p.amt; r.fee += fee; byP.set(p.pid, r);
+    if (owner !== 'broker') { const o = own.get(owner) || { collected:0 }; o.collected += p.amt; own.set(owner, o); }
+  }
+  const owners = db.users.filter(u => u.role === 'landlord').map(u => {
+    const collected = (own.get(u.id) || { collected:0 }).collected, fee = collected * pct, net = collected - fee, paid = db.payouts.filter(x => x.owner === u.id).reduce((a, x) => a + x.amt, 0);
+    return { id:u.id, name:u.name, props:props().filter(p => p.owner === u.id).length, collected, fee, net, paid, due:Math.max(0, net - paid) };
+  }).sort((a, b) => b.due - a.due || b.collected - a.collected);
+  return { months, total, mine, count:ok.length, pending:db.payments.filter(p => p.st === 'pending').reduce((a, p) => a + p.amt, 0),
+    paid:db.payouts.reduce((a, x) => a + x.amt, 0), due:owners.reduce((a, o) => a + o.due, 0), owners, byProp:[...byP.values()].sort((a, b) => b.v - a.v) };
+}
+/* رسم بياني بالأعمدة (SVG خفيف، بلا مكتبات): سلسلة وحدة، محور واحد، تلميح عند المرور، جدول بديل */
+function barChart(M) {
+  const W = 1000, H = 260, L = 56, Rm = 8, T = 22, B = 32, cw = (W - L - Rm) / M.length, max = Math.max(...M.map(m => m.v));
+  const step = max ? (() => { const r = max / 4, p = 10 ** Math.floor(Math.log10(r)), f = r / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p; })() : 100;
+  const top = step * 4, y = v => T + (H - T - B) * (1 - v / top), base = y(0), short = n => n >= 1000 ? nf.format(Math.round(n / 100) / 10) + 'k' : nf.format(n);
+  const grid = [0, 1, 2, 3, 4].map(i => `<line x1="${L}" x2="${W - Rm}" y1="${y(step * i).toFixed(1)}" y2="${y(step * i).toFixed(1)}"></line><text class="ax" x="${L - 8}" y="${y(step * i).toFixed(1)}" text-anchor="end" dominant-baseline="central">${short(step * i)}</text>`).join('');
+  const best = M.reduce((a, m) => m.v > a.v ? m : a, M[0]);
+  const bars = M.map((m, i) => {
+    const bw = Math.min(44, cw * .56), x = L + i * cw + (cw - bw) / 2, h = base - y(m.v), last = i === M.length - 1;
+    const tip = `${m.label}: ${money(m.v)} · ${m.n} دفعة`;
+    return `<rect class="hit" x="${(L + i * cw).toFixed(1)}" y="${T}" width="${cw.toFixed(1)}" height="${H - T - B + 4}" data-tip="${E(tip)}" tabindex="0" aria-label="${E(tip)}"></rect>`
+      + (m.v ? `<path class="bar${last ? ' cur' : ''}" d="M${x.toFixed(1)},${base}V${(base - h + 4).toFixed(1)}q0,-4 4,-4h${(bw - 8).toFixed(1)}q4,0 4,4V${base}Z"></path>` : '')
+      + (m === best && m.v ? `<text class="val" x="${(x + bw / 2).toFixed(1)}" y="${(base - h - 6).toFixed(1)}">${short(m.v)}</text>` : '')
+      + `<text class="ax" x="${(L + i * cw + cw / 2).toFixed(1)}" y="${H - 10}" text-anchor="middle">${E(m.short)}</text>`;
+  }).join('');
+  return `<div class="chartbox"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="المقبوض الشهري لآخر 12 شهر بالدينار"><g class="grid">${grid}</g><line class="base" x1="${L}" x2="${W - Rm}" y1="${base}" y2="${base}"></line>${bars}</svg><div class="tip" id="tip" hidden></div></div>`;
+}
+/* كل ما يستنى قرار السمسار، مرتّب من الأقدم */
+function decisions() {
+  const Q = [];
+  db.payments.filter(p => p.st === 'pending').forEach(p => Q.push({ at:p.at, kind:'pay', x:p }));
+  db.props.filter(p => !p.ok).forEach(p => Q.push({ at:p.at, kind:'prop', x:p }));
+  db.views.filter(v => v.st === 'pending').forEach(v => Q.push({ at:v.at, kind:'view', x:v }));
+  db.issues.filter(i => i.st === 'open').forEach(i => Q.push({ at:i.at, kind:'issue', x:i }));
+  return Q.sort((a, b) => String(a.at).localeCompare(String(b.at)));
+}
+function qRow({ kind, x }) {
+  const pt = id => E((prop(id) || {}).title || 'عقار محذوف');
+  if (kind === 'pay') return `<div class="q"><span class="tag">💳 ${x.type === 'dep' ? 'عربون' : 'كراء'}</span><div><b>${E(x.name)}</b> · ${pt(x.pid)}<div class="mut">${money(x.amt)} · ${fDT(x.at)}</div>${thumb('img', x.id, imgGet(x.img), 'عرض الإيصال')}</div><div class="rowact">${btn('pay-ok', x.id, 'قبول', 'ok')}${btn('pay-no', x.id, 'رفض', 'no')}</div></div>`;
+  if (kind === 'prop') return `<div class="q"><span class="tag">🏠 عقار جديد</span><div><b>${E(x.title)}</b> · ${E(uname(x.owner))}<div class="mut">${E(x.city)} · ${money(x.price)} / ${E(TERMS[x.term])}</div></div><div class="rowact">${btn('details', x.id, 'معاينة', 'ghost')}${btn('pub', x.id, 'نشر', 'ok')}${btn('prop-del', x.id, 'رفض', 'no')}</div></div>`;
+  if (kind === 'view') return `<div class="q"><span class="tag">📅 معاينة</span><div><b>${E(x.name)}</b> · ${pt(x.pid)}<div class="mut">${E(x.slot)}</div></div><div class="rowact">${btn('view-ok', x.id, 'تأكيد', 'ok')}${btn('view-no', x.id, 'إلغاء', 'no')}</div></div>`;
+  return `<div class="q"><span class="tag">⚠️ تشكية</span><div><b>${E(x.name)}</b> · ${pt(x.pid)}<div class="mut txt">${E(x.txt.slice(0, 140))}</div>${thumb('iss-img', x.id, imgGet(x.img), 'عرض صورة العطب')}</div><div class="rowact">${btn('iss-ok', x.id, 'تمّ الإصلاح', 'ok')}</div></div>`;
 }
 function payRow(py, admin) {
   const p = prop(py.pid);
@@ -1628,6 +1764,45 @@ function delProp(id) {
   if (ov) imgDel(ov.photo);
   toast('تم حذف العقار.'); render();
 }
+function onPayout(f) {
+  if (!isBroker()) return;
+  const owner = f.elements.owner.value, u = db.users.find(x => x.id === owner && x.role === 'landlord'), amt = Math.round(parseAmt(f.elements.amt.value) * 1000) / 1000, note = f.elements.note.value.trim();
+  if (!u) return setErr(f, 'اختر المالك.');
+  if (!(amt > 0)) return setErr(f, 'أدخل مبلغاً صحيحاً.');
+  const due = (finance().owners.find(o => o.id === owner) || {}).due || 0;
+  if (amt > due + 0.001 && !confirm(`المبلغ (${money(amt)}) أكبر من الباقي للمالك (${money(due)}). تسجيلو رغم ذلك؟`)) return;
+  db.payouts.push({ id:'o' + uid(), owner, amt, note:note.slice(0, 120), at:now() });
+  if (!commit(() => db.payouts.pop())) return;
+  toast(`تمّ تسجيل تحويل ${money(amt)} لـ${u.name}.`); render();
+}
+function delPayout(id) {
+  if (!isBroker()) return;
+  const i = db.payouts.findIndex(x => x.id === id); if (i < 0) return;
+  if (!confirm('إلغاء هذا التحويل من السجل؟')) return;
+  const x = db.payouts.splice(i, 1)[0];
+  if (!commit(() => db.payouts.splice(i, 0, x))) return;
+  toast('تمّ إلغاء التحويل.'); render();
+}
+function toggleBlock(id) {
+  if (!isBroker()) return;
+  const u = db.users.find(x => x.id === id); if (!u) return;
+  if (!u.blocked && !confirm(`إيقاف حساب «${u.name}»؟ ما ينجمش يدخل للمنصة حتى تفعّلو من جديد.`)) return;
+  u.blocked = !u.blocked;
+  if (!commit(() => { u.blocked = !u.blocked; })) return;
+  toast(u.blocked ? 'تمّ إيقاف الحساب.' : 'تمّ تفعيل الحساب.'); render();
+}
+function exportCsv() {
+  if (!isBroker()) return;
+  const pct = CFG.commission / 100, q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+  const head = ['التاريخ','المكتري','العقار','المالك','النوع','المبلغ','الحالة','عمولة السمسار','صافي المالك'];
+  const rows = db.payments.slice().sort(byAtDesc).map(p => { const pr = prop(p.pid), owner = pr ? pr.owner : 'broker', fee = p.st !== 'confirmed' ? 0 : owner === 'broker' ? p.amt : p.amt * pct;
+    return [String(p.at).slice(0, 10), p.name, pr ? pr.title : '', uname(owner), p.type === 'dep' ? 'عربون' : 'كراء', p.amt, (PILL[p.st] || [p.st])[0], fee.toFixed(3), p.st === 'confirmed' && owner !== 'broker' ? (p.amt - fee).toFixed(3) : 0]; });
+  const csv = '\ufeff' + [head, ...rows].map(r => r.map(q).join(',')).join('\r\n');
+  const url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8' }));
+  const a = document.createElement('a'); a.href = url; a.download = 'darek-paiements-' + now().slice(0, 10) + '.csv';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 10000);
+  toast(`تمّ تصدير ${rows.length} دفعة (يتحلّ في Excel).`);
+}
 async function onAdmin(f) {
   if (!isBroker()) return;
   const a = f.elements.p1.value, b = f.elements.p2.value;
@@ -1715,6 +1890,7 @@ function notifs() {
     db.bills.filter(b => ownsProp(b.pid)).forEach(b => add(b.at, `🧾 فاتورة جديدة من ${b.name}`, 'll_bills'));
     db.issues.filter(x => ownsProp(x.pid)).forEach(x => add(x.at, `⚠️ تشكية من ${x.name}: ${x.txt.slice(0, 50)}`, 'll_issues'));
     db.chats.filter(c => c.thr === me.id && c.from === 'broker').forEach(c => add(c.at, '💬 ردّ من الإدارة', 'support'));
+    db.payouts.filter(x => x.owner === me.id).forEach(x => add(x.at, `💸 وصلك تحويل ${money(x.amt)} من الوسيط`, 'pays'));
   } else {
     db.payments.filter(p => p.st === 'pending').forEach(p => add(p.at, `💳 إيصال جديد من ${p.name} (${money(p.amt)})`, 'pays'));
     db.props.filter(p => !p.ok).forEach(p => add(p.at, `🏠 عقار ينتظر النشر: ${p.title}`, 'broker_all'));
@@ -1786,13 +1962,14 @@ const A = {
   'view-ok': id => setView(id, 'confirmed'), 'view-no': id => setView(id, 'cancelled'), 'view-cancel': id => setView(id, 'cancelled'),
   pub: id => setPub(id, true), unpub: id => setPub(id, false), 'prop-st': setPropSt, 'prop-del': delProp,
   more: () => { shown += PAGE; paintGrid(); },
+  csv: exportCsv, 'payout-del': delPayout, 'user-block': toggleBlock,
   'fav-only': () => { F.fav = !F.fav; saveF(); render(); },
   'map-toggle': () => { F.map = !F.map; saveF(); render(); },
   'map-city': id => { F.city = F.city === id ? '' : oneOf(id, CITIES, ''); saveF(); if (tab !== 'props') go('props'); else render(); },
   quick: id => { Object.assign(F, F0); if (id === 'furn') F.furn = true; else F.cat = oneOf(id, Object.keys(CATS), ''); saveF(); go('props'); },
   'reset-filters': () => { Object.assign(F, F0); ldel(ss, FKEY); render(); }
 };
-const FORMS = { fAuth:onAuth, fPin:onPin, fPay:onPay, fView:onView, fProp:onProp, fPhoto:onPhoto, fChat:onChat, fDm:onDm, fBill:onBill, fIssue:onIssue, fAdmin:onAdmin,
+const FORMS = { fAuth:onAuth, fPin:onPin, fPay:onPay, fView:onView, fProp:onProp, fPhoto:onPhoto, fChat:onChat, fDm:onDm, fBill:onBill, fIssue:onIssue, fAdmin:onAdmin, fPayout:onPayout,
   fSearch: f => { Object.assign(F, F0, { q:f.elements.q.value.trim().slice(0, 60), city:oneOf(f.elements.city.value, CITIES, ''), max:num(f.elements.max.value, 1e6) }); saveF(); go('props'); } };
 const fail = err => { console.error(err); toast('حدث خطأ غير متوقع. حاول مرة أخرى.', true); };
 document.addEventListener('click', e => {
@@ -1831,9 +2008,15 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { if ($('menu').classList.contains('open')) { toggleMenu(false); $('hb').focus(); } if (!$('np').hidden) toggleNotifs(false); }
   if ((e.key === 'Enter' || e.key === ' ') && e.target instanceof SVGElement && e.target.dataset.act) { e.preventDefault(); e.target.dispatchEvent(new MouseEvent('click', { bubbles:true })); }
 });
+/* تلميح الرسم البياني (فأرة + لوحة مفاتيح) */
+const showTip = t => { const tip = $('tip'); if (!tip || !t) return; const box = tip.parentElement.getBoundingClientRect(), r = t.getBoundingClientRect(); tip.textContent = t.dataset.tip; tip.style.left = (r.left + r.width / 2 - box.left) + 'px'; tip.style.top = (r.top - box.top + r.height * .35) + 'px'; tip.hidden = false; };
+const hideTip = () => { const tip = $('tip'); if (tip) tip.hidden = true; };
+document.addEventListener('pointerover', e => { const t = e.target.closest && e.target.closest('[data-tip]'); if (t) showTip(t); else hideTip(); });
+document.addEventListener('focusin', e => { if (e.target.dataset && e.target.dataset.tip) showTip(e.target); else hideTip(); });
 $('dlgProp').addEventListener('close', () => { if (/^#p-/.test(location.hash)) history.replaceState(null, '', '#' + tab); });
 function route() {
   const h = location.hash.slice(1);
+  if (h === 'admin') { history.replaceState(null, '', '#' + tab); if (!isBroker()) openDlg('dlgPin'); return; }
   if (h.startsWith('p-')) { const p = prop(h.slice(2)); if (p) openDetail(p.id); return; }
   if (h !== tab && tabsFor(R()).some(i => i[0] === h)) { tab = h; render(); window.scrollTo(0, 0); }
 }
@@ -1846,7 +2029,7 @@ window.addEventListener('storage', e => {
   const before = unseen().length;
   db = load(); invalidate();
   imgSync().catch(() => {}).then(() => {
-    if (me && !isBroker()) { me = db.users.find(u => u.id === me.id) || null; if (!me) return leave(); }
+    if (me && !isBroker()) { me = db.users.find(u => u.id === me.id && !u.blocked) || null; if (!me) { leave(); return toast('تمّ إيقاف الحساب أو حذفه.', true); } }
     softRender(); pushNotify(before);
   });
 });
@@ -1876,7 +2059,7 @@ ldel(ls, 'darek_lock');
   tab = tabsFor(R()).some(i => i[0] === h) ? h : defaultTab();
   $('app').hidden = false;
   render();
-  if (h.startsWith('p-')) route();
+  if (h.startsWith('p-') || h === 'admin') route();
   if (!ls) toast('تنبيه: التخزين المحلي غير متاح في هذا المتصفح (وضع خاص؟)، لن تُحفظ بياناتك.', true);
   setTimeout(() => imgGc(), 5000);
 })().catch(fail);

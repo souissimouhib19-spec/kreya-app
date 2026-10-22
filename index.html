@@ -41,12 +41,17 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iDwLKjG7wGF8dOQOaS+FXI2/ETIXawU/5+M6lazFfcw='; style-src 'sha256-wYsrKu80nspXkba2/NI5ZOQbGhH2nf4+nEjB1/37FVw=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co; media-src 'self' blob: https:; connect-src https://*.supabase.co wss://*.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-B9vWmoKl8RumY27zfXTgX5W4Dkp+uqLao1WkRxDnf+M='; style-src 'sha256-v/6ra23ler6scNxzFmTzA4QhOzBaRGKUwhlSfw1mwOA=' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co; media-src 'self' blob: https:; connect-src https://*.supabase.co wss://*.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="داره: ابحث عن مبيت أو شقة في تونس، اطلب معاينة، وادفع العربون بإثبات تحويل تؤكده الإدارة.">
 <meta name="theme-color" content="#7a0a1d">
 <meta name="color-scheme" content="light">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="داره">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:title" content="داره (Darek) – منصة الكراء في تونس">
 <meta property="og:description" content="مبيتات، استوديوهات وشقق للطلبة والعائلات. معاينة، عربون موثّق، وفضاء خاص بعد الحجز.">
 <title>داره (Darek) – منصة العقارات والمبيتات في تونس</title>
@@ -236,6 +241,18 @@ dialog::backdrop{background:rgba(22,10,16,.62);backdrop-filter:blur(5px)}
 .dist{color:var(--red);font-weight:700;flex-basis:100%}.fact.dist::before{content:none}
 .mapfab{position:fixed;left:50%;bottom:calc(24px + var(--sb));transform:translateX(-50%);z-index:18;background:var(--ink);color:#fff;border:0;border-radius:99px;padding:12px 22px;font-weight:700;font-size:14px;box-shadow:var(--shl);cursor:pointer}
 .mapfab:hover{transform:translateX(-50%) scale(1.04)}
+/* 📲 شريط «ثبّت التطبيق» + نافذة الشرح */
+.appbar{position:fixed;left:12px;right:12px;bottom:calc(12px + var(--sb));z-index:36;max-width:520px;margin:0 auto;background:var(--ink);color:#fff;border-radius:16px;padding:10px 12px;display:flex;gap:10px;align-items:center;box-shadow:var(--shl)}
+.appbar img{width:40px;height:40px;border-radius:10px;flex:none}
+.appbar span{flex:1;font-size:13.5px;line-height:1.4}.appbar b{display:block;font-size:14.5px}
+.appbar .btn{background:#fff;color:var(--red)}
+.appx{background:none;border:0;color:#fff;opacity:.7;font-size:16px;padding:6px}
+.tips{margin:10px 0 0;padding-inline-start:20px;color:var(--mut);font-size:13.5px;display:grid;gap:4px}
+.amen-f{border:1px solid var(--line);border-radius:14px;padding:8px 14px 4px;margin:0 0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:2px 10px}
+.amen-f legend{font-size:13px;font-weight:700;color:var(--mut);padding:0 6px}
+.appsteps{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:10px;text-align:right;counter-reset:a}
+.appsteps li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;background:#faf8fa;border-radius:12px;padding:10px;counter-increment:a}
+.appsteps li::before{content:counter(a);width:30px;height:30px;border-radius:50%;background:var(--red);color:#fff;font-weight:800;display:grid;place-items:center}
 .filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 .filters input,.filters select{width:auto;margin:0}
 .filters .q{flex:1;min-width:180px}
@@ -402,7 +419,7 @@ dialog::backdrop{background:rgba(22,10,16,.62);backdrop-filter:blur(5px)}
   <footer class="foot">
     <div class="foot-in">
       <div><b>🏠 داره (Darek)</b><p>منصة تونسية للكراء: مبيتات طلبة، استوديوهات وشقق عائلية. معاينة منظّمة، عربون موثّق، وفضاء خاص بعد الحجز.</p></div>
-      <div><b>المنصة</b><button type="button" data-act="tab" data-id="props">تصفح العقارات</button><button type="button" data-act="list-prop">أضف عقارك</button><button type="button" data-act="intro">جولة تعريفية</button></div>
+      <div><b>المنصة</b><button type="button" data-act="tab" data-id="props">تصفح العقارات</button><button type="button" data-act="list-prop">أضف عقارك</button><button type="button" data-act="intro">جولة تعريفية</button><button type="button" data-act="install">📲 تطبيق الهاتف</button></div>
       <div><b>تواصل</b><button type="button" data-act="wa">واتساب</button><button type="button" data-act="admin-login">دخول الإدارة 🔒</button></div>
     </div>
     <small id="copy"></small>
@@ -435,6 +452,7 @@ dialog::backdrop{background:rgba(22,10,16,.62);backdrop-filter:blur(5px)}
     <label class="fld">كلمة السر <span class="opt">(8 أحرف على الأقل)</span><span class="pw"><input name="pass" type="password" autocomplete="current-password" maxlength="128" dir="ltr"><button type="button" class="peek" data-act="peek" aria-label="إظهار كلمة السر" aria-pressed="false">👁</button></span></label>
     <p class="err" role="alert"></p>
     <button type="submit" class="btn" id="authBtn">دخول</button>
+    <button type="button" class="link" id="forgotBtn" data-act="forgot" hidden>🔑 نسيت كلمة السر؟</button>
     <button type="button" class="link" data-act="close" data-id="dlgAuth">مواصلة التصفح كزائر</button>
   </form>
 </dialog>
@@ -494,6 +512,18 @@ dialog::backdrop{background:rgba(22,10,16,.62);backdrop-filter:blur(5px)}
   <div class="box pd"><button type="button" class="xbtn" data-act="close" data-id="dlgProp" aria-label="إغلاق">✕</button><div id="pdBody"></div></div>
 </dialog>
 
+<div class="appbar" id="appBar" role="region" aria-label="تثبيت التطبيق" hidden><img src="icon-192.png" alt="" width="40" height="40"><span><b>تطبيق داره 📲</b>ثبّتو على تليفونك: أيقونة في الشاشة ويتحلّ كتطبيق.</span><button type="button" class="btn sm" data-act="install">ثبّت</button><button type="button" class="appx" data-act="app-dismiss" aria-label="إخفاء">✕</button></div>
+<dialog id="dlgPw" aria-labelledby="pwT">
+  <form id="fPw" class="box" novalidate><button type="button" class="xbtn" data-act="close" data-id="dlgPw" aria-label="إغلاق">✕</button>
+    <h2 id="pwT">🔑 تبديل كلمة السر</h2>
+    <label class="fld">كلمة السر الجديدة <span class="opt">(8 أحرف على الأقل، حروف وأرقام)</span><span class="pw"><input name="p1" type="password" autocomplete="new-password" maxlength="128" dir="ltr"><button type="button" class="peek" data-act="peek" aria-label="إظهار كلمة السر" aria-pressed="false">👁</button></span></label>
+    <label class="fld">أعد كتابتها<input name="p2" type="password" autocomplete="new-password" maxlength="128" dir="ltr"></label>
+    <p class="err" role="alert"></p><button type="submit" class="btn">حفظ كلمة السر</button>
+  </form>
+</dialog>
+<dialog id="dlgApp" aria-labelledby="appT">
+  <div class="box"><button type="button" class="xbtn" data-act="close" data-id="dlgApp" aria-label="إغلاق">✕</button><img src="icon-192.png" alt="" width="72" height="72"><h2 id="appT">ثبّت تطبيق داره 📲</h2><div id="appBody"></div><button type="button" class="btn" data-act="close" data-id="dlgApp">فهمت</button></div>
+</dialog>
 <dialog id="dlgIntro" aria-labelledby="introT">
   <div class="box intro"><h2 id="introT">👋 مرحباً بك في داره</h2><div id="introBody"></div><button type="button" class="btn" data-act="close" data-id="dlgIntro">يلّا نبداو 🚀</button></div>
 </dialog>
@@ -518,7 +548,7 @@ document.getElementById('jsfail').remove();
              url = Project URL و key = anon public key من Supabase ← Project Settings ← API.
              فارغين = الوضع المحلي (كل جهاز بمعطياتو). شوف supabase/schema.sql و SUPABASE.md.
    ══════════════════════════════════════════════════════════════════════ */
-const APP_VER = '4.0';
+const APP_VER = '4.4';
 const CFG = Object.freeze({
   ann: '🔥 عروض مميزة: حجز سريع للعقارات والمبيتات في تونس والساحل عبر منصة داره!',
   wa: '21629461304', d17: '29461304', rib: '14 000 00029384812', depPct: 20,
@@ -545,6 +575,9 @@ const CATS = { girls:'بنات فقط', students:'طلبة', family:'عائلا�
 const TERMS = { day:'يوم', month:'شهر', year:'سنة' };
 const ROOMS = { 0:'غرفة / استوديو', 1:'S+1', 2:'S+2', 3:'S+3', 4:'S+4 فأكثر' };
 const RL = { tenant:'مكتري', landlord:'مالك', broker:'الإدارة' };
+/* التجهيزات (تتسجّل في العقار كـ «wifi,ac,…»). تجهيز جديد؟ زيدو هنا برك */
+const AMEN = { wifi:['📶','إنترنت / Wi-Fi'], ac:['❄️','مكيّف'], heat:['🔥','تدفئة'], hot:['🚿','ماء سخون'], kitchen:['🍳','مطبخ مجهّز'], wash:['🧺','ماكينة غسيل'], park:['🚗','بلاصة كرهبة'], lift:['🛗','أسانسير'], balcony:['🌇','شرفة'], secu:['🔒','حارس / باب مؤمّن'] };
+const amenOf = p => String(p.amen || '').split(',').filter(k => AMEN[k]);
 /* شريط الفئات (بالأيقونات): كل زر يبدّل فلتر واحد. زيد فئة؟ زيدها هنا وفي catOn() و A.cat [S17] */
 const CATBAR = [['all','🏘️','الكل'],['students','🎓','طلبة'],['girls','👩','بنات فقط'],['family','👨‍👩‍👧','عائلات'],['r0','🛏️','غرفة / استوديو'],['r1','🏠','S+1'],['r2','🏢','S+2'],['furn','🛋️','مفروش'],['day','📅','باليوم'],['near','🚶','قريب من الكلية']];
 const BILL = { steg:'⚡ STEG (كهرباء)', sonede:'💧 SONEDE (ماء)' };
@@ -622,7 +655,7 @@ function normalize(r) {
   return {
     v: 2,
     users: arr(r.users).filter(u => u && u.id && u.email).map(u => ({ id:str(u.id,40), name:str(u.name,60), email:str(u.email,80).toLowerCase(), phone:/^\d{8}$/.test(u.phone) ? u.phone : '', role:oneOf(u.role,['tenant','landlord'],'tenant'), salt:str(u.salt,64), hash:str(u.hash,64), iter:num(u.iter,2e6) || USER_ITER, at:str(u.at,40), blocked:u.blocked === true })),
-    props: arr(r.props).filter(p => p && p.id).map(p => ({ id:str(p.id,40), title:str(p.title,80), city:oneOf(p.city,CITIES,CITIES[0]), addr:str(p.addr,80), fac:str(p.fac,60) || '—', min:num(p.min,240), price:num(p.price,1e6), st:oneOf(p.st,['available','rented'],'available'), end:str(p.end,40) || '—', cat:oneOf(p.cat,Object.keys(CATS),'all'), term:oneOf(p.term,Object.keys(TERMS),'month'), rooms:Math.round(num(p.rooms,4)), area:Math.round(num(p.area,2000)), furn:p.furn === true, desc:str(p.desc,600), owner:str(p.owner,40), ok:p.ok === true, at:str(p.at,40), pat:str(p.pat,40) })),
+    props: arr(r.props).filter(p => p && p.id).map(p => ({ id:str(p.id,40), title:str(p.title,80), city:oneOf(p.city,CITIES,CITIES[0]), addr:str(p.addr,80), fac:str(p.fac,60) || '—', min:num(p.min,240), price:num(p.price,1e6), st:oneOf(p.st,['available','rented'],'available'), end:str(p.end,40) || '—', cat:oneOf(p.cat,Object.keys(CATS),'all'), term:oneOf(p.term,Object.keys(TERMS),'month'), rooms:Math.round(num(p.rooms,4)), area:Math.round(num(p.area,2000)), furn:p.furn === true, desc:str(p.desc,600), amen:String(p.amen || '').split(',').filter(k => AMEN[k]).join(','), owner:str(p.owner,40), ok:p.ok === true, at:str(p.at,40), pat:str(p.pat,40) })),
     ov,
     views: arr(r.views).filter(v => v && v.id).map(v => ({ id:str(v.id,40), pid:str(v.pid,40), uid:str(v.uid,40), name:str(v.name,60), slot:str(v.slot,80), at:str(v.at,40), dat:str(v.dat,40), st:oneOf(v.st,['pending','confirmed','cancelled'],'pending') })),
     payments: arr(r.payments).filter(p => p && p.id).map(p => ({ id:str(p.id,40), pid:str(p.pid,40), uid:str(p.uid,40), name:str(p.name,60), type:oneOf(p.type,['dep','rent'],'dep'), amt:num(p.amt,1e6), img:imgRef(p.img), at:str(p.at,40), dat:str(p.dat,40), st:oneOf(p.st,['pending','confirmed','rejected'],'pending') })),
@@ -769,7 +802,7 @@ async function imgGc() {
 const SB = CFG.supabase.url && CFG.supabase.key ? { url:CFG.supabase.url.replace(/\/+$/, ''), key:CFG.supabase.key } : null;
 const CLOUD = !!SB, CSESS = 'darek_cloud', POLL_MS = 20000;
 const TABLES = { users:'profiles', props:'props', views:'views', payments:'payments', chats:'chats', dms:'dms', bills:'bills', issues:'issues', payouts:'payouts' };
-let cs = CLOUD ? lget(ls, CSESS) : null, shadow = null, pushQ = Promise.resolve(), syncing = false;
+let noAmen = false, cs = CLOUD ? lget(ls, CSESS) : null, shadow = null, pushQ = Promise.resolve(), syncing = false;
 const claims = () => { try { return JSON.parse(decodeURIComponent(escape(atob(cs.access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))))); } catch { return {}; } };
 function setCs(x) {
   cs = x && x.access_token ? { access_token:x.access_token, refresh_token:x.refresh_token, expires_at:x.expires_at || Math.floor(Date.now() / 1000) + (x.expires_in || 3600) } : null;
@@ -791,7 +824,7 @@ async function sbFetch(path, { method = 'GET', body, headers = {}, raw = false, 
 }
 /* شكل الصف كيف يتبعث للسيرفر */
 const profileRow = u => ({ id:u.id, name:u.name, email:u.email, phone:u.phone, role:u.role, blocked:!!u.blocked, at:u.at });
-function rowsOf(k) { return k === 'users' ? db.users.map(profileRow) : db[k]; }
+function rowsOf(k) { return k === 'users' ? db.users.map(profileRow) : k === 'props' && noAmen ? db.props.map(({ amen, ...p }) => p) : db[k]; }
 function snapshot() {
   const S = {};
   for (const k of Object.keys(TABLES)) S[k] = new Map(rowsOf(k).map(r => [r.id, JSON.stringify(r)]));
@@ -824,6 +857,10 @@ async function cloudPush(target) {
 function cloudQueue() {
   const target = snapshot();
   pushQ = pushQ.then(() => cloudPush(target)).then(() => { shadow = target; }).catch(async e => {
+    if (!noAmen && /amen/.test(e.message || '')) {   // قاعدة قديمة بلا عمود «amen»: نكمّلو بلاه (شغّل schema.sql من جديد باش تتسجّل التجهيزات)
+      noAmen = true; const t2 = snapshot();
+      try { await cloudPush(t2); shadow = t2; return; } catch (e2) { e = e2; }
+    }
     console.error(e);
     toast('ما تسجّلتش العملية في السيرفر (' + (e.message || 'اتصال') + '). رجّعنا آخر نسخة.', true);
     await cloudRefresh(true);
@@ -850,6 +887,7 @@ async function cloudRefresh(force) {
   } catch (e) { console.error(e); } finally { syncing = false; }
 }
 async function onAuthCloud(f) {
+  const left = lockLeft('auth'); if (left) return setErr(f, lockMsg(left));
   const el = f.elements, email = el.email.value.trim().toLowerCase(), pass = el.pass.value;
   if (!EMAIL_RE.test(email)) return setErr(f, 'أدخل بريداً إلكترونياً صحيحاً.');
   if (pass.length < 8) return setErr(f, 'كلمة السر 8 أحرف على الأقل.');
@@ -859,6 +897,7 @@ async function onAuthCloud(f) {
       const name = el.fullname.value.trim().replace(/\s+/g, ' '), phone = cleanPhone(el.phone.value);
       if (name.length < 3) return setErr(f, 'أدخل الاسم الكامل.');
       if (phone && !/^[2-9]\d{7}$/.test(phone)) return setErr(f, 'رقم الهاتف التونسي 8 أرقام (مثال: 22123456).');
+      if (pwWeak(pass, email)) return setErr(f, pwWeak(pass, email));
       const r = await sbFetch('/auth/v1/signup', { method:'POST', body:{ email, password:pass, data:{ name, phone, role } }, auth:false });
       if (!r || !r.access_token) { setAuthMode('login'); return setErr(f, '📧 بعثنالك إيميل تأكيد. أكّد حسابك من البريد ثم ادخل.'); }
       setCs(r);
@@ -866,15 +905,64 @@ async function onAuthCloud(f) {
     await cloudLoad(); await imgSync();
     const u = cloudMe();
     if (!u) { setCs(null); await cloudLoad(); return setErr(f, 'هذا الحساب موقوف ولا ما عندوش ملف. تواصل مع الإدارة.'); }
+    ldel(ls, LOCK + 'auth');
     f.reset(); closeDlg('dlgAuth');
     if (authMode === 'register') toast('مرحباً ' + u.name + '! تم إنشاء حسابك.');
     else if (u.role !== 'broker' && u.role !== role) toast(`دخلت بحسابك كـ${RL[u.role]}.`);
     startSession(u);
   } catch (e) {
     const m = String(e.message || '');
+    if (/invalid login|invalid_grant|credentials/i.test(m)) lockFail('auth');
     setErr(f, /invalid login|invalid_grant|credentials/i.test(m) ? 'البريد أو كلمة السر غير صحيحة.' : /registered|exists/i.test(m) ? 'هذا البريد مسجّل مسبقاً. استعمل «تسجيل الدخول».' : /confirm/i.test(m) ? 'أكّد حسابك من الإيميل اللي وصلك أولاً.' : 'تعذّر الاتصال بالسيرفر: ' + m);
   } finally { busy(f, false); }
 }
+/* 🔑 نسيت كلمة السر: Supabase يبعث رابط للبريد، الرابط يرجّع للمنصة ونفتحو «كلمة سر جديدة» */
+let forgotAt = 0;
+async function forgot() {
+  const f = $('fAuth'), email = f.elements.email.value.trim().toLowerCase();
+  if (!EMAIL_RE.test(email)) { setErr(f, 'اكتب بريدك الإلكتروني الأول، ثم اضغط «نسيت كلمة السر؟».'); return f.elements.email.focus(); }
+  if (Date.now() - forgotAt < 60000) return setErr(f, 'استنى دقيقة قبل ما تطلب رابط آخر.');
+  forgotAt = Date.now();
+  try { await sbFetch('/auth/v1/recover?redirect_to=' + encodeURIComponent(location.origin + location.pathname), { method:'POST', body:{ email }, auth:false }); } catch (e) { console.error(e); }
+  setErr(f, '📧 كان البريد هذا مسجّل، باش يوصلك رابط لتبديل كلمة السر (ثبّت حتى في Spam).');
+}
+function openPw(recovery) {
+  const f = $('fPw'); f.reset(); f.querySelector('.err').textContent = '';
+  $('pwT').textContent = recovery ? '🔑 اختار كلمة سر جديدة' : '🔑 تبديل كلمة السر';
+  openDlg('dlgPw');
+}
+async function onPw(f) {
+  if (!CLOUD || !cs) return setErr(f, 'ادخل لحسابك الأول.');
+  const p1 = f.elements.p1.value, p2 = f.elements.p2.value, email = (claims().email || '').toLowerCase();
+  if (pwWeak(p1, email)) return setErr(f, pwWeak(p1, email));
+  if (p1 !== p2) return setErr(f, 'كلمتا السر موش كيف كيف.');
+  busy(f, true, '⏳ جاري الحفظ…');
+  try {
+    await sbFetch('/auth/v1/user', { method:'PUT', body:{ password:p1 } });
+    closeDlg('dlgPw'); toast('✅ تبدّلت كلمة السر. استعملها في الدخول الجاي.');
+    if (!me) { await cloudLoad(); await imgSync(); const u = cloudMe(); if (u) startSession(u); }
+  } catch (e) { setErr(f, /same|different/i.test(e.message) ? 'اختار كلمة سر مختلفة على القديمة.' : 'ما نجمناش نبدّلوها: ' + e.message); }
+  finally { busy(f, false); }
+}
+async function logoutAll() {
+  if (!confirm('تخرج من حسابك في كل التليفونات والحواسيب؟')) return;
+  try { await sbFetch('/auth/v1/logout?scope=global', { method:'POST' }); } catch (e) { console.error(e); }
+  setCs(null); leave(); try { await cloudLoad(); } catch {} render();
+  toast('🚪 خرجت من كل الأجهزة.');
+}
+/* رجعة من رابط البريد (تأكيد الحساب ولا تبديل كلمة السر): Supabase يحط الجلسة في # الرابط */
+function authFromLink() {
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (!h.get('access_token') && !h.get('error')) return '';
+  history.replaceState(null, '', location.pathname + location.search);
+  if (h.get('error')) { toast(/expired/i.test(h.get('error_code') || h.get('error_description') || '') ? 'الرابط انتهى. اطلب رابط جديد.' : 'الرابط موش صالح.', true); return ''; }
+  setCs({ access_token:h.get('access_token'), refresh_token:h.get('refresh_token'), expires_in:+h.get('expires_in') || 3600 });
+  return h.get('type') || 'login';
+}
+const securityPanel = () => CLOUD && cs ? `<section class="panel"><h2>🔐 أمان الحساب</h2>
+    <div class="row"><div class="grow"><b>${E(claims().email || '')}</b><div class="mut">${E(isBroker() ? 'الإدارة' : RL[me.role] || '')} · محمي بكلمة سر مشفّرة في السيرفر</div></div></div>
+    <div class="btnrow"><button type="button" class="btn sm" data-act="pw-change">🔑 تبديل كلمة السر</button><button type="button" class="btn sm no" data-act="logout-all">🚪 خروج من كل الأجهزة</button></div>
+    <ul class="tips"><li>استعمل كلمة سر ما تستعملهاش في مواقع أخرى (حروف + أرقام).</li><li>ما تعطي كلمة السر لحتى حد، حتى لو قال من «داره»: الإدارة ما تطلبهاش أبداً.</li><li>ضيّعت تليفونك؟ ادخل من جهاز آخر واضغط «خروج من كل الأجهزة».</li></ul></section>` : '';
 async function cloudLogout() {
   try { await sbFetch('/auth/v1/logout', { method:'POST' }); } catch {}
   setCs(null);
@@ -1078,6 +1166,7 @@ function setAuthMode(m) {
   const f = $('fAuth');
   f.querySelectorAll('[data-act=mode]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.id === authMode)));
   $('regOnly').hidden = authMode !== 'register';
+  $('forgotBtn').hidden = !CLOUD || authMode !== 'login';
   f.elements.pass.autocomplete = authMode === 'register' ? 'new-password' : 'current-password';
   $('authBtn').textContent = authMode === 'register' ? 'إنشاء الحساب والدخول' : 'دخول';
   f.querySelector('.err').textContent = '';
@@ -1094,6 +1183,14 @@ function peek(id, el) {
   el.setAttribute('aria-pressed', String(show)); el.setAttribute('aria-label', show ? 'إخفاء' : 'إظهار');
   i.focus();
 }
+/* كلمة سر قوية: 8 أحرف على الأقل، فيها حروف وأرقام، موش سهلة التخمين */
+function pwWeak(pass, email = '') {
+  if (pass.length < 8) return 'كلمة السر 8 أحرف على الأقل.';
+  if (!/\d/.test(pass) || !/[^\d\s]/.test(pass)) return 'كلمة السر لازم فيها حروف وأرقام.';
+  const low = pass.toLowerCase();
+  if (low === email || (email && low.includes(email.split('@')[0])) || /^(.)\1+$/.test(pass) || /^(12345678|123456789|azerty|password|motdepas|qwerty|00000000)/i.test(pass)) return 'كلمة السر سهلة برشا. اختر كلمة أقوى.';
+  return '';
+}
 async function onAuth(f) {
   if (CLOUD) return onAuthCloud(f);
   const left = lockLeft('auth'); if (left) return setErr(f, lockMsg(left));
@@ -1106,7 +1203,7 @@ async function onAuth(f) {
     if (name.length < 3) return setErr(f, 'أدخل الاسم الكامل.');
     if (phone && !/^[2-9]\d{7}$/.test(phone)) return setErr(f, 'رقم الهاتف التونسي 8 أرقام (مثال: 22123456).');
     if (u && u.hash) return setErr(f, 'هذا البريد مسجّل مسبقاً. استعمل «تسجيل الدخول».');
-    if (pass.toLowerCase() === email || /^(.)\1+$/.test(pass) || /^(12345678|123456789|azertyui|password)/i.test(pass)) return setErr(f, 'كلمة السر سهلة برشا. اختر كلمة أقوى.');
+    if (pwWeak(pass, email)) return setErr(f, pwWeak(pass, email));
     busy(f, true, '⏳ جاري إنشاء الحساب…');
     try {
       const salt = randHex(16), hash = await pbkdf2(pass, salt, USER_ITER);
@@ -1183,13 +1280,14 @@ function counts() {
   };
 }
 function tabsFor(r) {
+  const acct = CLOUD ? [['account','🔐 حسابي']] : [];
   if (r === 'guest') return [['landing','🏠 الرئيسية'],['props','🏘️ العقارات']];
   if (r === 'tenant') {
-    if (housed()) return [['home','🏠 داري',dmThreads().filter(t => t.unread).length],['bills','🧾 الفواتير'],['issues','⚠️ التشكيات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة']];
-    return [['props','🏘️ العقارات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة']];
+    if (housed()) return [['home','🏠 داري',dmThreads().filter(t => t.unread).length],['bills','🧾 الفواتير'],['issues','⚠️ التشكيات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة'],...acct];
+    return [['props','🏘️ العقارات'],['my_rents','📋 طلباتي ومدفوعاتي'],['support','💬 الدعم'],['pros','🛠️ خدمات الصيانة'],...acct];
   }
   const dmN = dmThreads().filter(t => t.unread).length, issN = ownIssues().filter(x => x.st === 'open').length;
-  if (r === 'landlord') return [['my_props','🏠 عقاراتي'],['tenants','💬 مكترِيّ',dmN],['ll_bills','🧾 الفواتير'],['ll_issues','⚠️ التشكيات',issN],['pays','💰 المداخيل'],['props','🏘️ العقارات'],['support','💬 الدعم']];
+  if (r === 'landlord') return [['my_props','🏠 عقاراتي'],['tenants','💬 مكترِيّ',dmN],['ll_bills','🧾 الفواتير'],['ll_issues','⚠️ التشكيات',issN],['pays','💰 المداخيل'],['props','🏘️ العقارات'],['support','💬 الدعم'],...acct];
   const c = counts();
   return [['broker_all','⚡ لوحة التحكم',c.props + c.views + c.pays + c.issues],['finance','💰 المالية'],['pays','💳 المدفوعات',c.pays],['users','👥 المستخدمون'],['inbox','💬 رسائل الدعم',c.inbox],['tenants','🏠 مكترو الإدارة',dmN],['ll_issues','⚠️ التشكيات',issN],['ll_bills','🧾 الفواتير'],['props','🏘️ العقارات'],['settings','🔐 الأمان والبيانات']];
 }
@@ -1451,6 +1549,7 @@ const VIEWS = {
       </div>
       <label class="fld">الوصف <span class="opt">(اختياري، 600 حرف)</span><textarea name="desc" maxlength="600" placeholder="شنوّة فيه؟ مكيّف، إنترنت، قريب من المترو…">${E(v.desc || '')}</textarea></label>
       <label class="chk"><input type="checkbox" name="furn"${v.furn ? ' checked' : ''}> مفروش</label>
+      ${noAmen ? '' : `<fieldset class="amen-f"><legend>التجهيزات (اختياري)</legend>${Object.entries(AMEN).map(([k, [i, l]]) => `<label class="chk"><input type="checkbox" name="amen" value="${k}"${amenOf(v).includes(k) ? ' checked' : ''}> ${i} ${E(l)}</label>`).join('')}</fieldset>`}
       <p class="err" role="alert"></p><div class="btnrow"><button type="submit" class="btn sm">${e ? 'حفظ التعديلات' : 'إرسال للإدارة'}</button>${e ? btn('edit-cancel', '', 'إلغاء', 'ghost') : ''}</div></form></section>
     ${mine.length ? `<section class="panel"><h2>📷 صورة العقار (تصميم Canva ولا صورة حقيقية)</h2><form id="fPhoto" novalidate>
       <label class="fld">العقار<select name="pid">${mine.map(p => opt(p.id, p.title, '')).join('')}</select></label>
@@ -1551,7 +1650,8 @@ const VIEWS = {
     return `<section class="panel"><h2>💬 رسائل الدعم</h2><label class="fld">المحادثة<select id="thr">${T.map(t => opt(t.id, (t.unread ? '● ' : '') + uname(t.id) + ' (' + (RL[(db.users.find(u => u.id === t.id) || {}).role] || '') + ')', curThr)).join('')}</select></label>${chatBox(curThr)}</section>`;
   },
 
-  settings: () => `<section class="panel"><h2>💾 البيانات</h2>
+  account: () => securityPanel() || empty('ادخل لحسابك.'),
+  settings: () => `${securityPanel()}<section class="panel"><h2>💾 البيانات</h2>
       ${CLOUD ? `<div class="note">☁️ وضع السحابة: المعطيات محفوظة في Supabase وتوصل لكل التليفونات (تحديث كل ${POLL_MS / 1000} ثانية). <span dir="ltr">${E(SB.url)}</span></div>` : `<p class="mut">التخزين: <span id="quota">${idb ? 'IndexedDB (الصور) + localStorage (المعطيات)' : 'localStorage فقط (≈ 5 MB)'}</span></p>
       <div class="note">⚠️ الوضع المحلي: كل البيانات محفوظة في متصفح هذا الجهاز فقط، وما توصلش من تليفون لآخر. باش تشارك المعطيات بين الأجهزة فعّل Supabase في [S01].</div>`}
       <div class="btnrow"><button type="button" class="btn sm" data-act="export">⬇️ تصدير نسخة احتياطية (JSON)</button>
@@ -1606,7 +1706,7 @@ function openDetail(id) {
     p.furn ? ['🛋️', 'مفروش', 'تدخل بشنطتك برك'] : null,
     ['🧾', 'عربون موثّق', 'الحجز يتأكّد كان بعد ما الإدارة تراجع إيصال الدفع'],
     !av && p.end && p.end !== '—' ? ['📆', 'يتحرر في ' + p.end, 'تنجم تطلب معاينة للفترة الجاية'] : null].filter(Boolean);
-  const amen = [['🛏️', ROOMS[Math.min(4, p.rooms || 0)]], p.area ? ['📐', p.area + ' م²'] : null, ['🛋️', p.furn ? 'مفروش' : 'غير مفروش'], ['👥', CATS[p.cat]], ['📅', 'كراء بال' + TERMS[p.term]]].filter(Boolean);
+  const amen = [['🛏️', ROOMS[Math.min(4, p.rooms || 0)]], p.area ? ['📐', p.area + ' م²'] : null, ['🛋️', p.furn ? 'مفروش' : 'غير مفروش'], ['👥', CATS[p.cat]], ['📅', 'كراء بال' + TERMS[p.term]], ...amenOf(p).map(k => AMEN[k])].filter(Boolean);
   $('pdBody').innerHTML = `<div class="pd-top"><h2 id="pdT">${E(p.title)}</h2><div class="pd-sub"><span>📍 ${E(p.city)} · ${E(p.addr)}</span><span class="pd-tools">${p.ok ? btn('share', p.id, '🔗 مشاركة', 'ghost') : ''}<button type="button" class="btn sm ghost fav-d" data-act="fav" data-id="${E(p.id)}" aria-pressed="${fav}">${fav ? '♥ في المفضلة' : '♡ حفظ'}</button></span></div></div>
     <div class="ph"><img src="${photo(p)}" alt="${E(p.title)}"><div class="badges"><span class="badge ${av ? 'b-a' : 'b-r'}">${av ? 'متاح' : 'مكرى'}</span>${p.ok ? '' : '<span class="badge">قيد المراجعة</span>'}</div></div>
     <div class="pd-in"><div>
@@ -1868,7 +1968,7 @@ function onProp(f) {
   if (!Number.isInteger(price) || price < 1 || price > 100000) return setErr(f, 'أدخل سعراً صحيحاً بين 1 و 100000 د.ت.');
   if (!Number.isInteger(min) || min < 0 || min > 240) return setErr(f, 'عدد الدقائق بين 0 و 240.');
   if (!Number.isInteger(area) || area < 0 || area > 2000) return setErr(f, 'المساحة بين 0 و 2000 م².');
-  const data = { title, city:oneOf(el.city.value, CITIES, CITIES[0]), addr, price, fac:fac || '—', min, area, desc:desc.slice(0, 600), furn:el.furn.checked, rooms:Math.min(4, Math.max(0, +el.rooms.value || 0)), cat:oneOf(el.cat.value, Object.keys(CATS), 'all'), term:oneOf(el.term.value, Object.keys(TERMS), 'month') };
+  const data = { title, city:oneOf(el.city.value, CITIES, CITIES[0]), addr, price, fac:fac || '—', min, area, desc:desc.slice(0, 600), furn:el.furn.checked, amen:[...f.querySelectorAll('[name=amen]:checked')].map(x => x.value).filter(k => AMEN[k]).join(','), rooms:Math.min(4, Math.max(0, +el.rooms.value || 0)), cat:oneOf(el.cat.value, Object.keys(CATS), 'all'), term:oneOf(el.term.value, Object.keys(TERMS), 'month') };
   if (editId) {
     const p = db.props.find(x => x.id === editId && x.owner === me.id); if (!p) { editId = null; return render(); }
     const old = { ...p }; Object.assign(p, data);
@@ -2055,6 +2155,46 @@ async function importData(input) {
 }
 
 /* ══════════════════════════════════════════════════════════════════════
+   [S16b] 📲 تطبيق الهاتف (PWA): أيقونة في الشاشة، يتحلّ بلا شريط المتصفح، ويخدم حتى بلا إنترنت
+   ──────────────────────────────────────────────────────────────────────
+   يلزم الملفات: manifest.webmanifest + sw.js +  جنب index.html (على https).
+   Android/Chrome: زر «ثبّت» يفتح نافذة التثبيت مباشرة. iPhone: نشرحو الخطوات (Safari ← مشاركة).
+   ══════════════════════════════════════════════════════════════════════ */
+let installEvt = null;
+const UA = navigator.userAgent;
+const IOS = /iphone|ipad|ipod/i.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const INAPP = /FBAN|FBAV|Instagram|Messenger|Snapchat|TikTok/i.test(UA);
+const pwaOk = () => location.protocol === 'https:';   // التثبيت يلزمو رابط https (GitHub Pages، Netlify…)
+const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+function pwaInit() {
+  if (!pwaOk()) return;
+  const l = document.createElement('link'); l.rel = 'manifest'; l.href = 'manifest.webmanifest'; document.head.appendChild(l);
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; appBar(); });
+  window.addEventListener('appinstalled', () => { installEvt = null; $('appBar').hidden = true; toast('✅ تطبيق داره تثبّت على تليفونك'); });
+  if (IOS && !standalone()) setTimeout(appBar, 6000);
+}
+function appBar() {
+  if (standalone() || lget(ls, 'darek_app_x') || document.querySelector('dialog[open]')) return;
+  if (installEvt || matchMedia('(max-width: 900px)').matches) $('appBar').hidden = false;
+}
+async function install() {
+  if (installEvt) {
+    const e = installEvt; installEvt = null; $('appBar').hidden = true;
+    e.prompt(); try { await e.userChoice; } catch {}
+    return;
+  }
+  const li = a => `<ol class="appsteps">${a.map(t => `<li><span>${t}</span></li>`).join('')}</ol>`;
+  $('appBody').innerHTML = standalone() ? '<p>✅ راك تستعمل في تطبيق داره.</p>'
+    : !pwaOk() ? '<p class="mut">التثبيت يخدم كان من رابط الموقع (https)، موش من ملف على الجهاز.</p>'
+    : INAPP ? li(['انت داخل متصفح فيسبوك/إنستغرام: اضغط ⋯ واختار «فتح في المتصفح» (Safari ولا Chrome).', 'من غادي اضغط «📲 تطبيق الهاتف» مرة أخرى.'])
+    : IOS ? li(['في <b>Safari</b>، اضغط زر المشاركة <b>⬆️</b> (تحت الشاشة).', 'اختار <b><bdi dir="ltr">Sur l’écran d’accueil</bdi></b> (<bdi dir="ltr">Add to Home Screen</bdi>).', 'اضغط <b><bdi dir="ltr">Ajouter</bdi></b>: أيقونة داره تظهر في الشاشة.'])
+    : li(['في <b>Chrome</b>، افتح القائمة <b>⋮</b> (فوق).', 'اختار <b><bdi dir="ltr">Installer l’application</bdi></b> ولا <b><bdi dir="ltr">Ajouter à l’écran d’accueil</bdi></b>.', 'أكّد: أيقونة داره تظهر في الشاشة.']);
+  $('appBody').insertAdjacentHTML('beforeend', '<p class="mut">نفس الحساب ونفس المعطيات، والتطبيق يتحدّث وحدو.</p>');
+  openDlg('dlgApp');
+}
+
+/* ══════════════════════════════════════════════════════════════════════
    [S16] 🔔 الإشعارات + 🎬 الجولة التعريفية
    ──────────────────────────────────────────────────────────────────────
    notifs() تحسب الأحداث اللي تهمّ المستعمل (دفع تأكّد، ميساج جديد، تشكية…) من المعطيات نفسها.
@@ -2136,7 +2276,9 @@ const A = {
   logout, menu: () => toggleMenu(), 'menu-close': () => toggleMenu(false), tab: go, home: () => go(defaultTab()),
   notifs: () => toggleNotifs(), notif: id => go(id),
   'notif-perm': async () => { try { const r = await Notification.requestPermission(); toast(r === 'granted' ? 'تمّ تفعيل إشعارات المتصفح.' : 'ما تفعّلتش الإشعارات.'); } catch {} toggleNotifs(false); },
-  details: openDetail, fav: toggleFav, share, intro: openIntro,
+  details: openDetail, fav: toggleFav, share, intro: openIntro, install,
+  forgot, 'pw-change': () => openPw(false), 'logout-all': logoutAll,
+  'app-dismiss': () => { lset(ls, 'darek_app_x', 1); $('appBar').hidden = true; },
   view: id => need('tenant', () => openView(id), 'سجّل الدخول (ولا اعمل حساب في دقيقة) باش تطلب معاينة.'),
   dep: id => need('tenant', () => openPay(id, 'dep'), 'سجّل الدخول باش تحجز وتدفع العربون.'),
   rent: id => openPay(id, 'rent'),
@@ -2165,7 +2307,7 @@ const A = {
   quick: id => { Object.assign(F, F0); if (id === 'furn') F.furn = true; else F.cat = oneOf(id, Object.keys(CATS), ''); saveF(); go('props'); },
   'reset-filters': () => { Object.assign(F, F0); ldel(ss, FKEY); render(); }
 };
-const FORMS = { fAuth:onAuth, fPin:onPin, fPay:onPay, fView:onView, fProp:onProp, fPhoto:onPhoto, fChat:onChat, fDm:onDm, fBill:onBill, fIssue:onIssue, fAdmin:onAdmin, fPayout:onPayout,
+const FORMS = { fAuth:onAuth, fPin:onPin, fPay:onPay, fView:onView, fProp:onProp, fPhoto:onPhoto, fChat:onChat, fDm:onDm, fBill:onBill, fIssue:onIssue, fAdmin:onAdmin, fPayout:onPayout, fPw:onPw,
   fSearch: f => { Object.assign(F, F0, { q:f.elements.q.value.trim().slice(0, 60), city:oneOf(f.elements.city.value, CITIES, ''), max:num(f.elements.max.value, 1e6) }); saveF(); go('props'); } };
 const fail = err => { console.error(err); toast('حدث خطأ غير متوقع. حاول مرة أخرى.', true); };
 document.addEventListener('click', e => {
@@ -2245,8 +2387,10 @@ $('payD17').textContent = CFG.d17; $('cpD17').dataset.copy = CFG.d17;
 $('payRib').textContent = CFG.rib; $('cpRib').dataset.copy = CFG.rib.replace(/\s/g, '');
 { const sf = obj(lget(ss, FKEY)); for (const k of Object.keys(F0)) if (typeof sf[k] === typeof F0[k]) F[k] = sf[k]; }
 ldel(ls, 'darek_lock');
+pwaInit();
 (async () => {
   idb = await idbOpen();
+  const linkType = CLOUD ? authFromLink() : '';
   if (CLOUD) {
     try { await cloudLoad(); } catch (e) { console.error(e); toast('تعذّر الاتصال بالسيرفر. ثبّت الإنترنت ثم حدّث الصفحة.', true); }
     await imgSync();
@@ -2265,6 +2409,7 @@ ldel(ls, 'darek_lock');
   $('app').hidden = false;
   render();
   if (h.startsWith('p-') || h === 'admin') route();
+  if (linkType === 'recovery') openPw(true); else if (linkType === 'signup') toast('✅ حسابك تأكّد. مرحباً بك في داره!'); else if (linkType && !me) toast('الرابط موش صالح ولا الحساب موقوف.', true);
   if (!ls) toast('تنبيه: التخزين المحلي غير متاح في هذا المتصفح (وضع خاص؟)، لن تُحفظ بياناتك.', true);
   if (!CLOUD) setTimeout(() => imgGc(), 5000);
 })().catch(fail);
